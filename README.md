@@ -203,6 +203,17 @@ setwise/
 └── README.md            # This documentation
 ```
 
+## Requirements
+
+- **Python 3.11+**
+- **TinyTeX** (lightweight LaTeX distribution)
+- **Required packages**: `jinja2`, `matplotlib`, `numpy`, `pytest`
+
+### LaTeX Installation
+- **Linux/macOS**: `wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh`
+- **Windows**: Download from https://yihui.org/tinytex/
+- **Required LaTeX packages**: Automatically installed via `tlmgr` during first use
+
 ## Development & Contributing
 
 ### Local Development Setup

@@ -25,10 +25,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
     
-    - name: Install system dependencies
+    - name: Install TinyTeX and LaTeX packages
       run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-pictures
+        wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
+        echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
+        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
+        tlmgr install latex-bin
+        tlmgr install collection-fontsrecommended
+        tlmgr install collection-latexextra
+        tlmgr install enumitem geometry float tikz xcolor fancyhdr booktabs tcolorbox lmodern
+        tlmgr install pgf amsmath amsfonts amssymb inputenc fontenc graphicx
     
     - name: Install Python dependencies
       run: |
@@ -37,7 +43,9 @@ jobs:
         pip install pytest-xvfb  # For matplotlib in headless environment
     
     - name: Generate test figures
-      run: python generate_figures.py
+      run: |
+        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
+        python generate_figures.py
     
     - name: Run tests with pytest
       run: |
@@ -91,18 +99,30 @@ jobs:
       with:
         python-version: "3.11"
     
-    - name: Install dependencies
+    - name: Install TinyTeX and LaTeX packages
       run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-pictures
+        wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
+        echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
+        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
+        tlmgr install latex-bin
+        tlmgr install collection-fontsrecommended
+        tlmgr install collection-latexextra
+        tlmgr install enumitem geometry float tikz xcolor fancyhdr booktabs tcolorbox lmodern
+        tlmgr install pgf amsmath amsfonts amssymb inputenc fontenc graphicx
+    
+    - name: Install Python dependencies
+      run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
     - name: Generate figures
-      run: python generate_figures.py
+      run: |
+        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
+        python generate_figures.py
     
     - name: Test full quiz generation
       run: |
+        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
         python main.py --seed 42 --sets 2 --mcq 3 --subjective 2 --no-pdf
         ls -la output/
         
