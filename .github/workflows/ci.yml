@@ -30,11 +30,8 @@ jobs:
         wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
         echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
         export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
-        # Install only packages we actually use
-        tlmgr install amsmath amsfonts amssymb enumitem geometry float
-        tlmgr install pgf tikz xcolor fancyhdr booktabs tcolorbox 
-        tlmgr install lmodern graphics graphicx inputenc fontenc
-        tlmgr install latex latex-bin latex-fonts
+        # Install only packages we need that aren't already included
+        tlmgr install enumitem pgf xcolor fancyhdr booktabs tcolorbox lmodern
     
     - name: Install Python dependencies
       run: |
@@ -104,11 +101,8 @@ jobs:
         wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
         echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
         export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
-        # Install only packages we actually use
-        tlmgr install amsmath amsfonts amssymb enumitem geometry float
-        tlmgr install pgf tikz xcolor fancyhdr booktabs tcolorbox 
-        tlmgr install lmodern graphics graphicx inputenc fontenc
-        tlmgr install latex latex-bin latex-fonts
+        # Install only packages we need that aren't already included
+        tlmgr install enumitem pgf xcolor fancyhdr booktabs tcolorbox lmodern
     
     - name: Install Python dependencies
       run: |
