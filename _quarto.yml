@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Setwise: Professional LaTeX Quiz Generator"
+  description: "Professional LaTeX Quiz Generation with Python"
+  site-url: "https://nipunbatra.github.io/setwise"
+  repo-url: "https://github.com/nipunbatra/setwise"
+  
+  navbar:
+    title: "Setwise"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: https://github.com/nipunbatra/setwise
+        text: GitHub
+        
+  page-footer:
+    center: "Made for educators and students worldwide"
+
+format:
+  html:
+    theme: 
+      - cosmo
+      - custom.scss
+    css: styles.css
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-tools: true

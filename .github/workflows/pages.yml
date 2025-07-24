@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: Deploy Quarto Site
 
 on:
   push:
@@ -57,89 +57,52 @@ jobs:
     
     - name: Convert PDF to images for preview
       run: |
-        mkdir -p docs/assets/images
+        mkdir -p assets/images
         # Convert all pages of both PDFs to PNG with high quality
         if [ -f output/quiz_set_1.pdf ]; then
-          pdftoppm -png -r 200 output/quiz_set_1.pdf docs/assets/images/quiz_set_1_page
-          pdftoppm -png -r 200 output/quiz_set_2.pdf docs/assets/images/quiz_set_2_page
+          pdftoppm -png -r 200 output/quiz_set_1.pdf assets/images/quiz_set_1_page
+          pdftoppm -png -r 200 output/quiz_set_2.pdf assets/images/quiz_set_2_page
           echo "PDF pages converted to PNG previews"
         else
           echo "PDF not found, creating placeholder"
-          mkdir -p docs/assets/images
+          mkdir -p assets/images
           # Create a placeholder image
-          convert -size 800x600 xc:lightblue -gravity center -pointsize 36 -annotate +0+0 "Quiz Preview\n(PDF compilation required)" docs/assets/images/quiz_preview.png
+          convert -size 800x600 xc:lightblue -gravity center -pointsize 36 -annotate +0+0 "Quiz Preview\n(PDF compilation required)" assets/images/quiz_preview.png
         fi
     
-    - name: Create GitHub Pages site from README
+    - name: Copy PDFs to assets
       run: |
-        mkdir -p docs
-        
-        # Copy README as index and fix asset paths for GitHub Pages
-        echo "📋 Copying README.md to docs/index.md"
-        cp README.md docs/index.md
-        
-        echo "🔧 Fixing asset paths in docs/index.md"
-        sed -i 's|docs/assets/|assets/|g' docs/index.md
-        
-        # Also copy PDFs to assets if they exist
+        mkdir -p assets
         if [ -f output/quiz_set_1.pdf ]; then
-          mkdir -p docs/assets
-          cp output/quiz_set_1.pdf docs/assets/
-          cp output/quiz_set_2.pdf docs/assets/
-          echo "📄 PDFs copied to assets"
+          cp output/quiz_set_1.pdf assets/
+          cp output/quiz_set_2.pdf assets/
+          echo "PDFs copied to assets"
         fi
+    
+    - name: Setup Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+      with:
+        version: pre-release
+    
+    - name: Render Quarto site
+      run: |
+        echo "Rendering Quarto site..."
+        quarto render
+        echo "Quarto render completed"
         
-        echo "📁 Files in docs directory:"
-        ls -la docs/
+        echo "Files in _site directory:"
+        ls -la _site/
         
-        echo "📄 First 20 lines of docs/index.md:"
-        head -20 docs/index.md
-        
-        echo "🔍 Checking for asset references:"
-        grep -n "assets/" docs/index.md | head -5 || echo "No asset references found"
-        
-        # Create Jekyll configuration
-        cat > docs/_config.yml << 'EOF'
-        title: "Setwise Quiz Generator"
-        description: "Professional LaTeX Quiz Generation with Python"
-        theme: jekyll-theme-cayman
-        plugins:
-          - jekyll-relative-links
-        relative_links:
-          enabled: true
-          collections: true
-        include:
-          - README.md
-        markdown: kramdown
-        highlighter: rouge
-        baseurl: "/setwise"
-        url: "https://nipunbatra.github.io"
-        EOF
-        
-        # Add .nojekyll file to ensure proper deployment
-        touch docs/.nojekyll
-        
-        echo "🏗️ Final docs directory structure:"
-        find docs -type f -name "*.md" -o -name "*.yml" -o -name "*.png" -o -name "*.pdf" -o -name ".nojekyll" | sort
-        
-        echo "📊 Directory sizes:"
-        du -sh docs/
-        du -sh docs/assets/ 2>/dev/null || echo "No assets directory"
+        echo "Checking for assets:"
+        find _site -name "*.png" -o -name "*.pdf" | head -10
     
     - name: Setup Pages
       uses: actions/configure-pages@v4
     
-    - name: Upload docs for inspection
-      uses: actions/upload-artifact@v4
-      with:
-        name: debug-docs-directory
-        path: docs/
-        retention-days: 1
-    
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './docs'
+        path: '_site'
     
     - name: Deploy to GitHub Pages
       id: deployment
