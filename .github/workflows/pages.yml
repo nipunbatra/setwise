@@ -40,18 +40,19 @@ jobs:
     - name: Generate figures and sample PDFs
       run: |
         python generate_figures.py
-        python main.py --seed 42 --sets 1 --mcq 3 --subjective 2
+        python main.py --seed 42 --sets 2 --mcq 4 --subjective 3
         ls -la output/
     
     - name: Convert PDF to images for preview
       run: |
         mkdir -p docs/assets/images
-        # Convert first page of PDF to PNG with high quality
+        # Convert all pages of both PDFs to PNG with high quality
         if [ -f output/quiz_set_1.pdf ]; then
-          pdftoppm -png -r 300 -singlefile output/quiz_set_1.pdf docs/assets/images/quiz_preview
-          echo "✅ PDF converted to PNG preview"
+          pdftoppm -png -r 200 output/quiz_set_1.pdf docs/assets/images/quiz_set_1_page
+          pdftoppm -png -r 200 output/quiz_set_2.pdf docs/assets/images/quiz_set_2_page
+          echo "PDF pages converted to PNG previews"
         else
-          echo "⚠️  PDF not found, creating placeholder"
+          echo "PDF not found, creating placeholder"
           mkdir -p docs/assets/images
           # Create a placeholder image
           convert -size 800x600 xc:lightblue -gravity center -pointsize 36 -annotate +0+0 "Quiz Preview\n(PDF compilation required)" docs/assets/images/quiz_preview.png

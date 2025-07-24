@@ -7,27 +7,39 @@
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
-## 📸 Sample Quiz Sets
+## Sample Quiz Sets - Visual Comparison
 
-### Quiz Set 1
+### Quiz Set 1 (All Pages)
 <div align="center">
 
-![Quiz Set 1 Preview](docs/assets/images/quiz_set_1.png)
+| Page 1 | Page 2 |
+|--------|--------|
+| ![Quiz Set 1 Page 1](docs/assets/images/quiz_set_1_page-1.png) | ![Quiz Set 1 Page 2](docs/assets/images/quiz_set_1_page-2.png) |
+
+| Page 3 | Page 4 |
+|--------|--------|
+| ![Quiz Set 1 Page 3](docs/assets/images/quiz_set_1_page-3.png) | ![Quiz Set 1 Page 4](docs/assets/images/quiz_set_1_page-4.png) |
 
 📄 **[Download PDF - Quiz Set 1](docs/assets/quiz_set_1.pdf)**
 
 </div>
 
-### Quiz Set 2  
+### Quiz Set 2 (All Pages) 
 <div align="center">
 
-![Quiz Set 2 Preview](docs/assets/images/quiz_set_2.png)
+| Page 1 | Page 2 |
+|--------|--------|
+| ![Quiz Set 2 Page 1](docs/assets/images/quiz_set_2_page-1.png) | ![Quiz Set 2 Page 2](docs/assets/images/quiz_set_2_page-2.png) |
+
+| Page 3 | Page 4 |
+|--------|--------|
+| ![Quiz Set 2 Page 3](docs/assets/images/quiz_set_2_page-3.png) | ![Quiz Set 2 Page 4](docs/assets/images/quiz_set_2_page-4.png) |
 
 📄 **[Download PDF - Quiz Set 2](docs/assets/quiz_set_2.pdf)**
 
 </div>
 
-*Professional styling with color-coded sections, rich mathematical content, TikZ diagrams, and tables*
+**Notice the Smart Randomization:** Same questions appear in both sets, but with shuffled MCQ options and different question order. Templated subjective questions show different variable values while maintaining identical structure.
 
 ## ✨ Key Features
 
