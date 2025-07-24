@@ -75,8 +75,20 @@ jobs:
         mkdir -p docs
         
         # Copy README as index and fix asset paths for GitHub Pages
+        echo "📋 Copying README.md to docs/index.md"
         cp README.md docs/index.md
+        
+        echo "🔧 Fixing asset paths in docs/index.md"
         sed -i 's|docs/assets/|assets/|g' docs/index.md
+        
+        echo "📁 Files in docs directory:"
+        ls -la docs/
+        
+        echo "📄 First 20 lines of docs/index.md:"
+        head -20 docs/index.md
+        
+        echo "🔍 Checking for asset references:"
+        grep -n "assets/" docs/index.md | head -5 || echo "No asset references found"
         
         # Create additional documentation pages
         cat > docs/_config.yml << 'EOF'
@@ -94,9 +106,22 @@ jobs:
         highlighter: rouge
         EOF
         
+        echo "🏗️ Final docs directory structure:"
+        find docs -type f -name "*.md" -o -name "*.yml" -o -name "*.png" -o -name "*.pdf" | sort
+        
+        echo "📊 Directory sizes:"
+        du -sh docs/
+        du -sh docs/assets/ 2>/dev/null || echo "No assets directory"
     
     - name: Setup Pages
       uses: actions/configure-pages@v4
+    
+    - name: Upload docs for inspection
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-docs-directory
+        path: docs/
+        retention-days: 1
     
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
@@ -106,3 +131,14 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+    
+    - name: Verify deployment
+      run: |
+        echo "🚀 Deployment completed!"
+        echo "📡 Site URL: ${{ steps.deployment.outputs.page_url }}"
+        echo "🔗 Direct link: https://nipunbatra.github.io/setwise/"
+        
+        # Wait a moment and try to curl the site
+        sleep 30
+        echo "🌐 Testing site accessibility..."
+        curl -I https://nipunbatra.github.io/setwise/ || echo "❌ Site not accessible yet"
