@@ -1,9 +1,9 @@
 # Setwise: Professional LaTeX Quiz Generator
 
-[![CI Status](https://github.com/your-username/setwise/workflows/Setwise%20CI/badge.svg)](https://github.com/your-username/setwise/actions)
+[![CI Status](https://github.com/nipunbatra/setwise/workflows/Setwise%20CI/badge.svg)](https://github.com/nipunbatra/setwise/actions)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-22%20passed-brightgreen.svg)](https://github.com/your-username/setwise/actions)
+[![Tests](https://img.shields.io/badge/tests-22%20passed-brightgreen.svg)](https://github.com/nipunbatra/setwise/actions)
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
@@ -55,7 +55,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/setwise.git
+git clone https://github.com/nipunbatra/setwise.git
 cd setwise
 
 # Install dependencies  
@@ -219,7 +219,7 @@ setwise/
 ### Local Development Setup
 ```bash
 # Clone and setup development environment
-git clone https://github.com/your-username/setwise.git
+git clone https://github.com/nipunbatra/setwise.git
 cd setwise
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -299,9 +299,9 @@ copies or substantial portions of the Software.
 
 ## Support & Community
 
-- **Issues**: [Report bugs and request features](https://github.com/your-username/setwise/issues)
-- **Discussions**: [Community discussions and Q&A](https://github.com/your-username/setwise/discussions)
-- **Documentation**: [Full documentation on GitHub Pages](https://your-username.github.io/setwise)
+- **Issues**: [Report bugs and request features](https://github.com/nipunbatra/setwise/issues)
+- **Discussions**: [Community discussions and Q&A](https://github.com/nipunbatra/setwise/discussions)
+- **Documentation**: [Full documentation on GitHub Pages](https://nipunbatra.github.io/setwise)
 - **Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines
 
 ---

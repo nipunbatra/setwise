@@ -81,6 +81,14 @@ jobs:
         echo "🔧 Fixing asset paths in docs/index.md"
         sed -i 's|docs/assets/|assets/|g' docs/index.md
         
+        # Also copy PDFs to assets if they exist
+        if [ -f output/quiz_set_1.pdf ]; then
+          mkdir -p docs/assets
+          cp output/quiz_set_1.pdf docs/assets/
+          cp output/quiz_set_2.pdf docs/assets/
+          echo "📄 PDFs copied to assets"
+        fi
+        
         echo "📁 Files in docs directory:"
         ls -la docs/
         
@@ -90,7 +98,7 @@ jobs:
         echo "🔍 Checking for asset references:"
         grep -n "assets/" docs/index.md | head -5 || echo "No asset references found"
         
-        # Create additional documentation pages
+        # Create Jekyll configuration
         cat > docs/_config.yml << 'EOF'
         title: "Setwise Quiz Generator"
         description: "Professional LaTeX Quiz Generation with Python"
@@ -104,10 +112,15 @@ jobs:
           - README.md
         markdown: kramdown
         highlighter: rouge
+        baseurl: "/setwise"
+        url: "https://nipunbatra.github.io"
         EOF
         
+        # Add .nojekyll file to ensure proper deployment
+        touch docs/.nojekyll
+        
         echo "🏗️ Final docs directory structure:"
-        find docs -type f -name "*.md" -o -name "*.yml" -o -name "*.png" -o -name "*.pdf" | sort
+        find docs -type f -name "*.md" -o -name "*.yml" -o -name "*.png" -o -name "*.pdf" -o -name ".nojekyll" | sort
         
         echo "📊 Directory sizes:"
         du -sh docs/
