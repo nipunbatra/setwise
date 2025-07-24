@@ -33,11 +33,11 @@ jobs:
         wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
         echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
         export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
-        tlmgr install latex-bin
-        tlmgr install collection-fontsrecommended
-        tlmgr install collection-latexextra
-        tlmgr install enumitem geometry float tikz xcolor fancyhdr booktabs tcolorbox lmodern
-        tlmgr install pgf amsmath amsfonts amssymb inputenc fontenc graphicx
+        # Install only packages we actually use
+        tlmgr install amsmath amsfonts amssymb enumitem geometry float
+        tlmgr install pgf tikz xcolor fancyhdr booktabs tcolorbox 
+        tlmgr install lmodern graphics graphicx inputenc fontenc
+        tlmgr install latex latex-bin latex-fonts
     
     - name: Install Python dependencies
       run: |
