@@ -41,17 +41,17 @@
 
 **Notice the Smart Randomization:** Same questions appear in both sets, but with shuffled MCQ options and different question order. Templated subjective questions show different variable values while maintaining identical structure.
 
-## ✨ Key Features
+## Key Features
 
-- 🎨 **Beautiful LaTeX Output** - Professional styling with color-coded sections
-- 🔀 **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
-- 📝 **Template Support** - Dynamic questions with variable substitution
-- 📊 **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
-- ⚡ **CLI Interface** - Full command-line control with reproducible seeds
-- 🧪 **100% Tested** - Comprehensive pytest suite with 22+ test cases
-- 🤖 **CI/CD Ready** - GitHub Actions for testing and deployment
+- **Beautiful LaTeX Output** - Professional styling with color-coded sections
+- **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
+- **Template Support** - Dynamic questions with variable substitution
+- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
+- **CLI Interface** - Full command-line control with reproducible seeds
+- **100% Tested** - Comprehensive pytest suite with 22+ test cases
+- **CI/CD Ready** - GitHub Actions for testing and deployment
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone the repository
@@ -71,7 +71,7 @@ python main.py --seed 42
 ls output/
 ```
 
-## 📋 Command Line Options
+## Command Line Options
 
 ```bash
 python main.py [OPTIONS]
@@ -98,7 +98,7 @@ python main.py --no-pdf --sets 2
 python main.py --output-dir ./my_quizzes --sets 1
 ```
 
-## 🧪 Testing & Quality Assurance
+## Testing & Quality Assurance
 
 ```bash
 # Run comprehensive test suite
@@ -113,15 +113,15 @@ python -m pytest test_main.py::TestQuizGeneration -v
 ```
 
 **Test Coverage includes:**
-- ✅ MCQ option shuffling and answer key tracking
-- ✅ Subjective question processing with template variables
-- ✅ Quiz generation reproducibility with seeds
-- ✅ CLI argument parsing and validation
-- ✅ LaTeX compilation and error handling
-- ✅ Data integrity and question consistency checks
-- ✅ File operations and output validation
+- MCQ option shuffling and answer key tracking
+- Subjective question processing with template variables
+- Quiz generation reproducibility with seeds
+- CLI argument parsing and validation
+- LaTeX compilation and error handling
+- Data integrity and question consistency checks
+- File operations and output validation
 
-## 🎯 Machine Learning Content
+## Machine Learning Content
 
 The quiz system includes comprehensive supervised learning topics:
 
@@ -143,7 +143,7 @@ The quiz system includes comprehensive supervised learning topics:
 - **Mathematical Derivations** - Gradient descent, optimization problems
 - **Model Selection** - Hyperparameter tuning, validation strategies
 
-## 📊 Visual Elements & Rich Content
+## Visual Elements & Rich Content
 
 ### Generated Content Types
 - **TikZ Diagrams**: Decision trees, neural network architectures, SVM margin illustrations
@@ -158,7 +158,7 @@ The quiz system includes comprehensive supervised learning topics:
 - **Responsive Layout**: Proper spacing, margins, and section organization
 - **Answer Key Generation**: Automatic tracking of correct answers with question mapping
 
-## 🛠️ Technical Architecture
+## Technical Architecture
 
 ### Core Technology Stack
 - **Python 3.8+** - Main application logic and CLI interface
@@ -175,7 +175,7 @@ The quiz system includes comprehensive supervised learning topics:
 - **`generate_figures.py`** - TikZ and matplotlib figure generation
 - **`test_main.py`** - Comprehensive test suite (22+ test cases)
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 setwise/
@@ -203,7 +203,7 @@ setwise/
 └── README.md            # This documentation
 ```
 
-## 🔧 Development & Contributing
+## Development & Contributing
 
 ### Local Development Setup
 ```bash
@@ -240,10 +240,10 @@ python main.py --seed 42 --sets 1 --no-pdf
 6. Update documentation as needed
 7. Submit a pull request with detailed description
 
-## 🚀 Deployment & CI/CD
+## Deployment & CI/CD
 
 ### GitHub Actions Workflows
-- **Continuous Integration**: Multi-Python version testing (3.8-3.12)
+- **Continuous Integration**: Python 3.11 testing
 - **Code Quality**: Black formatting, flake8 linting, isort import sorting
 - **Integration Testing**: Full quiz generation with LaTeX compilation
 - **GitHub Pages**: Automated documentation deployment with PDF previews
@@ -252,9 +252,9 @@ python main.py --seed 42 --sets 1 --no-pdf
 - **Artifact Storage**: Generated quizzes stored as GitHub Actions artifacts
 - **PDF Conversion**: Automatic PNG preview generation for documentation
 - **Coverage Reporting**: Codecov integration for test coverage tracking
-- **Multi-Environment**: Testing across multiple Python versions and OS
+- **Single Environment**: Testing on Python 3.11 for faster CI
 
-## 📈 Performance & Scalability
+## Performance & Scalability
 
 ### Optimization Features  
 - **Efficient Randomization**: Consistent question sets with shuffled options only
@@ -268,7 +268,7 @@ python main.py --seed 42 --sets 1 --no-pdf
 - **Concurrent Safe**: Thread-safe for parallel quiz generation
 - **Storage Optimized**: Compressed PDF output with vector graphics
 
-## 📄 License & Usage
+## License & Usage
 
 **MIT License** - Free for educational and commercial use.
 
@@ -286,7 +286,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 ```
 
-## 🤝 Support & Community
+## Support & Community
 
 - **Issues**: [Report bugs and request features](https://github.com/your-username/setwise/issues)
 - **Discussions**: [Community discussions and Q&A](https://github.com/your-username/setwise/discussions)
@@ -297,7 +297,7 @@ copies or substantial portions of the Software.
 
 <div align="center">
 
-**Made with ❤️ for educators and students worldwide**
+**Made for educators and students worldwide**
 
 *Empowering assessment through technology*
 

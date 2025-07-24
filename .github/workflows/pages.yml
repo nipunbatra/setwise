@@ -97,16 +97,16 @@ jobs:
         ![Quiz Preview](assets/images/quiz_preview.png)
         *Generated quiz with professional styling, color-coded sections, and rich mathematical content*
         
-        ## ✨ Key Features
+        ## Key Features
         
-        - 🎨 **Beautiful LaTeX Output** - Professional styling with color-coded sections
-        - 🔀 **Smart Randomization** - MCQ options and question order shuffling  
-        - 📝 **Template Support** - Dynamic questions with variable substitution
-        - 📊 **Rich Content** - Tables, TikZ diagrams, matplotlib plots
-        - ⚡ **CLI Interface** - Full command-line control with reproducible seeds
-        - 🧪 **100% Tested** - Comprehensive pytest suite with 22+ test cases
+        - **Beautiful LaTeX Output** - Professional styling with color-coded sections
+        - **Smart Randomization** - MCQ options and question order shuffling  
+        - **Template Support** - Dynamic questions with variable substitution
+        - **Rich Content** - Tables, TikZ diagrams, matplotlib plots
+        - **CLI Interface** - Full command-line control with reproducible seeds
+        - **100% Tested** - Comprehensive pytest suite with 22+ test cases
         
-        ## 🚀 Quick Start
+        ## Quick Start
         
         ```bash
         # Clone the repository
@@ -123,7 +123,7 @@ jobs:
         ls output/
         ```
         
-        ## 📋 Command Line Options
+        ## Command Line Options
         
         ```bash
         python main.py [OPTIONS]
@@ -137,7 +137,7 @@ jobs:
           --output-dir DIR      Output directory (default: output)
         ```
         
-        ## 🧪 Testing & Quality
+        ## Testing & Quality
         
         ```bash
         # Run comprehensive test suite
@@ -148,14 +148,14 @@ jobs:
         ```
         
         **Test Coverage:**
-        - ✅ MCQ shuffling and answer tracking
-        - ✅ Subjective question processing  
-        - ✅ Quiz generation reproducibility
-        - ✅ CLI argument validation
-        - ✅ LaTeX compilation handling
-        - ✅ Data integrity checks
+        - MCQ shuffling and answer tracking
+        - Subjective question processing  
+        - Quiz generation reproducibility
+        - CLI argument validation
+        - LaTeX compilation handling
+        - Data integrity checks
         
-        ## 🎯 Machine Learning Content
+        ## Machine Learning Content
         
         The quiz includes comprehensive coverage of:
         
@@ -165,7 +165,7 @@ jobs:
         - **Algorithm Deep-dives** - Decision trees, SVM, ensemble methods
         - **Mathematical Foundations** - Gradient descent, loss functions
         
-        ## 📊 Visual Elements
+        ## Visual Elements
         
         ### Generated Content Includes:
         - **TikZ Diagrams**: Decision trees, neural networks, SVM margins
@@ -173,7 +173,7 @@ jobs:
         - **Professional Tables**: Confusion matrices, datasets, comparison tables
         - **Mathematical Equations**: Properly typeset with LaTeX
         
-        ## 🛠️ Technical Stack
+        ## Technical Stack
         
         - **Python 3.8+** - Core application logic
         - **Jinja2** - Template rendering engine  
@@ -182,7 +182,7 @@ jobs:
         - **Matplotlib** - Statistical plot generation
         - **pytest** - Comprehensive testing framework
         
-        ## 📁 Repository Structure
+        ## Repository Structure
         
         ```
         setwise/
@@ -195,7 +195,7 @@ jobs:
         └── main.py               # Quiz generation engine
         ```
         
-        ## 🤝 Contributing
+        ## Contributing
         
         1. Fork the repository
         2. Create a feature branch: `git checkout -b feature-name`
@@ -203,13 +203,13 @@ jobs:
         4. Ensure all tests pass: `python -m pytest`
         5. Submit a pull request
         
-        ## 📄 License
+        ## License
         
         MIT License - feel free to use for educational and commercial purposes.
         
         ---
         
-        **Made with ❤️ for educators and students worldwide**
+        **Made for educators and students worldwide**
         EOF
     
     - name: Setup Pages
