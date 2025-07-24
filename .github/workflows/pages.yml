@@ -34,7 +34,7 @@ jobs:
         echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
         export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
         # Install only packages we need that aren't already included
-        tlmgr install enumitem pgf xcolor fancyhdr booktabs tcolorbox lmodern
+        tlmgr install enumitem pgf xcolor fancyhdr booktabs tcolorbox || true
     
     - name: Install Python dependencies
       run: |
