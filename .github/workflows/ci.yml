@@ -1,0 +1,126 @@
+name: Setwise CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-pictures
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-xvfb  # For matplotlib in headless environment
+    
+    - name: Generate test figures
+      run: python generate_figures.py
+    
+    - name: Run tests with pytest
+      run: |
+        python -m pytest test_main.py -v --tb=short --cov=main --cov-report=xml --cov-report=term-missing
+      env:
+        DISPLAY: ":99.0"
+    
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    
+    - name: Install linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install black flake8 isort mypy
+    
+    - name: Run black
+      run: black --check --diff .
+      continue-on-error: true
+    
+    - name: Run flake8
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      continue-on-error: true
+    
+    - name: Run isort
+      run: isort --check-only --diff .
+      continue-on-error: true
+
+  integration:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-pictures
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Generate figures
+      run: python generate_figures.py
+    
+    - name: Test full quiz generation
+      run: |
+        python main.py --seed 42 --sets 2 --mcq 3 --subjective 2 --no-pdf
+        ls -la output/
+        
+    - name: Verify output files
+      run: |
+        test -f output/quiz_set_1.tex
+        test -f output/quiz_set_2.tex
+        test -f output/answer_key_1.txt
+        test -f output/answer_key_2.txt
+        echo "✅ All output files generated successfully!"
+    
+    - name: Upload quiz artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: generated-quizzes
+        path: output/
+        retention-days: 30
