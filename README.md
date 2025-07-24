@@ -125,7 +125,7 @@ python -m pytest test_main.py::TestQuizGeneration -v
 
 The quiz system includes comprehensive supervised learning topics:
 
-### Multiple Choice Questions (MCQs)
+### Multiple Choice Questions (20 Questions, 5-6 Options Each)
 - **Bias-Variance Tradeoff** - Understanding model complexity implications
 - **Confusion Matrix Analysis** - Precision, recall, accuracy calculations  
 - **Regularization Techniques** - L1 (Lasso), L2 (Ridge), Elastic Net comparisons
@@ -134,14 +134,28 @@ The quiz system includes comprehensive supervised learning topics:
 - **Cross-Validation** - k-fold, stratified, leave-one-out strategies
 - **Performance Metrics** - ROC curves, AUC, F1-score interpretations
 - **Neural Networks** - Activation functions, backpropagation, architectures
+- **Ensemble Methods** - Random Forest, bagging vs boosting principles
+- **Feature Engineering** - Scaling, normalization, preprocessing techniques
+- **Optimization** - Gradient descent, learning rates, convergence
+- **Model Evaluation** - Validation curves, hyperparameter selection
+- **k-Nearest Neighbors** - Distance metrics, curse of dimensionality
+- **Logistic Regression** - Sigmoid function, probability mapping
 
-### Subjective Questions
+### Subjective Questions (15 Questions with Detailed Solutions)
 - **Decision Tree Analysis** - Depth calculation, Gini impurity, pruning benefits
 - **Linear Regression** - MSE calculation, regularization loss functions  
 - **Learning Curves** - Bias vs variance diagnosis, overfitting gap analysis
-- **Algorithm Comparison** - Performance trade-offs, suitable use cases
-- **Mathematical Derivations** - Gradient descent, optimization problems
-- **Model Selection** - Hyperparameter tuning, validation strategies
+- **Support Vector Machines** - Support vectors, margin concepts, kernel complexity
+- **Overfitting Analysis** - Model comparison, regularization parameter selection
+- **k-Nearest Neighbors** - Time complexity, preprocessing, parameter selection
+- **Neural Networks** - Backpropagation, weight updates, gradient problems
+- **Ensemble Methods** - Majority voting, accuracy calculations, method comparison
+- **Algorithm Comparison** - Assumptions, strengths, weaknesses analysis
+- **Mathematical Derivations** - Logistic regression gradient descent
+- **Model Selection** - Validation vs test error, data leakage prevention
+- **Real-world Applications** - Customer churn prediction pipeline design
+- **Optimization Analysis** - SGD vs Adam vs RMSprop comparison
+- **Dimensionality Reduction** - PCA vs t-SNE, curse of dimensionality
 
 ## Visual Elements & Rich Content
 
