@@ -70,12 +70,13 @@ jobs:
           convert -size 800x600 xc:lightblue -gravity center -pointsize 36 -annotate +0+0 "Quiz Preview\n(PDF compilation required)" docs/assets/images/quiz_preview.png
         fi
     
-    - name: Create enhanced docs site
+    - name: Create GitHub Pages site from README
       run: |
         mkdir -p docs
         
-        # Copy README as index
+        # Copy README as index and fix asset paths for GitHub Pages
         cp README.md docs/index.md
+        sed -i 's|docs/assets/|assets/|g' docs/index.md
         
         # Create additional documentation pages
         cat > docs/_config.yml << 'EOF'
