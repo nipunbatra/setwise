@@ -79,30 +79,87 @@ Minimalist black and white design with clean typography and high contrast
 - **Template Management** - Plug-and-play template system with easy selection
 - **Robust Validation** - Input validation and graceful error handling
 
-## Quick Start
+## Installation
+
+### Option 1: Install from PyPI (Recommended)
+
+```bash
+# Install the latest stable version
+pip install setwise
+
+# Install with development dependencies
+pip install setwise[dev]
+
+# Install with security scanning tools
+pip install setwise[security]
+```
+
+### Option 2: Install from Source
 
 ```bash
 # Clone the repository
 git clone https://github.com/nipunbatra/setwise.git
 cd setwise
 
-# Install dependencies  
-pip install -r requirements.txt
+# Install in development mode
+pip install -e .
 
+# Or install with dependencies
+pip install -e .[dev,security]
+```
+
+## Quick Start
+
+```bash
 # Generate figures (TikZ diagrams and matplotlib plots)
-python generate_figures.py
+setwise generate-figures
 
-# Generate sample quizzes
-python main.py --seed 42
+# Generate sample quizzes with default settings
+setwise generate --seed 42
 
-# View generated files
-ls output/
+# Generate 5 quiz sets with specific question counts
+setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
+
+# Use a different template
+setwise generate --template compact --sets 2
+
+# List available templates
+setwise list-templates
+
+# Generate without PDF compilation (LaTeX only)
+setwise generate --no-pdf --sets 1
+
+# Custom output directory
+setwise generate --output-dir my_quizzes --sets 3
+```
+
+### Python API Usage
+
+```python
+from setwise import QuizGenerator, TemplateManager
+
+# Create quiz generator
+generator = QuizGenerator(output_dir="my_output")
+
+# Generate quiz sets programmatically
+success = generator.generate_quizzes(
+    num_sets=3,
+    num_mcq=5,
+    num_subjective=2,
+    template_name="compact",
+    seed=42
+)
+
+# List available templates
+tm = TemplateManager()
+print(tm.list_templates())
 ```
 
 ## Command Line Options
 
+### Generate Command
 ```bash
-python main.py [OPTIONS]
+setwise generate [OPTIONS]
 
 Options:
   --seed SEED           Random seed for reproducibility (default: random)
@@ -112,29 +169,34 @@ Options:
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
   --template NAME       Template to use: default, compact, minimal (default: default)
-  --list-templates      List all available templates with descriptions
+```
+
+### Other Commands
+```bash
+setwise list-templates    # List all available templates with descriptions
+setwise generate-figures  # Generate TikZ diagrams and matplotlib plots
 ```
 
 ### Examples
 
 ```bash
 # Generate 5 sets with specific question counts and reproducible seed
-python main.py --seed 123 --sets 5 --mcq 3 --subjective 2
+setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 
 # Generate only LaTeX files without PDF compilation
-python main.py --no-pdf --sets 2
+setwise generate --no-pdf --sets 2
 
 # Use custom output directory
-python main.py --output-dir ./my_quizzes --sets 1
+setwise generate --output-dir ./my_quizzes --sets 1
 
 # List all available templates with descriptions
-python main.py --list-templates
+setwise list-templates
 
 # Use compact template for space-efficient 2-column layout
-python main.py --seed 42 --sets 2 --template compact
+setwise generate --seed 42 --sets 2 --template compact
 
 # Use minimal template for clean black & white printing
-python main.py --seed 42 --sets 2 --template minimal
+setwise generate --seed 42 --sets 2 --template minimal
 ```
 
 ## Testing & Quality Assurance

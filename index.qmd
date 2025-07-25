@@ -84,24 +84,42 @@ Minimalist black and white design with clean typography and high contrast
 - **Answer Keys** - Detailed explanations and solutions
 - **Reproducible Assessment** - Consistent evaluation across different quiz sets
 
-## Quick Start
+## Installation & Quick Start
 
+### Install from PyPI
 ```bash
-# Clone the repository
-git clone https://github.com/nipunbatra/setwise.git
-cd setwise
+# Install the latest stable version
+pip install setwise
 
-# Install dependencies  
-pip install -r requirements.txt
+# Install with development dependencies  
+pip install setwise[dev]
+```
 
+### Basic Usage
+```bash
 # Generate figures (TikZ diagrams and matplotlib plots)
-python generate_figures.py
+setwise generate-figures
 
-# Generate sample quizzes
-python main.py --seed 42
+# Generate sample quizzes with default settings
+setwise generate --seed 42
 
-# View generated files
-ls output/
+# Generate 5 quiz sets with specific question counts  
+setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
+
+# List available templates
+setwise list-templates
+
+# Use compact template for space-efficient layout
+setwise generate --template compact --sets 2
+```
+
+### Python API
+```python
+from setwise import QuizGenerator
+
+# Create and use quiz generator
+generator = QuizGenerator(output_dir="my_output")
+generator.generate_quizzes(num_sets=3, seed=42)
 ```
 
 ## Command Line Options

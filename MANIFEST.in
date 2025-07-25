@@ -1,0 +1,30 @@
+include README.md
+include LICENSE
+include pyproject.toml
+include SECURITY_FIXES.md
+include .codecov.yml
+include requirements.txt
+
+# Include package data
+recursive-include setwise/data *.py
+recursive-include templates *.tex.jinja
+recursive-include templates *.py
+
+# Include tests
+recursive-include tests *.py
+
+# Include documentation
+recursive-include docs *.md
+recursive-include scripts *.sh *.md
+
+# Exclude development files
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .coverage
+global-exclude htmlcov
+prune .github
+prune assets
+prune output
+prune figures
+prune assets_temp
