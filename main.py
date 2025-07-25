@@ -128,9 +128,9 @@ def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, template_name="
     template = env.get_template(template_file)
     
     quiz_content = template.render(
-        set_id=set_id,
-        mcqs=shuffled_mcq,
-        subjectives=processed_subjective,
+        set_number=set_id,
+        mcq_questions=shuffled_mcq,
+        subjective_questions=processed_subjective,
         total_marks=total_marks,
         mcq_marks=mcq_marks,
         subjective_marks=subjective_marks

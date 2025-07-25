@@ -88,13 +88,13 @@
 
 \vspace{15pt}
 
-{% if mcqs %}
+{% if mcq_questions %}
 \begin{center}
   \textcolor{primaryblue}{\Large\textbf{Multiple Choice Questions}}
 \end{center}
 \vspace{10pt}
 
-{% for q in mcqs %}
+{% for q in mcq_questions %}
 \begin{mcqbox}
 \textcolor{primaryblue}{\textbf{\large Q{{ loop.index }}}} \hfill \textcolor{accentorange}{\textbf{[{{ q.marks }} {% if q.marks == 1 %}mark{% else %}marks{% endif %}]}}
 \vspace{8pt}
@@ -112,16 +112,16 @@
 {% endfor %}
 {% endif %}
 
-{% if subjectives %}
+{% if subjective_questions %}
 \vspace{15pt}
 \begin{center}
   \textcolor{accentorange}{\Large\textbf{Subjective Questions}}
 \end{center}
 \vspace{10pt}
 
-{% for q in subjectives %}
+{% for q in subjective_questions %}
 \begin{subjectivebox}
-\textcolor{primaryblue}{\textbf{\large Q{{ loop.index + mcqs|length }}}} \hfill \textcolor{accentorange}{\textbf{[Total: {{ q.marks }} {% if q.marks == 1 %}mark{% else %}marks{% endif %}]}}
+\textcolor{primaryblue}{\textbf{\large Q{{ loop.index + mcq_questions|length }}}} \hfill \textcolor{accentorange}{\textbf{[Total: {{ q.marks }} {% if q.marks == 1 %}mark{% else %}marks{% endif %}]}}
 \vspace{8pt}
 
 {{ q.question }}
