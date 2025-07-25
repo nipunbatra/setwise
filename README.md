@@ -50,6 +50,8 @@
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **100% Tested** - Comprehensive pytest suite with 22+ test cases
 - **CI/CD Ready** - GitHub Actions for testing and deployment
+- **Layout Options** - Normal (professional) or compact (space-efficient) templates
+- **Robust Validation** - Input validation and graceful error handling
 
 ## Quick Start
 
@@ -83,6 +85,7 @@ Options:
   --subjective NUM      Number of subjective questions per set (default: all available)
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
+  --compact             Use compact layout to save pages (default: normal layout)
 ```
 
 ### Examples
@@ -96,6 +99,9 @@ python main.py --no-pdf --sets 2
 
 # Use custom output directory
 python main.py --output-dir ./my_quizzes --sets 1
+
+# Generate compact layout to save pages (2-column, multi-column MCQ options)
+python main.py --seed 42 --sets 2 --compact
 ```
 
 ## Testing & Quality Assurance

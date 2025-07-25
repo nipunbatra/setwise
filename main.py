@@ -88,7 +88,7 @@ def process_subjective_questions(subjective_list):
     return processed_questions
 
 
-def generate_quiz_set(set_id, num_mcq=None, num_subjective=None):
+def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, compact=False):
     """
     Generate a single quiz set with randomized questions.
     
@@ -122,7 +122,8 @@ def generate_quiz_set(set_id, num_mcq=None, num_subjective=None):
     
     # Load and render the LaTeX template
     env = Environment(loader=FileSystemLoader('templates'))
-    template = env.get_template('quiz_template.tex.jinja')
+    template_name = 'quiz_template_compact.tex.jinja' if compact else 'quiz_template.tex.jinja'
+    template = env.get_template(template_name)
     
     quiz_content = template.render(
         set_id=set_id,
@@ -210,19 +211,68 @@ def parse_args():
     parser.add_argument('--subjective', type=int, help='Number of subjective questions per set (default: all)')
     parser.add_argument('--no-pdf', action='store_true', help='Skip PDF compilation')
     parser.add_argument('--output-dir', type=str, default='output', help='Output directory (default: output)')
+    parser.add_argument('--compact', action='store_true', help='Use compact layout to save pages')
     
     return parser.parse_args()
+
+def validate_inputs(args):
+    """Validate command line arguments and system requirements."""
+    # Validate question counts
+    if args.mcq and args.mcq > len(mcq):
+        print(f"Warning: Requested {args.mcq} MCQ questions, but only {len(mcq)} available. Using all available.")
+        args.mcq = len(mcq)
+    
+    if args.subjective and args.subjective > len(subjective):
+        print(f"Warning: Requested {args.subjective} subjective questions, but only {len(subjective)} available. Using all available.")
+        args.subjective = len(subjective)
+    
+    # Validate output directory
+    if not os.path.exists(args.output_dir):
+        try:
+            os.makedirs(args.output_dir, exist_ok=True)
+            print(f"Created output directory: {args.output_dir}")
+        except OSError as e:
+            print(f"Error: Cannot create output directory '{args.output_dir}': {e}")
+            sys.exit(1)
+    
+    # Check for LaTeX if PDF compilation is enabled
+    if not args.no_pdf:
+        try:
+            subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            print("Warning: pdflatex not found. PDF compilation will be skipped.")
+            args.no_pdf = True
+    
+    # Check template files exist
+    template_name = 'quiz_template_compact.tex.jinja' if args.compact else 'quiz_template.tex.jinja'
+    template_path = os.path.join('templates', template_name)
+    if not os.path.exists(template_path):
+        print(f"Error: Template file '{template_path}' not found.")
+        sys.exit(1)
+    
+    return args
 
 def main():
     """Main function to generate quiz sets."""
     
-    # Parse command line arguments
-    args = parse_args()
-    
-    # Set random seed if provided
-    if args.seed is not None:
-        random.seed(args.seed)
-        print(f"Using random seed: {args.seed}")
+    try:
+        # Parse command line arguments
+        args = parse_args()
+        
+        # Validate inputs
+        args = validate_inputs(args)
+        
+        # Set random seed if provided
+        if args.seed is not None:
+            random.seed(args.seed)
+            print(f"Using random seed: {args.seed}")
+        
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user.")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error during initialization: {e}")
+        sys.exit(1)
     
     # Configuration from CLI arguments
     num_sets = args.sets
@@ -252,7 +302,8 @@ def main():
         quiz_content, answer_key_content = generate_quiz_set(
             set_id=set_num,
             num_mcq=num_mcq_per_set,
-            num_subjective=num_subjective_per_set
+            num_subjective=num_subjective_per_set,
+            compact=args.compact
         )
         
         # Save LaTeX file

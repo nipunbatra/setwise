@@ -46,6 +46,8 @@
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **100% Tested** - Comprehensive pytest suite with 22+ test cases
 - **CI/CD Ready** - GitHub Actions for testing and deployment
+- **Layout Options** - Normal (professional) or compact (space-efficient) templates
+- **Robust Validation** - Input validation and graceful error handling
 
 ## Quick Start
 
