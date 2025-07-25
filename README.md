@@ -1,10 +1,10 @@
 # Setwise: Professional LaTeX Quiz Generator
 
-[![CI Status](https://github.com/nipunbatra/setwise/workflows/Setwise%20CI/badge.svg)](https://github.com/nipunbatra/setwise/actions)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/nipunbatra/setwise/ci.yml?branch=main&label=CI)](https://github.com/nipunbatra/setwise/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/nipunbatra/setwise/branch/main/graph/badge.svg)](https://codecov.io/gh/nipunbatra/setwise)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Security Issues](https://img.shields.io/github/issues/nipunbatra/setwise/security?label=security%20issues&color=red)](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
+[![Security Issues](https://img.shields.io/github/issues-search?query=repo%3Anipunbatra%2Fsetwise%20is%3Aissue%20is%3Aopen%20label%3Asecurity&label=security%20issues&color=red)](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
