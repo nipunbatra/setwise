@@ -26,9 +26,7 @@ Professional single-column layout with color-coded sections and spacious design
 Two-column layout with multi-column MCQ options for maximum space efficiency
 
 ::: {layout-ncol=2}
-![Compact Template Preview](assets/images/compact_preview.png){width=400}
-
-![Compact Template Preview 2](assets/images/compact_preview2.png){width=400}
+![Compact Template Preview](assets/images/compact_preview-1.png){width=400}
 :::
 
 [Download PDF - Compact Template](assets/compact_sample.pdf){.btn .btn-primary}
@@ -39,9 +37,7 @@ Two-column layout with multi-column MCQ options for maximum space efficiency
 Traditional academic format with minimal colors and standard typography
 
 ::: {layout-ncol=2}
-![Academic Template Preview](assets/images/academic_preview.png){width=400}
-
-![Academic Template Preview 2](assets/images/academic_preview2.png){width=400}
+![Academic Template Preview](assets/images/academic_preview-1.png){width=400}
 :::
 
 [Download PDF - Academic Template](assets/academic_sample.pdf){.btn .btn-primary}
@@ -52,9 +48,7 @@ Traditional academic format with minimal colors and standard typography
 Minimalist black and white design with clean typography and high contrast
 
 ::: {layout-ncol=2}
-![Minimal Template Preview](assets/images/minimal_preview.png){width=400}
-
-![Minimal Template Preview 2](assets/images/minimal_preview2.png){width=400}
+![Minimal Template Preview](assets/images/minimal_preview-1.png){width=400}
 :::
 
 [Download PDF - Minimal Template](assets/minimal_sample.pdf){.btn .btn-primary}
