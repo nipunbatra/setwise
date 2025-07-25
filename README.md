@@ -7,57 +7,63 @@
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
-## Template Showcase - 4 Built-in Templates
+## Template Showcase - 3 Professional Templates
 
 ### Default Template (Professional)
 Professional single-column layout with color-coded sections and spacious design
+
+**Quiz Set 1 (All Pages)**
 <div align="center">
 
-| Page 1 | Page 2 |
-|--------|--------|
-| ![Default Template Page 1](docs/assets/images/quiz_set_1_page-1.png) | ![Default Template Page 2](docs/assets/images/quiz_set_1_page-2.png) |
+| Page 1 | Page 2 | Page 3 |
+|--------|--------|--------|
+| ![Default Set 1 Page 1](assets/images/default_set1_page-1.png) | ![Default Set 1 Page 2](assets/images/default_set1_page-2.png) | ![Default Set 1 Page 3](assets/images/default_set1_page-3.png) |
 
-📄 **[Download PDF - Default Template](docs/assets/quiz_set_1.pdf)**
-**Use case:** Formal presentations, exams, professional documentation (4-6 pages typical)
+</div>
+
+**Quiz Set 2 (Same Questions, Different Order)**
+<div align="center">
+
+| Page 1 | Page 2 | Page 3 |
+|--------|--------|--------|
+| ![Default Set 2 Page 1](assets/images/default_set2_page-1.png) | ![Default Set 2 Page 2](assets/images/default_set2_page-2.png) | ![Default Set 2 Page 3](assets/images/default_set2_page-3.png) |
+
+📄 **[Download PDF - Default Template](assets/default_sample.pdf)**
+
+**Use case:** Formal presentations, exams, professional documentation (3-4 pages typical)
 </div>
 
 ### Compact Template (Space-Efficient)
 Two-column layout with multi-column MCQ options for maximum space efficiency
+
+**Quiz Set 1 vs Set 2 Comparison**
 <div align="center">
 
-| Page 1 | Page 2 |
-|--------|--------|
-| ![Compact Template Preview](docs/assets/images/compact_preview.png) | ![Compact Template Preview 2](docs/assets/images/compact_preview2.png) |
+| Quiz Set 1 | Quiz Set 2 |
+|-------------|-------------|
+| ![Compact Set 1](assets/images/compact_set1_page-1.png) | ![Compact Set 2](assets/images/compact_set2_page-1.png) |
 
-📄 **[Download PDF - Compact Template](docs/assets/compact_sample.pdf)**
-**Use case:** Printing, quick distribution, saving paper (2-3 pages typical)
-</div>
+📄 **[Download PDF - Compact Template](assets/compact_sample.pdf)**
 
-### Academic Template (Traditional)
-Traditional academic format with minimal colors and standard typography
-<div align="center">
-
-| Page 1 | Page 2 |
-|--------|--------|
-| ![Academic Template Preview](docs/assets/images/academic_preview.png) | ![Academic Template Preview 2](docs/assets/images/academic_preview2.png) |
-
-📄 **[Download PDF - Academic Template](docs/assets/academic_sample.pdf)**
-**Use case:** University exams, academic assessments, formal testing (3-5 pages typical)
+**Use case:** Printing, quick distribution, saving paper (1-2 pages typical)
 </div>
 
 ### Minimal Template (Clean)
 Minimalist black and white design with clean typography and high contrast
+
+**Quiz Set 1 vs Set 2 Comparison**
 <div align="center">
 
-| Page 1 | Page 2 |
-|--------|--------|
-| ![Minimal Template Preview](docs/assets/images/minimal_preview.png) | ![Minimal Template Preview 2](docs/assets/images/minimal_preview2.png) |
+| Quiz Set 1 | Quiz Set 2 |
+|-------------|-------------|
+| ![Minimal Set 1](assets/images/minimal_set1_page-1.png) | ![Minimal Set 2](assets/images/minimal_set2_page-1.png) |
 
-📄 **[Download PDF - Minimal Template](docs/assets/minimal_sample.pdf)**
-**Use case:** Black & white printing, simple assessments, distraction-free (3-4 pages typical)
+📄 **[Download PDF - Minimal Template](assets/minimal_sample.pdf)**
+
+**Use case:** Black & white printing, simple assessments, distraction-free (1-2 pages typical)
 </div>
 
-**Template Selection:** Use `--template [name]` or `--list-templates` to see all options with detailed descriptions.
+**Notice the Smart Randomization:** Same questions appear in both sets, but with shuffled MCQ options and different question order. Perfect for preventing cheating while maintaining fair assessment.
 
 ## Key Features
 
@@ -68,7 +74,7 @@ Minimalist black and white design with clean typography and high contrast
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **100% Tested** - Comprehensive pytest suite with 22+ test cases
 - **CI/CD Ready** - GitHub Actions for testing and deployment
-- **Multiple Templates** - 4 built-in templates: default, compact, academic, minimal
+- **Multiple Templates** - 3 built-in templates: default, compact, minimal
 - **Template Management** - Plug-and-play template system with easy selection
 - **Robust Validation** - Input validation and graceful error handling
 
@@ -104,7 +110,7 @@ Options:
   --subjective NUM      Number of subjective questions per set (default: all available)
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
-  --template NAME       Template to use: default, compact, academic, minimal (default: default)
+  --template NAME       Template to use: default, compact, minimal (default: default)
   --list-templates      List all available templates with descriptions
 ```
 
@@ -125,9 +131,6 @@ python main.py --list-templates
 
 # Use compact template for space-efficient 2-column layout
 python main.py --seed 42 --sets 2 --template compact
-
-# Use academic template for traditional university-style quizzes
-python main.py --seed 42 --sets 2 --template academic
 
 # Use minimal template for clean black & white printing
 python main.py --seed 42 --sets 2 --template minimal
@@ -237,7 +240,6 @@ setwise/
 ├── templates/
 │   ├── quiz_template.tex.jinja         # Default professional template
 │   ├── quiz_template_compact.tex.jinja # Space-efficient 2-column template
-│   ├── quiz_template_academic.tex.jinja# Traditional academic template
 │   ├── quiz_template_minimal.tex.jinja # Clean minimal template
 │   └── template_config.py              # Template management system
 ├── figures/               # Generated TikZ diagrams and plots
