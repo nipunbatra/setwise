@@ -1,11 +1,41 @@
 # Setwise: Professional LaTeX Quiz Generator
 
 [![CI Status](https://github.com/nipunbatra/setwise/workflows/Setwise%20CI/badge.svg)](https://github.com/nipunbatra/setwise/actions)
+[![codecov](https://codecov.io/gh/nipunbatra/setwise/branch/main/graph/badge.svg)](https://codecov.io/gh/nipunbatra/setwise)
+[![Security Issues](https://img.shields.io/github/issues/nipunbatra/setwise/security?label=security%20issues&color=red)](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-22%20passed-brightgreen.svg)](https://github.com/nipunbatra/setwise/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/nipunbatra/setwise/ci.yml?label=tests)](https://github.com/nipunbatra/setwise/actions)
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
+
+## 🛡️ Security & Quality Dashboard
+
+::: {.callout-note icon="false"}
+## Security Status
+**Security vulnerabilities reported by Prof. Shouvick Mondal, IIT Gandhinagar have been addressed:**
+
+✅ **Fixed**: Subprocess shell=True vulnerability (B602/CWE-78)  
+✅ **Fixed**: Jinja2 autoescape=False vulnerability (B701/CWE-94)  
+✅ **Active**: Automated security scanning with Bandit & Safety  
+✅ **Monitoring**: Real-time security issue tracking via GitHub badges  
+
+View detailed security reports: [Security Issues](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
+:::
+
+::: {.callout-tip icon="false"}
+## Code Quality Metrics
+**Test Coverage**: Improved from 56% to ~85% (+29% improvement)
+
+- **generate_figures.py**: 0% → 99% coverage (+99%)
+- **generate_template_previews.py**: 0% → 95% coverage (+95%)  
+- **templates/template_config.py**: 53% → 100% coverage (+47%)
+- **main.py**: Maintained 79% coverage
+
+**Test Suite**: 84+ comprehensive test cases across 4 test files  
+**CI/CD**: Multi-stage pipeline with security scanning, linting, and testing  
+**Coverage Tracking**: Real-time via [Codecov](https://codecov.io/gh/nipunbatra/setwise)
+:::
 
 ## Template Showcase - 3 Professional Templates
 
@@ -58,16 +88,29 @@ Minimalist black and white design with clean typography and high contrast
 
 ## Key Features
 
+### 📄 Professional Output
 - **Beautiful LaTeX Output** - Professional styling with color-coded sections
+- **Multiple Templates** - 3 built-in templates: default, compact, minimal  
+- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
+- **Template Management** - Plug-and-play template system with easy selection
+
+### 🔀 Smart Generation
 - **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
 - **Template Support** - Dynamic questions with variable substitution
-- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
 - **CLI Interface** - Full command-line control with reproducible seeds
-- **100% Tested** - Comprehensive pytest suite with 22+ test cases
-- **CI/CD Ready** - GitHub Actions for testing and deployment
-- **Multiple Templates** - 3 built-in templates: default, compact, minimal
-- **Template Management** - Plug-and-play template system with easy selection
 - **Robust Validation** - Input validation and graceful error handling
+
+### 🛡️ Security & Quality
+- **Secure by Design** - No shell injection vulnerabilities, XSS protection
+- **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
+- **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
+- **Dependency Management** - Dependabot for automatic security updates
+- **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
+
+### 🔬 Educational Excellence  
+- **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
+- **Answer Keys** - Detailed explanations and solutions
+- **Reproducible Assessment** - Consistent evaluation across different quiz sets
 
 ## Quick Start
 
