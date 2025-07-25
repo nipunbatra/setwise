@@ -13,22 +13,16 @@
 Professional single-column layout with color-coded sections and spacious design
 
 **Quiz Set 1 (All Pages)**
-::: {layout-ncol=3}
-![Default Set 1 Page 1](assets/images/default_set1_page-1.png){width=300}
 
-![Default Set 1 Page 2](assets/images/default_set1_page-2.png){width=300}
-
-![Default Set 1 Page 3](assets/images/default_set1_page-3.png){width=300}
-:::
+| Page 1 | Page 2 | Page 3 |
+|--------|--------|--------|
+| ![Default Set 1 Page 1](assets/images/default_set1_page-1.png) | ![Default Set 1 Page 2](assets/images/default_set1_page-2.png) | ![Default Set 1 Page 3](assets/images/default_set1_page-3.png) |
 
 **Quiz Set 2 (Same Questions, Different Order)**
-::: {layout-ncol=3}
-![Default Set 2 Page 1](assets/images/default_set2_page-1.png){width=300}
 
-![Default Set 2 Page 2](assets/images/default_set2_page-2.png){width=300}
-
-![Default Set 2 Page 3](assets/images/default_set2_page-3.png){width=300}
-:::
+| Page 1 | Page 2 | Page 3 |
+|--------|--------|--------|
+| ![Default Set 2 Page 1](assets/images/default_set2_page-1.png) | ![Default Set 2 Page 2](assets/images/default_set2_page-2.png) | ![Default Set 2 Page 3](assets/images/default_set2_page-3.png) |
 
 [Download PDF - Default Template](assets/default_sample.pdf){.btn .btn-primary}
 
@@ -38,11 +32,10 @@ Professional single-column layout with color-coded sections and spacious design
 Two-column layout with multi-column MCQ options for maximum space efficiency
 
 **Quiz Set 1 vs Set 2 Comparison**
-::: {layout-ncol=2}
-![Compact Set 1](assets/images/compact_set1_page-1.png){width=400}
 
-![Compact Set 2](assets/images/compact_set2_page-1.png){width=400}
-:::
+| Quiz Set 1 | Quiz Set 2 |
+|-------------|-------------|
+| ![Compact Set 1](assets/images/compact_set1_page-1.png) | ![Compact Set 2](assets/images/compact_set2_page-1.png) |
 
 [Download PDF - Compact Template](assets/compact_sample.pdf){.btn .btn-primary}
 
@@ -52,11 +45,10 @@ Two-column layout with multi-column MCQ options for maximum space efficiency
 Minimalist black and white design with clean typography and high contrast
 
 **Quiz Set 1 vs Set 2 Comparison**
-::: {layout-ncol=2}
-![Minimal Set 1](assets/images/minimal_set1_page-1.png){width=400}
 
-![Minimal Set 2](assets/images/minimal_set2_page-1.png){width=400}
-:::
+| Quiz Set 1 | Quiz Set 2 |
+|-------------|-------------|
+| ![Minimal Set 1](assets/images/minimal_set1_page-1.png) | ![Minimal Set 2](assets/images/minimal_set2_page-1.png) |
 
 [Download PDF - Minimal Template](assets/minimal_sample.pdf){.btn .btn-primary}
 
