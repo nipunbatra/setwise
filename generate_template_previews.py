@@ -10,13 +10,16 @@ import os
 import sys
 import subprocess
 import shutil
+import shlex
 from pathlib import Path
 
 def run_command(cmd, description):
     """Run a shell command and handle errors."""
     print(f"Running: {description}")
     try:
-        result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
+        # Use shlex.split for secure command parsing instead of shell=True
+        cmd_args = shlex.split(cmd) if isinstance(cmd, str) else cmd
+        result = subprocess.run(cmd_args, check=True, capture_output=True, text=True)
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error {description}: {e}")

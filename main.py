@@ -123,7 +123,10 @@ def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, template_name="
     total_marks = mcq_marks + subjective_marks
     
     # Load and render the LaTeX template
-    env = Environment(loader=FileSystemLoader('templates'))
+    env = Environment(
+        loader=FileSystemLoader('templates'),
+        autoescape=True  # Enable autoescape for security
+    )
     template_file = template_manager.get_template_file(template_name)
     template = env.get_template(template_file)
     
