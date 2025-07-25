@@ -68,16 +68,36 @@ Minimalist black and white design with clean typography and high contrast
 
 ## Key Features
 
+### 📄 Professional Output
 - **Beautiful LaTeX Output** - Professional styling with color-coded sections
+- **Multiple Templates** - 3 built-in templates: default, compact, minimal  
+- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
+- **Template Management** - Plug-and-play template system with easy selection
+
+### 🔀 Smart Generation
 - **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
 - **Template Support** - Dynamic questions with variable substitution
-- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
 - **CLI Interface** - Full command-line control with reproducible seeds
-- **100% Tested** - Comprehensive pytest suite with 22+ test cases
-- **CI/CD Ready** - GitHub Actions for testing and deployment
-- **Multiple Templates** - 3 built-in templates: default, compact, minimal
-- **Template Management** - Plug-and-play template system with easy selection
 - **Robust Validation** - Input validation and graceful error handling
+
+### 🛡️ Security & Quality
+- **Secure by Design** - No shell injection vulnerabilities, XSS protection
+- **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
+- **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
+- **Dependency Management** - Dependabot for automatic security updates
+- **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
+
+### 📦 Modern Distribution
+- **Pip Installable** - Modern Python packaging with pyproject.toml
+- **Multiple Install Options** - Basic, development, and security extras
+- **Cross-Platform** - Works on Windows, macOS, and Linux
+- **Python 3.8+** - Support for modern Python versions
+- **Professional CLI** - Intuitive command-line interface with help system
+
+### 🔬 Educational Excellence  
+- **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
+- **Answer Keys** - Detailed explanations and solutions
+- **Reproducible Assessment** - Consistent evaluation across different quiz sets
 
 ## Installation
 
@@ -199,19 +219,51 @@ setwise generate --seed 42 --sets 2 --template compact
 setwise generate --seed 42 --sets 2 --template minimal
 ```
 
-## Testing & Quality Assurance
+## Development & Testing
 
+### Development Installation
+```bash
+# Clone and install in development mode
+git clone https://github.com/nipunbatra/setwise.git
+cd setwise
+pip install -e .[dev,security]
+```
+
+### Testing & Quality Assurance
 ```bash
 # Run comprehensive test suite
 python -m pytest -v
 
 # Generate test coverage report
-python -m pytest --cov=main --cov-report=html
+python -m pytest --cov=setwise --cov-report=html
+
+# Run security tests locally
+./scripts/security_test.sh
 
 # Run specific test categories
 python -m pytest test_main.py::TestMCQShuffling -v
 python -m pytest test_main.py::TestQuizGeneration -v
 ```
+
+### Package Building & Distribution
+```bash
+# Build package for distribution
+python -m build
+
+# Check package integrity
+twine check dist/*
+
+# Install locally built package
+pip install dist/setwise-*.whl
+
+# Publish to PyPI (maintainers only)
+twine upload dist/*
+```
+
+### Requirements
+- **Python**: 3.8+ (tested on 3.8, 3.9, 3.10, 3.11, 3.12)
+- **LaTeX**: pdflatex for PDF compilation
+- **System**: poppler-utils for PDF to image conversion (preview generation)
 
 **Test Coverage includes:**
 - MCQ option shuffling and answer key tracking

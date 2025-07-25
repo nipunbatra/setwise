@@ -122,10 +122,11 @@ generator = QuizGenerator(output_dir="my_output")
 generator.generate_quizzes(num_sets=3, seed=42)
 ```
 
-## Command Line Options
+## Command Line Reference
 
+### Generate Command
 ```bash
-python main.py [OPTIONS]
+setwise generate [OPTIONS]
 
 Options:
   --seed SEED           Random seed for reproducibility (default: random)
@@ -135,43 +136,62 @@ Options:
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
   --template NAME       Template to use: default, compact, minimal (default: default)
-  --list-templates      List all available templates with descriptions
 ```
 
-### Examples
+### Other Commands
+```bash
+setwise list-templates    # List all available templates with descriptions
+setwise generate-figures  # Generate TikZ diagrams and matplotlib plots
+setwise --help           # Show complete help
+```
+
+### Advanced Examples
 
 ```bash
 # Generate 5 sets with specific question counts and reproducible seed
-python main.py --seed 123 --sets 5 --mcq 3 --subjective 2
+setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 
 # Generate only LaTeX files without PDF compilation
-python main.py --no-pdf --sets 2
+setwise generate --no-pdf --sets 2
 
 # Use custom output directory
-python main.py --output-dir ./my_quizzes --sets 1
-
-# List all available templates with descriptions
-python main.py --list-templates
+setwise generate --output-dir ./my_quizzes --sets 1
 
 # Use compact template for space-efficient 2-column layout
-python main.py --seed 42 --sets 2 --template compact
+setwise generate --seed 42 --sets 2 --template compact
 
 # Use minimal template for clean black & white printing
-python main.py --seed 42 --sets 2 --template minimal
+setwise generate --seed 42 --sets 2 --template minimal
+
+# Generate figures first, then quiz sets
+setwise generate-figures
+setwise generate --seed 42 --sets 3
 ```
 
-## Testing & Quality Assurance
+## Development & Testing
 
+### Development Setup
+```bash
+# Clone and install in development mode
+git clone https://github.com/nipunbatra/setwise.git
+cd setwise
+pip install -e .[dev,security]
+```
+
+### Testing & Quality Assurance
 ```bash
 # Run comprehensive test suite
 python -m pytest -v
 
-# Generate test coverage report
-python -m pytest --cov=main --cov-report=html
+# Generate test coverage report  
+python -m pytest --cov=setwise --cov-report=html
 
-# Run specific test categories
-python -m pytest test_main.py::TestMCQShuffling -v
-python -m pytest test_main.py::TestQuizGeneration -v
+# Run security tests locally
+./scripts/security_test.sh
+
+# Package building and validation
+python -m build
+twine check dist/*
 ```
 
 **Test Coverage includes:**
