@@ -7,39 +7,57 @@
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
-## Sample Quiz Sets - Visual Comparison
+## Template Showcase - 4 Built-in Templates
 
-### Quiz Set 1 (All Pages)
+### Default Template (Professional)
+Professional single-column layout with color-coded sections and spacious design
 <div align="center">
 
 | Page 1 | Page 2 |
 |--------|--------|
-| ![Quiz Set 1 Page 1](docs/assets/images/quiz_set_1_page-1.png) | ![Quiz Set 1 Page 2](docs/assets/images/quiz_set_1_page-2.png) |
+| ![Default Template Page 1](docs/assets/images/quiz_set_1_page-1.png) | ![Default Template Page 2](docs/assets/images/quiz_set_1_page-2.png) |
 
-| Page 3 | Page 4 |
-|--------|--------|
-| ![Quiz Set 1 Page 3](docs/assets/images/quiz_set_1_page-3.png) | ![Quiz Set 1 Page 4](docs/assets/images/quiz_set_1_page-4.png) |
-
-📄 **[Download PDF - Quiz Set 1](docs/assets/quiz_set_1.pdf)**
-
+📄 **[Download PDF - Default Template](docs/assets/quiz_set_1.pdf)**
+**Use case:** Formal presentations, exams, professional documentation (4-6 pages typical)
 </div>
 
-### Quiz Set 2 (All Pages) 
+### Compact Template (Space-Efficient)
+Two-column layout with multi-column MCQ options for maximum space efficiency
 <div align="center">
 
 | Page 1 | Page 2 |
 |--------|--------|
-| ![Quiz Set 2 Page 1](docs/assets/images/quiz_set_2_page-1.png) | ![Quiz Set 2 Page 2](docs/assets/images/quiz_set_2_page-2.png) |
+| ![Compact Template Preview](docs/assets/images/compact_preview.png) | ![Compact Template Preview 2](docs/assets/images/compact_preview2.png) |
 
-| Page 3 | Page 4 |
-|--------|--------|
-| ![Quiz Set 2 Page 3](docs/assets/images/quiz_set_2_page-3.png) | ![Quiz Set 2 Page 4](docs/assets/images/quiz_set_2_page-4.png) |
-
-📄 **[Download PDF - Quiz Set 2](docs/assets/quiz_set_2.pdf)**
-
+📄 **[Download PDF - Compact Template](docs/assets/compact_sample.pdf)**
+**Use case:** Printing, quick distribution, saving paper (2-3 pages typical)
 </div>
 
-**Notice the Smart Randomization:** Same questions appear in both sets, but with shuffled MCQ options and different question order. Templated subjective questions show different variable values while maintaining identical structure.
+### Academic Template (Traditional)
+Traditional academic format with minimal colors and standard typography
+<div align="center">
+
+| Page 1 | Page 2 |
+|--------|--------|
+| ![Academic Template Preview](docs/assets/images/academic_preview.png) | ![Academic Template Preview 2](docs/assets/images/academic_preview2.png) |
+
+📄 **[Download PDF - Academic Template](docs/assets/academic_sample.pdf)**
+**Use case:** University exams, academic assessments, formal testing (3-5 pages typical)
+</div>
+
+### Minimal Template (Clean)
+Minimalist black and white design with clean typography and high contrast
+<div align="center">
+
+| Page 1 | Page 2 |
+|--------|--------|
+| ![Minimal Template Preview](docs/assets/images/minimal_preview.png) | ![Minimal Template Preview 2](docs/assets/images/minimal_preview2.png) |
+
+📄 **[Download PDF - Minimal Template](docs/assets/minimal_sample.pdf)**
+**Use case:** Black & white printing, simple assessments, distraction-free (3-4 pages typical)
+</div>
+
+**Template Selection:** Use `--template [name]` or `--list-templates` to see all options with detailed descriptions.
 
 ## Key Features
 
@@ -50,7 +68,8 @@
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **100% Tested** - Comprehensive pytest suite with 22+ test cases
 - **CI/CD Ready** - GitHub Actions for testing and deployment
-- **Layout Options** - Normal (professional) or compact (space-efficient) templates
+- **Multiple Templates** - 4 built-in templates: default, compact, academic, minimal
+- **Template Management** - Plug-and-play template system with easy selection
 - **Robust Validation** - Input validation and graceful error handling
 
 ## Quick Start
@@ -85,7 +104,8 @@ Options:
   --subjective NUM      Number of subjective questions per set (default: all available)
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
-  --compact             Use compact layout to save pages (default: normal layout)
+  --template NAME       Template to use: default, compact, academic, minimal (default: default)
+  --list-templates      List all available templates with descriptions
 ```
 
 ### Examples
@@ -100,8 +120,17 @@ python main.py --no-pdf --sets 2
 # Use custom output directory
 python main.py --output-dir ./my_quizzes --sets 1
 
-# Generate compact layout to save pages (2-column, multi-column MCQ options)
-python main.py --seed 42 --sets 2 --compact
+# List all available templates with descriptions
+python main.py --list-templates
+
+# Use compact template for space-efficient 2-column layout
+python main.py --seed 42 --sets 2 --template compact
+
+# Use academic template for traditional university-style quizzes
+python main.py --seed 42 --sets 2 --template academic
+
+# Use minimal template for clean black & white printing
+python main.py --seed 42 --sets 2 --template minimal
 ```
 
 ## Testing & Quality Assurance
@@ -191,7 +220,7 @@ The quiz system includes comprehensive supervised learning topics:
 ### Key Components
 - **`main.py`** - Quiz generation engine with CLI interface
 - **`data/questions.py`** - Machine learning question database with metadata
-- **`templates/quiz_template.tex.jinja`** - Professional LaTeX template
+- **`templates/`** - LaTeX template system with 4 built-in templates and management
 - **`generate_figures.py`** - TikZ and matplotlib figure generation
 - **`test_main.py`** - Comprehensive test suite (22+ test cases)
 
@@ -206,7 +235,11 @@ setwise/
 ├── data/
 │   └── questions.py       # Machine learning question database
 ├── templates/
-│   └── quiz_template.tex.jinja  # Professional LaTeX template
+│   ├── quiz_template.tex.jinja         # Default professional template
+│   ├── quiz_template_compact.tex.jinja # Space-efficient 2-column template
+│   ├── quiz_template_academic.tex.jinja# Traditional academic template
+│   ├── quiz_template_minimal.tex.jinja # Clean minimal template
+│   └── template_config.py              # Template management system
 ├── figures/               # Generated TikZ diagrams and plots
 │   ├── *.tikz            # TikZ diagram files
 │   └── *.pdf             # Matplotlib generated plots

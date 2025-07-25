@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+
+% Academic color scheme - minimal colors
+\usepackage{xcolor}
+\definecolor{darkblue}{RGB}{0, 51, 102}
+\definecolor{darkgray}{RGB}{64, 64, 64}
+\definecolor{lightgray}{RGB}{240, 240, 240}
+
+% Academic headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Machine Learning Quiz - Set {{ set_number }}}}
+\fancyhead[R]{\textbf{Total: {{ total_marks }} marks}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+% Academic styling
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+% Academic title
+\begin{center}
+{\Large\textbf{Machine Learning Quiz}}\\[8pt]
+{\large Supervised Learning Assessment}\\[4pt]
+{\normalsize Set {{ set_number }} \hfill Total Marks: {{ total_marks }}}\\[12pt]
+\hrule
+\end{center}
+
+\vspace{12pt}
+
+% Academic instructions
+\noindent\textbf{Instructions:}
+\begin{enumerate}[leftmargin=20pt, itemsep=2pt]
+  \item Answer all questions clearly and completely.
+  \item Show your work for subjective questions.
+  \item For multiple choice questions, circle the correct option.
+  \item Time allocation: MCQ ({{ mcq_marks }} marks) + Subjective ({{ subjective_marks }} marks) = {{ total_marks }} marks total
+\end{enumerate}
+
+\hrule
+\vspace{15pt}
+
+{% if mcq_questions %}
+\section*{Part A: Multiple Choice Questions}
+\textit{Choose the best answer for each question.}
+
+\vspace{8pt}
+
+{% for question in mcq_questions %}
+\noindent\textbf{% raw %}{{% endraw %}{{ loop.index }}{% raw %}.}{% endraw %} {{ question.question }} \hfill \textbf{% raw %}{[{% endraw %}{{ question.marks }}{% raw %} marks]}{% endraw %}
+
+\vspace{6pt}
+\begin{enumerate}[label=(\alph*), leftmargin=20pt, itemsep=3pt]
+{% for option in question.options %}
+  \item {{ option }}
+{% endfor %}
+\end{enumerate}
+\vspace{8pt}
+{% endfor %}
+
+\vspace{15pt}
+{% endif %}
+
+{% if subjective_questions %}
+\section*{Part B: Subjective Questions}
+\textit{Provide detailed answers with proper justification.}
+
+\vspace{8pt}
+
+{% for question in subjective_questions %}
+\noindent\textbf{% raw %}{{% endraw %}{{ loop.index + mcq_questions|length }}{% raw %}.}{% endraw %} {{ question.question }} \hfill \textbf{% raw %}{[{% endraw %}{{ question.marks }}{% raw %} marks]}{% endraw %}
+
+\vspace{8pt}
+\hrule height 0.2pt
+\vspace{8pt}
+\hrule height 0.2pt
+\vspace{8pt}
+\hrule height 0.2pt
+\vspace{12pt}
+{% endfor %}
+{% endif %}
+
+% Academic footer
+\vfill
+\begin{center}
+\small\textit{End of Quiz \hfill Generated with Setwise Quiz Generator}
+\end{center}
+
+\end{document}

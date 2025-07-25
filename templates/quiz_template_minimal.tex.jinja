@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+% Minimal - no colors, no fancy headers
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+
+\begin{document}
+
+% Minimal title
+\begin{center}
+\textbf{\Large Machine Learning Quiz - Set {{ set_number }}}\\
+\textbf{Total Marks: {{ total_marks }}}
+\end{center}
+
+\rule{\textwidth}{0.5pt}
+
+% Minimal instructions
+\textbf{Instructions:}
+\begin{itemize}[leftmargin=15pt, itemsep=1pt]
+  \item Answer all questions clearly and completely.
+  \item Show work for subjective questions.
+  \item Circle the correct option for multiple choice questions.
+  \item MCQ: {{ mcq_marks }} marks, Subjective: {{ subjective_marks }} marks
+\end{itemize}
+
+\rule{\textwidth}{0.5pt}
+
+{% if mcq_questions %}
+\textbf{MULTIPLE CHOICE QUESTIONS}
+
+{% for question in mcq_questions %}
+\textbf{% raw %}{{% endraw %}{{ loop.index }}{% raw %}.}{% endraw %} {{ question.question }} \textbf{% raw %}{[{% endraw %}{{ question.marks }}{% raw %} marks]}{% endraw %}
+
+\begin{enumerate}[label=(\Alph*), leftmargin=18pt, itemsep=2pt]
+{% for option in question.options %}
+  \item {{ option }}
+{% endfor %}
+\end{enumerate}
+
+{% endfor %}
+{% endif %}
+
+{% if subjective_questions %}
+\textbf{SUBJECTIVE QUESTIONS}
+
+{% for question in subjective_questions %}
+\textbf{% raw %}{{% endraw %}{{ loop.index + mcq_questions|length }}{% raw %}.}{% endraw %} {{ question.question }} \textbf{% raw %}{[{% endraw %}{{ question.marks }}{% raw %} marks]}{% endraw %}
+
+\vspace{12pt}
+\rule{\textwidth}{0.3pt}
+\vspace{12pt}
+\rule{\textwidth}{0.3pt}
+\vspace{12pt}
+\rule{\textwidth}{0.3pt}
+\vspace{12pt}
+
+{% endfor %}
+{% endif %}
+
+\vfill
+\begin{center}
+\textit{Generated with Setwise Quiz Generator}
+\end{center}
+
+\end{document}

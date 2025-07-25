@@ -12,9 +12,11 @@ import argparse
 from jinja2 import Template, Environment, FileSystemLoader
 from pathlib import Path
 
-# Import question data
+# Import question data and template manager
 sys.path.append('data')
+sys.path.append('templates')
 from questions import mcq, subjective
+from template_config import template_manager
 
 
 def shuffle_mcq_options(question_list):
@@ -88,7 +90,7 @@ def process_subjective_questions(subjective_list):
     return processed_questions
 
 
-def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, compact=False):
+def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, template_name="default"):
     """
     Generate a single quiz set with randomized questions.
     
@@ -122,8 +124,8 @@ def generate_quiz_set(set_id, num_mcq=None, num_subjective=None, compact=False):
     
     # Load and render the LaTeX template
     env = Environment(loader=FileSystemLoader('templates'))
-    template_name = 'quiz_template_compact.tex.jinja' if compact else 'quiz_template.tex.jinja'
-    template = env.get_template(template_name)
+    template_file = template_manager.get_template_file(template_name)
+    template = env.get_template(template_file)
     
     quiz_content = template.render(
         set_id=set_id,
@@ -211,7 +213,10 @@ def parse_args():
     parser.add_argument('--subjective', type=int, help='Number of subjective questions per set (default: all)')
     parser.add_argument('--no-pdf', action='store_true', help='Skip PDF compilation')
     parser.add_argument('--output-dir', type=str, default='output', help='Output directory (default: output)')
-    parser.add_argument('--compact', action='store_true', help='Use compact layout to save pages')
+    parser.add_argument('--template', type=str, default='default', 
+                        help='Template style to use (default: default). Use --list-templates to see options')
+    parser.add_argument('--list-templates', action='store_true', 
+                        help='List all available templates and exit')
     
     return parser.parse_args()
 
@@ -243,11 +248,10 @@ def validate_inputs(args):
             print("Warning: pdflatex not found. PDF compilation will be skipped.")
             args.no_pdf = True
     
-    # Check template files exist
-    template_name = 'quiz_template_compact.tex.jinja' if args.compact else 'quiz_template.tex.jinja'
-    template_path = os.path.join('templates', template_name)
-    if not os.path.exists(template_path):
-        print(f"Error: Template file '{template_path}' not found.")
+    # Validate template selection
+    is_valid, message = template_manager.validate_template(args.template)
+    if not is_valid:
+        print(f"Error: {message}")
         sys.exit(1)
     
     return args
@@ -258,6 +262,11 @@ def main():
     try:
         # Parse command line arguments
         args = parse_args()
+        
+        # Handle template listing
+        if args.list_templates:
+            print(template_manager.list_templates())
+            sys.exit(0)
         
         # Validate inputs
         args = validate_inputs(args)
@@ -303,7 +312,7 @@ def main():
             set_id=set_num,
             num_mcq=num_mcq_per_set,
             num_subjective=num_subjective_per_set,
-            compact=args.compact
+            template_name=args.template
         )
         
         # Save LaTeX file

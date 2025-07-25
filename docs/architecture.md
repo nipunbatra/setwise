@@ -7,9 +7,11 @@ graph TD
     A[CLI Arguments] --> B[main.py]
     B --> C[validate_inputs()]
     C --> D[Parse Arguments]
-    D --> E{Layout Type?}
-    E -->|Normal| F[quiz_template.tex.jinja]
-    E -->|Compact| G[quiz_template_compact.tex.jinja]
+    D --> E{Template Selection?}
+    E -->|default| F[quiz_template.tex.jinja]
+    E -->|compact| G[quiz_template_compact.tex.jinja]
+    E -->|academic| H[quiz_template_academic.tex.jinja]
+    E -->|minimal| I[quiz_template_minimal.tex.jinja]
     
     H[data/questions.py] --> I[MCQ Questions<br/>20 questions, 5-6 options]
     H --> J[Subjective Questions<br/>15 questions with templates]
@@ -21,6 +23,8 @@ graph TD
     L --> M
     F --> M
     G --> M
+    H --> M
+    I --> M
     
     M --> N[Jinja2 Template Engine]
     N --> O[LaTeX Content]
@@ -48,9 +52,9 @@ graph TD
 ## Component Breakdown
 
 ### 1. Input Layer
-- **CLI Arguments**: User-specified parameters (seed, sets, questions, layout)
+- **CLI Arguments**: User-specified parameters (seed, sets, questions, template selection)
 - **Question Database**: Structured MCQ and subjective questions with metadata
-- **Templates**: Jinja2 LaTeX templates for normal and compact layouts
+- **Template System**: 4 built-in Jinja2 LaTeX templates with management system
 
 ### 2. Processing Layer
 - **Validation**: Input validation and system requirements check
@@ -94,13 +98,22 @@ graph TD
     F --> H[LaTeX Output]
 ```
 
-### Layout Options
+### Template Management System
 ```mermaid
 graph TD
-    A[CLI Flag: --compact] --> B{Layout Choice}
-    B -->|False| C[quiz_template.tex.jinja<br/>- Single column<br/>- Spacious layout<br/>- Color-coded boxes<br/>- ~4-6 pages]
-    B -->|True| D[quiz_template_compact.tex.jinja<br/>- Two column<br/>- Multi-column MCQ options<br/>- Compact spacing<br/>- ~2-3 pages]
+    A[CLI: --template NAME] --> B[TemplateManager]
+    B --> C{Template Selection}
     
-    C --> E[Professional Presentation]
-    D --> F[Space-Efficient Printing]
+    C -->|default| D[quiz_template.tex.jinja<br/>- Single column<br/>- Color-coded sections<br/>- Professional styling<br/>- 4-6 pages]
+    
+    C -->|compact| E[quiz_template_compact.tex.jinja<br/>- Two column layout<br/>- Multi-column MCQ options<br/>- Reduced spacing<br/>- 2-3 pages]
+    
+    C -->|academic| F[quiz_template_academic.tex.jinja<br/>- Traditional format<br/>- Minimal colors<br/>- Standard typography<br/>- 3-5 pages]
+    
+    C -->|minimal| G[quiz_template_minimal.tex.jinja<br/>- Black & white<br/>- Clean typography<br/>- No decorations<br/>- 3-4 pages]
+    
+    D --> H[Professional Use]
+    E --> I[Space-Efficient Printing]
+    F --> J[Academic Assessments]
+    G --> K[Minimal Distraction]
 ```
