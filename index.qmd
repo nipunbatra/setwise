@@ -9,34 +9,6 @@
 
 > A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
 
-## 🛡️ Security & Quality Dashboard
-
-::: {.callout-note icon="false"}
-## Security Status
-**Security vulnerabilities reported by Prof. Shouvick Mondal, IIT Gandhinagar have been addressed:**
-
-✅ **Fixed**: Subprocess shell=True vulnerability (B602/CWE-78)  
-✅ **Fixed**: Jinja2 autoescape=False vulnerability (B701/CWE-94)  
-✅ **Active**: Automated security scanning with Bandit & Safety  
-✅ **Monitoring**: Real-time security issue tracking via GitHub badges  
-
-View detailed security reports: [Security Issues](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
-:::
-
-::: {.callout-tip icon="false"}
-## Code Quality Metrics
-**Test Coverage**: Improved from 56% to ~85% (+29% improvement)
-
-- **generate_figures.py**: 0% → 99% coverage (+99%)
-- **generate_template_previews.py**: 0% → 95% coverage (+95%)  
-- **templates/template_config.py**: 53% → 100% coverage (+47%)
-- **main.py**: Maintained 79% coverage
-
-**Test Suite**: 84+ comprehensive test cases across 4 test files  
-**CI/CD**: Multi-stage pipeline with security scanning, linting, and testing  
-**Coverage Tracking**: Real-time via [Codecov](https://codecov.io/gh/nipunbatra/setwise)
-:::
-
 ## Template Showcase - 3 Professional Templates
 
 ### Default Template (Professional)
