@@ -101,31 +101,12 @@ Minimalist black and white design with clean typography and high contrast
 
 ## Installation
 
-### Option 1: Install from PyPI (Recommended)
-
 ```bash
-# Install the latest stable version
-pip install setwise
+# Install from GitHub source
+pip install git+https://github.com/nipunbatra/setwise.git
 
-# Install with development dependencies
-pip install setwise[dev]
-
-# Install with security scanning tools
-pip install setwise[security]
-```
-
-### Option 2: Install from Source
-
-```bash
-# Clone the repository
-git clone https://github.com/nipunbatra/setwise.git
-cd setwise
-
-# Install in development mode
-pip install -e .
-
-# Or install with dependencies
-pip install -e .[dev,security]
+# For development with all tools
+pip install git+https://github.com/nipunbatra/setwise.git[dev,security]
 ```
 
 ## Quick Start
