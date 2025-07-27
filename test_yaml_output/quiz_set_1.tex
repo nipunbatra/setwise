@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usetikzlibrary{positioning, shadows, decorations.pathmorphing}
+
+% Define colors
+\definecolor{primaryblue}{RGB}{41, 128, 185}
+\definecolor{secondaryblue}{RGB}{52, 152, 219}
+\definecolor{accentorange}{RGB}{230, 126, 34}
+\definecolor{lightgray}{RGB}{236, 240, 241}
+\definecolor{darkgray}{RGB}{52, 73, 94}
+\definecolor{successgreen}{RGB}{39, 174, 96}
+
+% Configure fancy headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primaryblue}{\textbf{Machine Learning Quiz - Set 1}}}
+\fancyhead[R]{\textcolor{darkgray}{\textbf{Total: 16 marks}}}
+\fancyfoot[C]{\textcolor{darkgray}{\thepage}}
+\renewcommand{\headrulewidth}{2pt}
+
+% Custom environments
+\newtcolorbox{instructionbox}{
+  colback=lightgray,
+  colframe=primaryblue,
+  arc=3mm,
+  boxrule=1.5pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt
+}
+
+\newtcolorbox{mcqbox}{
+  colback=white,
+  colframe=secondaryblue!30,
+  arc=2mm,
+  boxrule=0.8pt,
+  left=6pt,
+  right=6pt,
+  top=4pt,
+  bottom=4pt
+}
+
+\newtcolorbox{subjectivebox}{
+  colback=white,
+  colframe=accentorange!40,
+  arc=2mm,
+  boxrule=0.8pt,
+  left=6pt,
+  right=6pt,
+  top=4pt,
+  bottom=4pt
+}
+
+\begin{document}
+
+% Title section with decorative elements
+\begin{center}
+  {\Huge\textcolor{primaryblue}{\textbf{Machine Learning}}} \\[5pt]
+  {\LARGE\textcolor{darkgray}{\textbf{Supervised Learning Quiz}}} \\[3pt]
+  {\Large\textcolor{secondaryblue}{\textbf{Set 1}}}
+\end{center}
+
+\vspace{20pt}
+
+% Instructions box
+\begin{instructionbox}
+\textcolor{darkgray}{\textbf{\large Instructions:}}
+\begin{itemize}[leftmargin=20pt, itemsep=3pt]
+  \item \textcolor{darkgray}{Answer all questions clearly and completely.}
+  \item \textcolor{darkgray}{Show your work for subjective questions.}
+  \item \textcolor{darkgray}{For multiple choice questions, \textbf{circle} the correct option.}
+  \item \textcolor{darkgray}{\textbf{Marks Distribution:} MCQ (3 marks) + Subjective (13 marks) = \textbf{16marks total}}
+\end{itemize}
+\end{instructionbox}
+
+\vspace{15pt}
+
+
+\begin{center}
+  \textcolor{primaryblue}{\Large\textbf{Multiple Choice Questions}}
+\end{center}
+\vspace{10pt}
+
+
+\begin{mcqbox}
+\textcolor{primaryblue}{\textbf{\large Q1}} \hfill \textcolor{accentorange}{\textbf{[2 marks]}}
+\vspace{8pt}
+
+Calculate: $2^3 + 5 \times 2$
+
+\vspace{8pt}
+\begin{enumerate}[label=\textbf{(\Alph*)}, leftmargin=25pt, itemsep=4pt]
+
+  \item \textcolor{darkgray}{16}
+
+  \item \textcolor{darkgray}{18}
+
+  \item \textcolor{darkgray}{20}
+
+  \item \textcolor{darkgray}{22}
+
+\end{enumerate}
+\end{mcqbox}
+\vspace{8pt}
+
+\begin{mcqbox}
+\textcolor{primaryblue}{\textbf{\large Q2}} \hfill \textcolor{accentorange}{\textbf{[1 mark]}}
+\vspace{8pt}
+
+What is the capital of France?
+
+\vspace{8pt}
+\begin{enumerate}[label=\textbf{(\Alph*)}, leftmargin=25pt, itemsep=4pt]
+
+  \item \textcolor{darkgray}{London}
+
+  \item \textcolor{darkgray}{Berlin}
+
+  \item \textcolor{darkgray}{Paris}
+
+  \item \textcolor{darkgray}{Madrid}
+
+\end{enumerate}
+\end{mcqbox}
+\vspace{8pt}
+
+
+
+
+\vspace{15pt}
+\begin{center}
+  \textcolor{accentorange}{\Large\textbf{Subjective Questions}}
+\end{center}
+\vspace{10pt}
+
+
+\begin{subjectivebox}
+\textcolor{primaryblue}{\textbf{\large Q3}} \hfill \textcolor{accentorange}{\textbf{[Total: 8 marks]}}
+\vspace{8pt}
+
+Derive the quadratic formula from $ax^2 + bx + c = 0$.
+\end{subjectivebox}
+\vspace{12pt}
+
+\begin{subjectivebox}
+\textcolor{primaryblue}{\textbf{\large Q4}} \hfill \textcolor{accentorange}{\textbf{[Total: 5 marks]}}
+\vspace{8pt}
+
+Explain Newton&#39;s first law of motion.
+\end{subjectivebox}
+\vspace{12pt}
+
+
+
+% Footer decoration
+\vfill
+\begin{center}
+  \textcolor{darkgray}{\small\textit{Generated with Setwise Quiz Generator}}
+\end{center}
+
+\end{document}

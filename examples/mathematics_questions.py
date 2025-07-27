@@ -8,11 +8,11 @@ Usage: setwise generate --questions-file mathematics_questions.py
 # Multiple Choice Questions - Mathematics
 mcq = [
     {
-        "question": r"What is the derivative of $f(x) = x^3 + 2x^2 - 5x + 1$?",
+        "question": r"What is the derivative of $f(x) = $x^{3}$ + 2x^2 - 5x + 1$?",
         "options": [
             r"$3x^2 + 4x - 5$",
             r"$3x^2 + 2x - 5$", 
-            r"$x^3 + 4x - 5$",
+            r"$$x^{3}$ + 4x - 5$",
             r"$3x^2 + 4x - 1$",
             r"$3x^2 + x - 5$"
         ],
@@ -20,15 +20,15 @@ mcq = [
         "marks": 2
     },
     {
-        "question": r"The integral $\int x^2 dx$ equals:",
+        "question": r"The integral $\int $x^{2}$ dx$ equals:",
         "options": [
-            r"$\frac{x^3}{3} + C$",
-            r"$x^3 + C$",
-            r"$\frac{x^2}{2} + C$",
+            r"$\frac{$x^{3}$}{3} + C$",
+            r"$$x^{3}$ + C$",
+            r"$\frac{$x^{2}$}{2} + C$",
             r"$2x + C$",
             r"$\frac{2x^3}{3} + C$"
         ],
-        "answer": r"$\frac{x^3}{3} + C$",
+        "answer": r"$\frac{$x^{3}$}{3} + C$",
         "marks": 2
     },
     {
@@ -44,7 +44,7 @@ mcq = [
         "marks": 1
     },
     {
-        "question": r"The determinant of the matrix $\begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix}$ is:",
+        "question": r"The determinant of the 2×2 matrix with entries [2,1; 3,4] is:",
         "options": [
             r"5",
             r"8",
@@ -72,7 +72,7 @@ mcq = [
 # Subjective Questions - Mathematics
 subjective = [
     {
-        "question": r"""Find the critical points and classify them for the function $f(x) = x^3 - 6x^2 + 9x + 2$.
+        "question": r"""Find the critical points and classify them for the function $f(x) = $x^{3}$ - 6x^2 + 9x + 2$.
 
 \textbf{a)} Find $f'(x)$ and set it equal to zero. \textbf{[3 marks]}
 
@@ -83,7 +83,7 @@ subjective = [
 \textbf{d)} Sketch the behavior of the function near these points. \textbf{[3 marks]}""",
         "answer": r"""a) $f'(x) = 3x^2 - 12x + 9 = 0$
 
-b) $3(x^2 - 4x + 3) = 0$, so $x^2 - 4x + 3 = 0$
+b) $3($x^{2}$ - 4x + 3) = 0$, so $$x^{2}$ - 4x + 3 = 0$
    $(x-1)(x-3) = 0$, giving $x = 1$ and $x = 3$
 
 c) $f''(x) = 6x - 12$
@@ -105,16 +105,16 @@ $$\int_{{ lower }}^{{ upper }} ({{ integrand }}) \, dx$$
 \textbf{c)} Calculate the numerical value. \textbf{[2 marks]}""",
         "variables": [
             {
-                "lower": 0, "upper": 2, "integrand": "x^2 + 1",
-                "answer": "a) $\\frac{x^3}{3} + x$; b) $[\\frac{x^3}{3} + x]_0^2$; c) $\\frac{8}{3} + 2 - 0 = \\frac{14}{3}$"
+                "lower": 0, "upper": 2, "integrand": "$x^{2}$ + 1",
+                "answer": "a) $\\frac{$x^{3}$}{3} + x$; b) $[\\frac{$x^{3}$}{3} + x]_0^2$; c) $\\frac{8}{3} + 2 - 0 = \\frac{14}{3}$"
             },
             {
                 "lower": 1, "upper": 3, "integrand": "2x - 1", 
-                "answer": "a) $x^2 - x$; b) $[x^2 - x]_1^3$; c) $(9-3) - (1-1) = 6$"
+                "answer": "a) $$x^{2}$ - x$; b) $[$x^{2}$ - x]_1^3$; c) $(9-3) - (1-1) = 6$"
             },
             {
                 "lower": 0, "upper": 1, "integrand": "e^x",
-                "answer": "a) $e^x$; b) $[e^x]_0^1$; c) $e^1 - e^0 = e - 1$"
+                "answer": "a) $e^x$; b) $[e^x]_0^1$; c) $$e^{1}$ - $e^{0}$ = e - 1$"
             }
         ],
         "marks": 7
@@ -144,25 +144,25 @@ Use the standard normal table or state your method clearly.""",
         "marks": 8
     },
     {
-        "question": r"""Prove that the series $\sum_{n=1}^{\infty} \frac{1}{n^2}$ converges using the integral test.
+        "question": r"""Prove that the series $\sum_{n=1}^{\infty} \frac{1}{$n^{2}$}$ converges using the integral test.
 
 \textbf{a)} State the integral test conditions. \textbf{[2 marks]}
 
-\textbf{b)} Verify that $f(x) = \frac{1}{x^2}$ satisfies these conditions for $x \geq 1$. \textbf{[3 marks]}
+\textbf{b)} Verify that $f(x) = \frac{1}{$x^{2}$}$ satisfies these conditions for $x \geq 1$. \textbf{[3 marks]}
 
-\textbf{c)} Evaluate the improper integral $\int_1^{\infty} \frac{1}{x^2} dx$. \textbf{[4 marks]}
+\textbf{c)} Evaluate the improper integral $\int_1^{\infty} \frac{1}{$x^{2}$} dx$. \textbf{[4 marks]}
 
 \textbf{d)} State your conclusion about the series convergence. \textbf{[1 mark]}""",
         "answer": r"""a) Integral test: If $f(x)$ is positive, continuous, and decreasing for $x \geq N$, then $\sum f(n)$ and $\int f(x)dx$ have the same convergence behavior.
 
-b) For $f(x) = \frac{1}{x^2}$ on $[1,\infty)$:
-   - Positive: $\frac{1}{x^2} > 0$ for all $x \geq 1$
+b) For $f(x) = \frac{1}{$x^{2}$}$ on $[1,\infty)$:
+   - Positive: $\frac{1}{$x^{2}$} > 0$ for all $x \geq 1$
    - Continuous: polynomial in denominator, no zeros
-   - Decreasing: $f'(x) = -\frac{2}{x^3} < 0$ for $x \geq 1$
+   - Decreasing: $f'(x) = -\frac{2}{$x^{3}$} < 0$ for $x \geq 1$
 
-c) $\int_1^{\infty} \frac{1}{x^2} dx = \lim_{t \to \infty} \int_1^t x^{-2} dx = \lim_{t \to \infty} [-x^{-1}]_1^t = \lim_{t \to \infty} (-\frac{1}{t} + 1) = 1$
+c) $\int_1^{\infty} \frac{1}{$x^{2}$} dx = \lim_{t \to \infty} \int_1^t x^{-2} dx = \lim_{t \to \infty} [-x^{-1}]_1^t = \lim_{t \to \infty} (-\frac{1}{t} + 1) = 1$
 
-d) Since the integral converges, the series $\sum_{n=1}^{\infty} \frac{1}{n^2}$ converges.""",
+d) Since the integral converges, the series $\sum_{n=1}^{\infty} \frac{1}{$n^{2}$}$ converges.""",
         "marks": 10
     }
 ]
