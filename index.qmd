@@ -80,7 +80,15 @@ Minimalist black and white design with clean typography and high contrast
 - **Dependency Management** - Dependabot for automatic security updates
 - **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
 
+### LaTeX Robustness
+- **Intelligent Error Detection** - Validates LaTeX syntax before compilation
+- **Automatic Error Fixing** - Fixes common LaTeX mistakes automatically
+- **User-Friendly Error Messages** - Clear explanations instead of cryptic LaTeX errors
+- **Comprehensive Help System** - Interactive LaTeX syntax guidance
+- **Chemical Formula Support** - Automatic conversion (H2O → H$_2$O)
+
 ### Educational Excellence  
+- **Multi-Subject Support** - Built-in templates for Physics, Chemistry, Mathematics, Computer Science
 - **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
 - **Answer Keys** - Detailed explanations and solutions
 - **Reproducible Assessment** - Consistent evaluation across different quiz sets
@@ -90,6 +98,9 @@ Minimalist black and white design with clean typography and high contrast
 ```bash
 # Install from GitHub source
 pip install git+https://github.com/nipunbatra/setwise.git
+
+# With web interface support
+pip install git+https://github.com/nipunbatra/setwise.git[web]
 
 # For development with all tools
 pip install git+https://github.com/nipunbatra/setwise.git[dev,security]
@@ -128,19 +139,55 @@ generator = QuizGenerator(
 generator.generate_quizzes(num_sets=3, seed=42)
 ```
 
+## Easy-to-Use Web Interface
+
+For users who prefer a graphical interface, Setwise includes a comprehensive web application:
+
+```bash
+# Launch the web interface
+streamlit run setwise_web.py
+```
+
+**Web Interface Features:**
+- Point-and-click quiz generation with visual controls
+- Drag-and-drop question file uploads with instant validation
+- Real-time LaTeX error checking and automatic fixing
+- Interactive LaTeX syntax help with live testing
+- Built-in examples for Physics, Chemistry, Mathematics, Computer Science
+- Visual question library management and statistics
+
 ## Custom Question Libraries
 
-You can create custom question libraries for any subject:
+Create question libraries for any subject with robust LaTeX support:
 
 ```bash
 # Create a sample questions file
 setwise questions create-sample my_questions.py
 
-# Validate your questions file  
+# Validate questions with LaTeX syntax checking
 setwise questions validate my_questions.py
+
+# Automatically fix common LaTeX errors
+setwise questions fix-latex my_questions.py
+
+# Get comprehensive LaTeX syntax help
+setwise questions latex-help
 
 # Use your custom questions
 setwise generate --questions-file my_questions.py --sets 3
+```
+
+**Built-in Subject Examples:**
+```bash
+# Download and use professional question libraries
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/chemistry_questions.py
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/mathematics_questions.py
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/computer_science_questions.py
+
+# Generate subject-specific quizzes
+setwise generate --questions-file physics_questions.py --sets 2
+setwise generate --questions-file chemistry_questions.py --sets 2
 ```
 
 ## Command Line Reference
@@ -163,9 +210,11 @@ Options:
 ### Question Management Commands
 ```bash
 setwise questions list                    # Find and list question libraries
-setwise questions validate FILE          # Validate a questions.py file
+setwise questions validate FILE          # Validate questions with LaTeX syntax checking
 setwise questions create-sample FILE     # Create a sample questions file
-setwise questions stats FILE             # Show statistics for a questions file
+setwise questions stats FILE             # Show detailed statistics for a questions file
+setwise questions fix-latex FILE         # Automatically fix common LaTeX errors
+setwise questions latex-help             # Comprehensive LaTeX syntax help and examples
 ```
 
 ### Other Commands
@@ -173,6 +222,84 @@ setwise questions stats FILE             # Show statistics for a questions file
 setwise list-templates                    # List all available templates with descriptions
 setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
 setwise --help                           # Show complete help
+```
+
+## LaTeX Error Prevention & Fixing
+
+Setwise includes intelligent LaTeX validation and automatic error fixing to make quiz creation effortless:
+
+### Automatic Error Detection
+```bash
+# Validate LaTeX syntax before generating quizzes
+setwise questions validate my_questions.py
+# ✅ Valid questions file with 10 MCQ and 5 subjective questions
+# OR
+# ❌ MCQ question 3 LaTeX errors: Unmatched $ delimiters
+```
+
+### Smart Error Fixing
+```bash
+# Preview fixes without applying them
+setwise questions fix-latex my_questions.py --dry-run
+
+# Automatically fix common errors
+setwise questions fix-latex my_questions.py
+# Applied fixes:
+#   - Fixed chemical formula: H2O → H$_2$O
+#   - Added math mode for 5 expressions
+#   - Escaped percentage symbols
+```
+
+### Common Issues Automatically Fixed
+- **Missing math delimiters**: `x^2` → `$x^{2}$`
+- **Chemical formulas**: `H2O` → `H$_2$O`, `CO2` → `CO$_2$`
+- **Degree symbols**: `45 degrees` → `45°`
+- **Special characters**: `%` → `\\%`
+- **Subscripts/superscripts**: `x_1` → `$x_{1}$`
+
+### User-Friendly Error Messages
+Instead of cryptic LaTeX errors, get helpful guidance:
+- `"Missing $ inserted"` → `"Missing $ for math mode - surround math expressions with $"`
+- `"Undefined control sequence"` → `"Undefined LaTeX command - check spelling of \\frac, \\sqrt"`
+- `"Extra }"` → `"Extra closing brace } - check for matching braces"`
+
+### LaTeX Syntax Help
+```bash
+# Get comprehensive LaTeX help with examples
+setwise questions latex-help
+```
+
+## Subject-Specific Examples
+
+### Physics Questions
+```python
+# Professional physics questions with proper scientific notation
+{
+    "question": r"A projectile is launched at {{ angle }}° with velocity {{ velocity }} m/s. Calculate the range.",
+    "variables": [
+        {"angle": 30, "velocity": 20, "answer": "Range = v²sin(2θ)/g = 35.35 m"},
+        {"angle": 45, "velocity": 25, "answer": "Range = v²sin(2θ)/g = 63.78 m"}
+    ]
+}
+```
+
+### Chemistry Questions
+```python
+# Chemical equations with proper molecular formulas
+{
+    "question": r"Balance: Al + Fe$_2$O$_3$ → Al$_2$O$_3$ + Fe",
+    "answer": r"2Al + Fe$_2$O$_3$ → Al$_2$O$_3$ + 2Fe"
+}
+```
+
+### Mathematics Questions
+```python
+# Mathematical expressions with proper LaTeX formatting
+{
+    "question": r"Find $\\lim_{x \\to 0} \\frac{\\sin x}{x}$",
+    "options": ["0", "1", "$\\infty$", "Does not exist"],
+    "answer": "1"
+}
 ```
 
 ### Advanced Examples
@@ -184,7 +311,7 @@ setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 # Generate only LaTeX files without PDF compilation
 setwise generate --no-pdf --sets 2
 
-# Use custom questions from anywhere
+# Use custom questions from anywhere with automatic validation
 setwise generate --questions-file ~/Documents/my_chemistry_quiz.py --sets 2
 
 # Use custom output directory
@@ -199,17 +326,104 @@ setwise generate --seed 42 --sets 2 --template minimal
 # Generate figures first, then quiz sets
 setwise generate-figures
 setwise generate --seed 42 --sets 3
+
+# Fix LaTeX errors before generating
+setwise questions fix-latex my_questions.py
+setwise generate --questions-file my_questions.py --sets 3
+```
+
+## Complete Usage Guide
+
+### For Educators (Non-Technical Users)
+
+**Step 1: Install with Web Interface**
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+```
+
+**Step 2: Launch Web Interface**
+```bash
+streamlit run setwise_web.py
+```
+
+**Step 3: Create Your Quiz**
+1. Choose "Generate Quiz" from the sidebar
+2. Configure quiz parameters (number of sets, questions per set)
+3. Either use built-in ML questions or upload your own
+4. Click "Generate Quiz" and download the results
+
+**Step 4: Manage Question Libraries**
+1. Use "Question Library Manager" to create new questions
+2. Upload and validate existing question files
+3. Automatically fix LaTeX syntax errors
+4. View detailed statistics about your question libraries
+
+### For Technical Users (Command Line)
+
+**Quick Start Workflow:**
+```bash
+# Install
+pip install git+https://github.com/nipunbatra/setwise.git
+
+# Generate quiz with built-in ML questions
+setwise generate --seed 42 --sets 3
+
+# Create custom questions
+setwise questions create-sample my_subject_questions.py
+# Edit the file with your questions
+setwise questions validate my_subject_questions.py
+setwise generate --questions-file my_subject_questions.py --sets 2
+```
+
+**Advanced Workflow:**
+```bash
+# Download subject-specific examples
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
+
+# Validate and fix LaTeX errors
+setwise questions validate physics_questions.py
+setwise questions fix-latex physics_questions.py --dry-run
+
+# Generate professional quiz sets
+setwise generate --questions-file physics_questions.py --seed 123 --sets 5 --template compact
+
+# View statistics
+setwise questions stats physics_questions.py
+```
+
+### For Developers (Advanced Usage)
+
+**Development Environment:**
+```bash
+# Clone and setup development environment
+git clone https://github.com/nipunbatra/setwise.git
+cd setwise
+pip install -e .[dev,security]
+```
+
+**Python API Usage:**
+```python
+from setwise import QuizGenerator, TemplateManager
+from setwise.question_manager import QuestionManager
+from setwise.latex_validator import LaTeXValidator
+
+# Generate quizzes programmatically
+generator = QuizGenerator(
+    output_dir="my_output",
+    questions_file="custom_questions.py"
+)
+success = generator.generate_quizzes(num_sets=3, seed=42)
+
+# Validate question libraries
+is_valid, message = QuestionManager.validate_questions_file("my_questions.py")
+
+# Check LaTeX syntax
+is_valid, errors = LaTeXValidator.validate_latex_syntax("$x^2 + y^2 = z^2$")
 ```
 
 ## Development & Testing
 
 ### Development Setup
-```bash
-# Clone and install in development mode
-git clone https://github.com/nipunbatra/setwise.git
-cd setwise
-pip install -e .[dev,security]
-```
 
 ### Testing & Quality Assurance
 ```bash
@@ -302,6 +516,69 @@ setwise/
 ├── requirements.txt      # Python dependencies
 └── README.md            # This documentation
 ```
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+**LaTeX Installation Issues:**
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-full
+
+# macOS 
+brew install --cask mactex
+
+# Windows
+# Download from https://miktex.org/
+```
+
+**LaTeX Compilation Errors:**
+```bash
+# Validate questions before generating
+setwise questions validate my_questions.py
+
+# Fix common LaTeX errors automatically
+setwise questions fix-latex my_questions.py
+
+# Get LaTeX syntax help
+setwise questions latex-help
+```
+
+**Question File Format Issues:**
+```bash
+# Check if your questions.py file is valid
+setwise questions validate my_questions.py
+
+# Create a new file from template if needed
+setwise questions create-sample fixed_questions.py
+```
+
+**Web Interface Issues:**
+```bash
+# Make sure streamlit is installed
+pip install streamlit
+
+# Launch with full path
+python -m streamlit run setwise_web.py
+
+# Check if port 8501 is available
+```
+
+**Import Errors:**
+```bash
+# Reinstall with all dependencies
+pip uninstall setwise
+pip install git+https://github.com/nipunbatra/setwise.git[web,dev]
+```
+
+### Getting Help
+
+- **LaTeX Syntax Help**: `setwise questions latex-help`
+- **Question Validation**: `setwise questions validate FILE`
+- **Error Fixing**: `setwise questions fix-latex FILE --dry-run`
+- **GitHub Issues**: [Report problems](https://github.com/nipunbatra/setwise/issues)
+- **Web Interface**: Use the interactive help sections
 
 ## License & Usage
 
