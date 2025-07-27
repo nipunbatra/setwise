@@ -29,7 +29,7 @@ Professional single-column layout with color-coded sections and spacious design
 |--------|--------|--------|
 | ![Default Set 2 Page 1](assets/images/default_set2_page-1.png) | ![Default Set 2 Page 2](assets/images/default_set2_page-2.png) | ![Default Set 2 Page 3](assets/images/default_set2_page-3.png) |
 
-📄 **[Download PDF - Default Template](assets/default_sample.pdf)**
+**[Download PDF - Default Template](assets/default_sample.pdf)**
 
 **Use case:** Formal presentations, exams, professional documentation (3-4 pages typical)
 </div>
@@ -44,7 +44,7 @@ Two-column layout with multi-column MCQ options for maximum space efficiency
 |-------------|-------------|
 | ![Compact Set 1](assets/images/compact_set1_page-1.png) | ![Compact Set 2](assets/images/compact_set2_page-1.png) |
 
-📄 **[Download PDF - Compact Template](assets/compact_sample.pdf)**
+**[Download PDF - Compact Template](assets/compact_sample.pdf)**
 
 **Use case:** Printing, quick distribution, saving paper (1-2 pages typical)
 </div>
@@ -59,7 +59,7 @@ Minimalist black and white design with clean typography and high contrast
 |-------------|-------------|
 | ![Minimal Set 1](assets/images/minimal_set1_page-1.png) | ![Minimal Set 2](assets/images/minimal_set2_page-1.png) |
 
-📄 **[Download PDF - Minimal Template](assets/minimal_sample.pdf)**
+**[Download PDF - Minimal Template](assets/minimal_sample.pdf)**
 
 **Use case:** Black & white printing, simple assessments, distraction-free (1-2 pages typical)
 </div>
@@ -68,33 +68,34 @@ Minimalist black and white design with clean typography and high contrast
 
 ## Key Features
 
-### 📄 Professional Output
+### Professional Output
 - **Beautiful LaTeX Output** - Professional styling with color-coded sections
 - **Multiple Templates** - 3 built-in templates: default, compact, minimal  
 - **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
 - **Template Management** - Plug-and-play template system with easy selection
 
-### 🔀 Smart Generation
+### Smart Generation
 - **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
 - **Template Support** - Dynamic questions with variable substitution
+- **Custom Question Libraries** - Support for user-defined question sets from any location
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **Robust Validation** - Input validation and graceful error handling
 
-### 🛡️ Security & Quality
+### Security & Quality
 - **Secure by Design** - No shell injection vulnerabilities, XSS protection
 - **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
 - **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
 - **Dependency Management** - Dependabot for automatic security updates
 - **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
 
-### 📦 Modern Distribution
+### Modern Distribution
 - **Pip Installable** - Modern Python packaging with pyproject.toml
 - **Multiple Install Options** - Basic, development, and security extras
 - **Cross-Platform** - Works on Windows, macOS, and Linux
 - **Python 3.8+** - Support for modern Python versions
 - **Professional CLI** - Intuitive command-line interface with help system
 
-### 🔬 Educational Excellence  
+### Educational Excellence  
 - **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
 - **Answer Keys** - Detailed explanations and solutions
 - **Reproducible Assessment** - Consistent evaluation across different quiz sets
@@ -124,6 +125,9 @@ setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 # Use a different template
 setwise generate --template compact --sets 2
 
+# Use custom questions from any location
+setwise generate --questions-file /path/to/my_questions.py --sets 2
+
 # List available templates
 setwise list-templates
 
@@ -139,8 +143,11 @@ setwise generate --output-dir my_quizzes --sets 3
 ```python
 from setwise import QuizGenerator, TemplateManager
 
-# Create quiz generator
-generator = QuizGenerator(output_dir="my_output")
+# Create quiz generator with custom questions
+generator = QuizGenerator(
+    output_dir="my_output",
+    questions_file="/path/to/custom_questions.py"
+)
 
 # Generate quiz sets programmatically
 success = generator.generate_quizzes(
@@ -170,15 +177,82 @@ Options:
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
   --template NAME       Template to use: default, compact, minimal (default: default)
+  --questions-file FILE Path to custom questions.py file (can be anywhere)
+```
+
+### Question Management Commands
+```bash
+setwise questions list                    # Find and list question libraries
+setwise questions validate FILE          # Validate a questions.py file
+setwise questions create-sample FILE     # Create a sample questions file
+setwise questions stats FILE             # Show statistics for a questions file
 ```
 
 ### Other Commands
 ```bash
-setwise list-templates    # List all available templates with descriptions
-setwise generate-figures  # Generate TikZ diagrams and matplotlib plots
+setwise list-templates                    # List all available templates with descriptions
+setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
 ```
 
-### Examples
+## Custom Question Libraries
+
+### Creating Your Own Questions
+
+You can create custom question libraries for any subject by creating a `questions.py` file anywhere on your system:
+
+```bash
+# Create a sample questions file to get started
+setwise questions create-sample my_physics_questions.py
+
+# Validate your questions file
+setwise questions validate my_physics_questions.py
+
+# Check statistics about your questions
+setwise questions stats my_physics_questions.py
+
+# Use your custom questions
+setwise generate --questions-file my_physics_questions.py --sets 3
+```
+
+### Question File Format
+
+Your `questions.py` file must define two variables: `mcq` and `subjective`. Here's the structure:
+
+```python
+# Multiple Choice Questions
+mcq = [
+    {
+        "question": r"What is the speed of light in vacuum?",
+        "options": [
+            r"299,792,458 m/s",
+            r"300,000,000 m/s", 
+            r"186,000 miles/s",
+            r"3 × 10^8 m/s"
+        ],
+        "answer": r"299,792,458 m/s",
+        "marks": 2
+    }
+]
+
+# Subjective Questions (with template support)
+subjective = [
+    {
+        "question": r"Derive Newton's second law of motion.",
+        "answer": "F = ma derivation...",
+        "marks": 5
+    },
+    {
+        "template": r"Calculate the kinetic energy of an object with mass {{ mass }} kg moving at {{ velocity }} m/s.",
+        "variables": [
+            {"mass": 10, "velocity": 5, "answer": "KE = ½mv² = ½(10)(25) = 125 J"},
+            {"mass": 2, "velocity": 10, "answer": "KE = ½mv² = ½(2)(100) = 100 J"}
+        ],
+        "marks": 3
+    }
+]
+```
+
+### Advanced Examples
 
 ```bash
 # Generate 5 sets with specific question counts and reproducible seed
@@ -186,6 +260,9 @@ setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 
 # Generate only LaTeX files without PDF compilation
 setwise generate --no-pdf --sets 2
+
+# Use custom questions from anywhere
+setwise generate --questions-file ~/Documents/my_chemistry_quiz.py --sets 2
 
 # Use custom output directory
 setwise generate --output-dir ./my_quizzes --sets 1
@@ -198,6 +275,12 @@ setwise generate --seed 42 --sets 2 --template compact
 
 # Use minimal template for clean black & white printing
 setwise generate --seed 42 --sets 2 --template minimal
+
+# Find all question libraries in current directory
+setwise questions list
+
+# Search specific directories for question files
+setwise questions list --search-dirs ./questions ./data ~/quiz_bank
 ```
 
 ## Development & Testing

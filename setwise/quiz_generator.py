@@ -11,44 +11,84 @@ import os
 import sys
 import subprocess
 import argparse
+import importlib.util
 from jinja2 import Template, Environment, FileSystemLoader
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 
-# Import question data and template manager
+# Import template manager
 try:
-    from .data.questions import mcq, subjective
     from .template_manager import TemplateManager
 except ImportError:
     # Fallback for development/backward compatibility
     import sys
     from pathlib import Path
-    
-    # Add paths for backward compatibility
-    current_dir = Path(__file__).parent.parent
-    sys.path.insert(0, str(current_dir / "data"))
-    sys.path.insert(0, str(current_dir / "templates"))
-    
-    from questions import mcq, subjective
+    sys.path.insert(0, str(Path(__file__).parent.parent / "templates"))
     from template_config import TemplateManager
 
 
 class QuizGenerator:
     """Main class for generating randomized quiz sets."""
     
-    def __init__(self, template_dir: str = "templates", output_dir: str = "output"):
+    def __init__(self, template_dir: str = "templates", output_dir: str = "output", 
+                 questions_file: Optional[str] = None):
         """Initialize the quiz generator.
         
         Args:
             template_dir: Directory containing LaTeX templates
             output_dir: Directory for generated quiz files
+            questions_file: Path to custom questions.py file (optional)
         """
         self.template_dir = Path(template_dir)
         self.output_dir = Path(output_dir)
         self.template_manager = TemplateManager(template_dir)
         
+        # Load questions from custom file or default
+        self.mcq, self.subjective = self._load_questions(questions_file)
+        
         # Ensure output directory exists
         self.output_dir.mkdir(exist_ok=True)
+    
+    def _load_questions(self, questions_file: Optional[str] = None) -> Tuple[List[Dict], List[Dict]]:
+        """Load questions from specified file or default location.
+        
+        Args:
+            questions_file: Path to custom questions.py file
+            
+        Returns:
+            Tuple of (mcq_questions, subjective_questions)
+        """
+        if questions_file:
+            # Load from custom file
+            questions_path = Path(questions_file)
+            if not questions_path.exists():
+                raise FileNotFoundError(f"Questions file not found: {questions_file}")
+            
+            spec = importlib.util.spec_from_file_location("custom_questions", questions_path)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Could not load questions from: {questions_file}")
+            
+            questions_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(questions_module)
+            
+            # Validate required attributes
+            if not hasattr(questions_module, 'mcq'):
+                raise AttributeError(f"Questions file must define 'mcq' variable: {questions_file}")
+            if not hasattr(questions_module, 'subjective'):
+                raise AttributeError(f"Questions file must define 'subjective' variable: {questions_file}")
+            
+            return questions_module.mcq, questions_module.subjective
+        else:
+            # Load from default location
+            try:
+                from .data.questions import mcq, subjective
+                return mcq, subjective
+            except ImportError:
+                # Fallback for development/backward compatibility
+                current_dir = Path(__file__).parent.parent
+                sys.path.insert(0, str(current_dir / "data"))
+                from questions import mcq, subjective
+                return mcq, subjective
     
     def shuffle_mcq_options(self, question_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
@@ -128,13 +168,13 @@ class QuizGenerator:
             Tuple of (quiz_content, answer_key)
         """
         # Process templated subjective questions first
-        processed_subjective = self.process_templated_questions(subjective)
+        processed_subjective = self.process_templated_questions(self.subjective)
         
         # Sample questions if limits specified
         if num_mcq is not None:
-            sampled_mcq = random.sample(mcq, min(num_mcq, len(mcq)))
+            sampled_mcq = random.sample(self.mcq, min(num_mcq, len(self.mcq)))
         else:
-            sampled_mcq = mcq.copy()
+            sampled_mcq = self.mcq.copy()
             
         if num_subjective is not None:
             sampled_subjective = random.sample(processed_subjective, 

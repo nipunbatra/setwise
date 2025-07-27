@@ -1,0 +1,330 @@
+\documentclass{../../common/quals-template}
+
+% Set exam information
+\renewcommand{\examsubject}{Machine Learning}
+\renewcommand{\examyear}{2025}
+\renewcommand{\exammarks}{30}
+\renewcommand{\examduration}{2.5 hours}
+\renewcommand{\examobjective}{15}
+\renewcommand{\examsubjective}{15}
+
+% Custom instructions for ML exam
+\renewcommand{\custominstructions}{%
+    \item Use standard mathematical notation for ML concepts
+    \item Show all work for subjective questions
+    \item Provide clear justifications for your answers
+}
+
+% Answer toggle - set to true to show answers, false to hide
+\showanswerstrue  % Change to \showanswersfalse to hide answers
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\instructionbox
+
+\sectionheader{SECTION A: MULTIPLE CHOICE QUESTIONS}{(15 marks -- 1 mark each)}
+
+\begin{questions}
+
+\question[1] Which of the following best describes the bias-variance tradeoff in machine learning?
+\begin{choices}
+\mcqchoice{High bias models always perform better than high variance models}
+\mcqchoice{Bias and variance are independent and don't affect each other}
+\mcqcorrect{Reducing bias typically increases variance, and vice versa}
+\mcqchoice{Variance only matters in unsupervised learning}
+\mcqchoice{Bias and variance can both be minimized simultaneously without any tradeoff}
+\end{choices}
+
+\question[1] Given the confusion matrix below for a binary classification problem:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+ & \textbf{Predicted 0} & \textbf{Predicted 1} \\
+\hline
+\textbf{Actual 0} & 85 & 15 \\
+\hline
+\textbf{Actual 1} & 10 & 90 \\
+\hline
+\end{tabular}
+\end{center}
+
+What is the precision of the classifier?
+\begin{choices}
+\mcqchoice{0.85}
+\mcqcorrect{0.857}
+\mcqchoice{0.90}
+\mcqchoice{0.875}
+\mcqchoice{0.95}
+\end{choices}
+
+\question[1] Which regularization technique adds a penalty term proportional to the sum of absolute values of parameters?
+\begin{choices}
+\mcqchoice{L2 Regularization (Ridge)}
+\mcqcorrect{L1 Regularization (Lasso)}
+\mcqchoice{Elastic Net}
+\mcqchoice{Dropout}
+\mcqchoice{Batch Normalization}
+\end{choices}
+
+\question[1] In Support Vector Machines, what happens when the regularization parameter $C$ is very large?
+\begin{choices}
+\mcqchoice{The model becomes more regularized and may underfit}
+\mcqcorrect{The model focuses on minimizing training error and may overfit}
+\mcqchoice{The kernel function becomes linear}
+\mcqchoice{The support vectors are ignored}
+\mcqchoice{The margin becomes infinite}
+\end{choices}
+
+\question[1] Which of the following is true about k-fold cross-validation?
+\begin{choices}
+\mcqchoice{It uses k different datasets for training}
+\mcqcorrect{It splits data into k parts, trains on k-1 parts, tests on 1 part, repeats k times}
+\mcqchoice{It only works when k equals the number of features}
+\mcqchoice{It requires k different algorithms}
+\mcqchoice{The value of k should always be equal to the sample size}
+\end{choices}
+
+\question[1] Which activation function is most commonly used in hidden layers of modern deep neural networks?
+\begin{choices}
+\mcqchoice{Sigmoid}
+\mcqchoice{Tanh}
+\mcqcorrect{ReLU}
+\mcqchoice{Linear}
+\mcqchoice{Step function}
+\end{choices}
+
+\question[1] What is the main advantage of using Random Forest over a single Decision Tree?
+\begin{choices}
+\mcqchoice{Faster training time}
+\mcqchoice{Better interpretability}
+\mcqcorrect{Reduced overfitting through ensemble averaging}
+\mcqchoice{Lower memory usage}
+\mcqchoice{Better performance on linear relationships}
+\end{choices}
+
+\question[1] In logistic regression, what does the sigmoid function map the linear combination of features to?
+\begin{choices}
+\mcqchoice{Any real number}
+\mcqcorrect{Values between 0 and 1}
+\mcqchoice{Values between -1 and 1}
+\mcqchoice{Only integer values}
+\mcqchoice{Values between -∞ and +∞}
+\end{choices}
+
+\question[1] What is the primary difference between bagging and boosting ensemble methods?
+\begin{choices}
+\mcqchoice{Bagging uses different algorithms, boosting uses the same algorithm}
+\mcqcorrect{Bagging trains models in parallel, boosting trains models sequentially}
+\mcqchoice{Bagging is only for regression, boosting is only for classification}
+\mcqchoice{Bagging uses all features, boosting uses feature subsets}
+\mcqchoice{Bagging requires more computational resources than boosting}
+\end{choices}
+
+\question[1] In k-Nearest Neighbors (k-NN), what happens when k is set to 1?
+\begin{choices}
+\mcqchoice{The model becomes more biased}
+\mcqcorrect{The model may overfit to training data}
+\mcqchoice{The model always underfits}
+\mcqchoice{The algorithm becomes faster}
+\mcqchoice{All predictions become the same}
+\end{choices}
+
+\question[1] Which metric is most appropriate for evaluating a model on an imbalanced classification dataset?
+\begin{choices}
+\mcqchoice{Accuracy}
+\mcqchoice{Mean Squared Error}
+\mcqcorrect{F1-Score}
+\mcqchoice{R-squared}
+\mcqchoice{Mean Absolute Error}
+\end{choices}
+
+\question[1] What is the kernel trick in Support Vector Machines?
+\begin{choices}
+\mcqchoice{A method to reduce training time}
+\mcqcorrect{A way to implicitly map data to higher dimensions without explicit computation}
+\mcqchoice{A technique to reduce the number of support vectors}
+\mcqchoice{A method to automatically select the best features}
+\mcqchoice{A way to handle missing values in the dataset}
+\end{choices}
+
+\question[1] Which of the following is NOT a hyperparameter in a Random Forest model?
+\begin{choices}
+\mcqchoice{Number of trees in the forest}
+\mcqchoice{Maximum depth of each tree}
+\mcqchoice{Number of features considered at each split}
+\mcqcorrect{The trained weights of the model}
+\mcqchoice{Minimum samples required to split a node}
+\end{choices}
+
+\question[1] In gradient descent optimization, what does the learning rate control?
+\begin{choices}
+\mcqchoice{The number of iterations to run}
+\mcqcorrect{The size of steps taken towards the minimum}
+\mcqchoice{The number of features to use}
+\mcqchoice{The complexity of the model}
+\mcqchoice{The size of the training dataset}
+\end{choices}
+
+\question[1] Which statement about overfitting is most accurate?
+\begin{choices}
+\mcqchoice{Overfitting only occurs with neural networks}
+\mcqcorrect{A model that overfits will always have high training accuracy and low validation accuracy}
+\mcqchoice{Overfitting can be completely eliminated by using more data}
+\mcqchoice{Overfitted models perform well on both training and test data}
+\mcqchoice{Overfitting is beneficial for model performance}
+\end{choices}
+
+\newpage
+
+\sectionheader{SECTION B: SUBJECTIVE QUESTIONS}{(15 marks)}
+
+\question[5] \textbf{Linear Regression Analysis}
+
+Consider the following dataset for linear regression:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Sample} & \textbf{Feature 1} & \textbf{Feature 2} & \textbf{Target} \\
+\hline
+1 & 2 & 1 & 5 \\
+\hline
+2 & 4 & 3 & 11 \\
+\hline
+3 & 1 & 2 & 4 \\
+\hline
+4 & 3 & 4 & 10 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{parts}
+\part[3] Calculate the mean squared error (MSE) if the model predicts $\hat{y} = 4.8, 10.5, 4.2, 9.8$ respectively.
+
+\part[2] If we use L2 regularization with $\lambda = 0.01$, write the complete loss function.
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): MSE Calculation}
+
+MSE = $\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$
+
+\begin{align}
+\text{MSE} &= \frac{1}{4}[(5-4.8)^2 + (11-10.5)^2 + (4-4.2)^2 + (10-9.8)^2]\\
+&= \frac{1}{4}[0.04 + 0.25 + 0.04 + 0.04]\\
+&= \frac{1}{4}[0.37]\\
+&= 0.0925
+\end{align}
+
+\textbf{Part (b): L2 Regularized Loss Function}
+
+Complete loss function with L2 regularization:
+$$L(\theta) = \text{MSE} + \lambda \sum_{j=1}^{d} \theta_j^2$$
+$$L(\theta) = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 + 0.01 \sum_{j=1}^{d} \theta_j^2$$
+
+Where $\theta_j$ are the model parameters (weights) and $d$ is the number of features.
+\end{solution}
+
+\question[6] \textbf{Decision Tree and Information Gain}
+
+Analyze the decision tree structure and calculate information measures.
+
+\begin{parts}
+\part[1] What is the maximum depth of a decision tree with 4 leaf nodes arranged in a balanced binary structure?
+
+\part[3] Calculate the Gini impurity for a node with class distribution: Class A: 40 samples, Class B: 30 samples, Class C: 10 samples.
+
+\part[2] Explain why pruning might be beneficial for decision trees and describe one pruning technique.
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Maximum Depth}
+
+For a balanced binary tree with 4 leaf nodes:
+- Level 0: 1 root node
+- Level 1: 2 internal nodes  
+- Level 2: 4 leaf nodes
+
+Maximum depth = 2
+
+\textbf{Part (b): Gini Impurity Calculation}
+
+Total samples = 40 + 30 + 10 = 80
+
+Class probabilities:
+- $p_A = \frac{40}{80} = 0.5$
+- $p_B = \frac{30}{80} = 0.375$ 
+- $p_C = \frac{10}{80} = 0.125$
+
+Gini impurity:
+\begin{align}
+\text{Gini} &= 1 - \sum_{i} p_i^2\\
+&= 1 - (0.5^2 + 0.375^2 + 0.125^2)\\
+&= 1 - (0.25 + 0.140625 + 0.015625)\\
+&= 1 - 0.40625\\
+&= 0.59375
+\end{align}
+
+\textbf{Part (c): Pruning Benefits and Technique}
+
+\textbf{Benefits:}
+- Reduces overfitting by removing branches that don't generalize well
+- Improves model interpretability and reduces complexity
+- Better performance on unseen data
+
+\textbf{Pruning Technique - Post-pruning (Reduced Error Pruning):}
+1. Build full tree on training data
+2. Use validation set to evaluate each subtree
+3. Remove branches that don't improve validation performance
+4. Continue until no beneficial removals remain
+\end{solution}
+
+\question[4] \textbf{k-Nearest Neighbors Analysis}
+
+A k-Nearest Neighbors classifier is trained on a dataset with 1000 samples and 20 features.
+
+\begin{parts}
+\part[2] What is the time complexity for predicting a single test sample when k = 5?
+
+\part[2] If the training data has features with very different scales (e.g., age in years vs income in dollars), what preprocessing step should be applied and why?
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Time Complexity}
+
+For predicting a single test sample:
+
+1. \textbf{Distance calculation:} O(n × d) = O(1000 × 20) = O(20,000)
+   - Must calculate distance to all training samples
+   - Each distance calculation involves d features
+
+2. \textbf{Finding k nearest:} O(n log k) = O(1000 log 5) ≈ O(2,322)
+   - Using a heap or partial sorting to find k smallest distances
+
+\textbf{Overall complexity:} O(n × d + n log k) = O(20,000 + 2,322) = O(n × d)
+
+Since n × d >> n log k, the dominant term is O(n × d) = O(20,000)
+
+\textbf{Part (b): Feature Scaling}
+
+\textbf{Required preprocessing:} Feature scaling/normalization
+
+\textbf{Why it's necessary:}
+- k-NN uses distance metrics (e.g., Euclidean distance)
+- Features with larger scales dominate the distance calculation
+- Example: Income ($50,000) vs Age (30 years) → income differences overwhelm age differences
+- Without scaling, the algorithm becomes biased toward high-magnitude features
+
+\textbf{Common scaling methods:}
+- Min-Max scaling: scales to [0,1] range
+- Standardization: scales to mean=0, std=1
+- Robust scaling: uses median and IQR, less sensitive to outliers
+\end{solution}
+
+\end{questions}
+
+\end{document}

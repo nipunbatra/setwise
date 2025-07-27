@@ -1,0 +1,371 @@
+\documentclass{../../common/quals-template}
+
+% Set exam information
+\renewcommand{\examsubject}{Machine Learning}
+\renewcommand{\examyear}{2025}
+\renewcommand{\exammarks}{25}
+\renewcommand{\examduration}{2 hours}
+\renewcommand{\examobjective}{8}
+\renewcommand{\examsubjective}{17}
+
+% Custom instructions for ML exam
+\renewcommand{\custominstructions}{%
+    \item Use standard mathematical notation for ML concepts
+    \item Show all work for subjective questions
+}
+
+% Answer toggle - set to true to show answers, false to hide
+\showanswerstrue  % Change to \showanswersfalse to hide answers
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\instructionbox
+
+\sectionheader{SECTION A: MULTIPLE CHOICE QUESTIONS}{(8 marks -- 1 mark each)}
+
+\begin{questions}
+
+\question[1] Which statement best describes the bias-variance tradeoff in machine learning?
+\begin{choices}
+\mcqcorrect{High bias models tend to underfit, high variance models tend to overfit}
+\mcqchoice{High bias models tend to overfit, high variance models tend to underfit}  
+\mcqchoice{Bias and variance are independent of model complexity}
+\mcqchoice{Both bias and variance always increase with model complexity}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] In $k$-NN classification, as we increase the value of $k$:
+\begin{choices}
+\mcqcorrect{Bias increases and variance decreases}
+\mcqchoice{Bias decreases and variance increases}
+\mcqchoice{Both bias and variance increase}
+\mcqchoice{Both bias and variance decrease}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] Which regularization technique adds the sum of absolute values of parameters to the loss function?
+\begin{choices}
+\mcqchoice{Ridge regression (L2)}
+\mcqcorrect{Lasso regression (L1)}
+\mcqchoice{Elastic Net}
+\mcqchoice{Dropout}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] In Support Vector Machines, as the penalty parameter $C$ increases:
+\begin{choices}
+\mcqchoice{The margin increases and the number of support vectors decreases}
+\mcqcorrect{The margin decreases and the number of support vectors decreases}
+\mcqchoice{The margin increases and the number of support vectors increases}
+\mcqchoice{There is no effect on either margin or support vectors}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] Which activation function is most commonly used in hidden layers of modern deep neural networks?
+\begin{choices}
+\mcqchoice{Sigmoid}
+\mcqchoice{Tanh}
+\mcqcorrect{ReLU}
+\mcqchoice{Linear}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] In Random Forest, what technique is used to reduce correlation between trees?
+\begin{choices}
+\mcqchoice{Boosting}
+\mcqchoice{Pruning}
+\mcqcorrect{Feature bagging (random subset of features at each split)}
+\mcqchoice{Early stopping}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] Which evaluation metric is most appropriate for highly imbalanced binary classification?
+\begin{choices}
+\mcqchoice{Accuracy}
+\mcqchoice{Mean Squared Error}
+\mcqcorrect{F1-score or AUC}
+\mcqchoice{R-squared}
+\mcqchoice{None of the above}
+\end{choices}
+
+\question[1] In k-fold cross-validation, what happens as $k$ approaches the number of samples $n$?
+\begin{choices}
+\mcqchoice{Bias increases, variance decreases}
+\mcqcorrect{Bias decreases, variance increases}
+\mcqchoice{Both bias and variance decrease}
+\mcqchoice{Cross-validation becomes invalid}
+\mcqchoice{None of the above}
+\end{choices}
+
+\newpage
+
+\sectionheader{SECTION B: SUBJECTIVE QUESTIONS}{(17 marks)}
+
+\question[4] \textbf{Decision Tree Construction}
+
+Consider building a decision tree for the following dataset with binary features $A$, $B$ and binary target $y$:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Feature A & Feature B & Class y \\
+\midrule
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+0 & 0 & 0 \\
+1 & 1 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{parts}
+\part[2] Calculate the Gini impurity for the root node and the information gain for splitting on feature $A$.
+
+\part[2] Draw the complete decision tree using the feature that gives maximum information gain at each step. Show your calculations.
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Gini impurity and information gain}
+
+\textbf{Root node analysis:}
+Total samples: 6, Class 0: 3, Class 1: 3
+
+Gini impurity: $G = 1 - \sum_{i} p_i^2 = 1 - \left(\frac{3}{6}\right)^2 - \left(\frac{3}{6}\right)^2 = 1 - 0.25 - 0.25 = 0.5$
+
+\textbf{Splitting on feature A:}
+- $A = 0$: 3 samples (2 class 0, 1 class 1) → $G_0 = 1 - \left(\frac{2}{3}\right)^2 - \left(\frac{1}{3}\right)^2 = 1 - \frac{4}{9} - \frac{1}{9} = \frac{4}{9} ≈ 0.444$
+- $A = 1$: 3 samples (1 class 0, 2 class 1) → $G_1 = 1 - \left(\frac{1}{3}\right)^2 - \left(\frac{2}{3}\right)^2 = \frac{4}{9} ≈ 0.444$
+
+Weighted Gini: $G_{weighted} = \frac{3}{6} \times 0.444 + \frac{3}{6} \times 0.444 = 0.444$
+
+Information Gain: $IG_A = 0.5 - 0.444 = 0.056$
+
+\textbf{Part (b): Complete decision tree}
+
+\textbf{Splitting on feature B:}
+- $B = 0$: 3 samples (2 class 0, 1 class 1) → $G_0 = \frac{4}{9} ≈ 0.444$
+- $B = 1$: 3 samples (1 class 0, 2 class 1) → $G_1 = \frac{4}{9} ≈ 0.444$
+
+Information Gain: $IG_B = 0.5 - 0.444 = 0.056$
+
+Since both features have equal information gain, we can choose either. Let's use feature A.
+
+\textbf{Decision Tree:}
+```
+         A
+       /   \
+    A=0       A=1
+  (2:0,1:1)  (1:0,2:1)
+      |         |
+      B         B
+    /   \     /   \
+  B=0   B=1 B=0   B=1
+ (2:0) (1:1)(1:1)(1:0,1:1)
+   |     |    |      |
+   0     1    1    majority→1
+```
+\end{solution}
+
+\question[5] \textbf{Support Vector Machine Analysis}
+
+Consider a linear SVM trained on a 2D dataset. After training, you find that only 3 out of 100 training points are support vectors.
+
+\begin{parts}
+\part[2] Explain what this tells you about the dataset and the decision boundary. What would happen if you removed the non-support vector points from the training set?
+
+\part[3] The SVM was trained with penalty parameter $C = 1$. Discuss how changing $C$ to $0.1$ and $10$ would affect: (i) the margin, (ii) the number of support vectors, and (iii) the risk of overfitting.
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Analysis of support vectors}
+
+\textbf{What this tells us about the dataset:}
+\begin{itemize}
+\item The dataset is \textbf{linearly separable} or nearly separable with very few misclassifications
+\item The classes are \textbf{well-separated} since only 3 points determine the decision boundary
+\item Most training points are \textbf{far from the decision boundary} and don't influence it
+\item The decision boundary is determined by a \textbf{minimal set of critical points}
+\end{itemize}
+
+\textbf{Effect of removing non-support vectors:}
+If we removed the 97 non-support vector points and retrained the SVM with only the 3 support vectors:
+\begin{itemize}
+\item The \textbf{decision boundary would remain identical}
+\item The \textbf{margin would be unchanged}
+\item \textbf{Training would be much faster} (only 3 points vs 100)
+\item \textbf{Generalization ability would be maintained}
+\end{itemize}
+
+This demonstrates the \textbf{sparsity property} of SVMs - only support vectors matter for the final model.
+
+\textbf{Part (b): Effect of changing penalty parameter $C$}
+
+\textbf{Decreasing $C$ from 1 to 0.1 (less penalty for violations):}
+\begin{itemize}
+\item \textbf{Margin:} Increases (softer margin, allows more violations)
+\item \textbf{Support vectors:} Increases (more points can be within or violate margin)
+\item \textbf{Overfitting risk:} Decreases (more regularization, simpler boundary)
+\end{itemize}
+
+\textbf{Increasing $C$ from 1 to 10 (higher penalty for violations):}
+\begin{itemize}
+\item \textbf{Margin:} Decreases (harder margin, fewer violations allowed)
+\item \textbf{Support vectors:} May decrease (tighter constraints)
+\item \textbf{Overfitting risk:} Increases (less regularization, more complex boundary)
+\end{itemize}
+
+\textbf{Mathematical intuition:}
+The SVM objective $\frac{1}{2}\|w\|^2 + C\sum\xi_i$ balances:
+- Margin maximization (first term)
+- Error minimization (second term)
+
+Lower $C$ → Emphasizes margin maximization → Simpler model
+Higher $C$ → Emphasizes error minimization → More complex model
+\end{solution}
+
+\question[4] \textbf{Neural Network Backpropagation}
+
+Consider a simple neural network with one hidden layer:
+- Input: $x \in \mathbb{R}$
+- Hidden layer: $h = \sigma(w_1 x + b_1)$ where $\sigma$ is the sigmoid function
+- Output: $y = w_2 h + b_2$
+- Loss: $L = \frac{1}{2}(y - t)^2$ where $t$ is the target
+
+\begin{parts}
+\part[2] Derive the gradient $\frac{\partial L}{\partial w_1}$ using the chain rule.
+
+\part[2] Explain why the vanishing gradient problem occurs with sigmoid activations in deep networks, and suggest a solution.
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Gradient derivation}
+
+\textbf{Forward pass equations:}
+\begin{align}
+z_1 &= w_1 x + b_1\\
+h &= \sigma(z_1) = \frac{1}{1 + e^{-z_1}}\\
+y &= w_2 h + b_2\\
+L &= \frac{1}{2}(y - t)^2
+\end{align}
+
+\textbf{Chain rule application:}
+$\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial y} \cdot \frac{\partial y}{\partial h} \cdot \frac{\partial h}{\partial z_1} \cdot \frac{\partial z_1}{\partial w_1}$
+
+\textbf{Computing each term:}
+\begin{align}
+\frac{\partial L}{\partial y} &= y - t\\
+\frac{\partial y}{\partial h} &= w_2\\
+\frac{\partial h}{\partial z_1} &= \sigma'(z_1) = \sigma(z_1)(1 - \sigma(z_1)) = h(1-h)\\
+\frac{\partial z_1}{\partial w_1} &= x
+\end{align}
+
+\textbf{Final result:}
+$\boxed{\frac{\partial L}{\partial w_1} = (y - t) \cdot w_2 \cdot h(1-h) \cdot x}$
+
+\textbf{Part (b): Vanishing gradient problem}
+
+\textbf{Why sigmoid causes vanishing gradients:}
+\begin{itemize}
+\item \textbf{Derivative range:} $\sigma'(z) = \sigma(z)(1-\sigma(z)) \leq 0.25$ (maximum at $z=0$)
+\item \textbf{Saturation:} For large $|z|$, $\sigma'(z) \approx 0$ (flat regions)
+\item \textbf{Multiplication effect:} In deep networks, gradients multiply through layers: $\prod_{i=1}^L \sigma'(z_i)$
+\item \textbf{Exponential decay:} Product of many small numbers ($< 0.25$) → exponentially small gradients
+\end{itemize}
+
+\textbf{Mathematical illustration:}
+For a 10-layer network: $(0.25)^{10} \approx 9.5 \times 10^{-7}$ → extremely small gradient
+
+\textbf{Solutions:}
+\begin{enumerate}
+\item \textbf{ReLU activation:} $f(x) = \max(0,x)$, $f'(x) = 1$ for $x > 0$ (no saturation)
+\item \textbf{Residual connections:} Skip connections allow gradients to flow directly
+\item \textbf{Batch normalization:} Normalizes inputs to each layer
+\item \textbf{LSTM/GRU:} For recurrent networks, use gating mechanisms
+\item \textbf{Gradient clipping:} Prevent exploding gradients
+\end{enumerate}
+\end{solution}
+
+\question[4] \textbf{Cross-Validation and Model Selection}
+
+You are comparing three models using 5-fold cross-validation on a dataset with 1000 samples:
+- Model A: Average CV accuracy = 85%, Standard deviation = 2%
+- Model B: Average CV accuracy = 84%, Standard deviation = 1%  
+- Model C: Average CV accuracy = 86%, Standard deviation = 5%
+
+\begin{parts}
+\part[2] Which model would you choose and why? Consider both performance and reliability.
+
+\part[2] Explain potential issues with using the test set multiple times for model comparison. How would you properly evaluate the final chosen model?
+\end{parts}
+
+\begin{solution}
+\textbf{Part (a): Model selection}
+
+\textbf{Analysis of each model:}
+
+\textbf{Model A:} 85% ± 2%
+- Good average performance
+- \textbf{Moderate stability} (reasonable standard deviation)
+- Confidence interval: approximately 83% - 87%
+
+\textbf{Model B:} 84% ± 1%  
+- Slightly lower average performance
+- \textbf{High stability} (low standard deviation)
+- Confidence interval: approximately 83% - 85%
+- \textbf{Most consistent across folds}
+
+\textbf{Model C:} 86% ± 5%
+- \textbf{Highest average performance} but large variance
+- \textbf{High instability} (high standard deviation)
+- Confidence interval: approximately 81% - 91%
+- \textbf{Unreliable performance}
+
+\textbf{Recommendation: Model B}
+
+\textbf{Justification:}
+\begin{itemize}
+\item \textbf{Bias-variance tradeoff:} Model B has the best balance
+\item \textbf{Reliability:} Low variance indicates consistent performance across different data splits
+\item \textbf{Generalization:} More likely to perform consistently on unseen data
+\item \textbf{Production readiness:} Predictable performance is crucial in real applications
+\item \textbf{Statistical significance:} The 1% difference from Model A is likely not significant given the variance
+\end{itemize}
+
+\textbf{Part (b): Test set contamination and proper evaluation}
+
+\textbf{Issues with repeated test set use:}
+\begin{itemize}
+\item \textbf{Data leakage:} Information from test set influences model selection
+\item \textbf{Optimistic bias:} Performance estimates become overly optimistic
+\item \textbf{Overfitting to test set:} Models implicitly tuned to specific test data
+\item \textbf{Invalid statistical inference:} p-values and confidence intervals become meaningless
+\item \textbf{Poor generalization:} Final model may not perform well on truly unseen data
+\end{itemize}
+
+\textbf{Proper evaluation protocol:}
+\begin{enumerate}
+\item \textbf{Three-way split:}
+   - Training set (60%): Train models
+   - Validation set (20%): Compare and select models
+   - Test set (20%): Final evaluation only
+
+\item \textbf{Nested cross-validation:}
+   - Outer loop: k-fold CV for unbiased performance estimation
+   - Inner loop: k-fold CV for hyperparameter tuning and model selection
+
+\item \textbf{Hold-out test set:} Keep test set completely separate until final evaluation
+
+\item \textbf{Single test:} Use test set exactly once for final chosen model
+\end{enumerate}
+
+\textbf{Best practice:} After selecting Model B using cross-validation, evaluate it exactly once on the held-out test set to get an unbiased estimate of its true performance.
+\end{solution}
+
+\end{questions}
+
+\end{document}

@@ -60,26 +60,27 @@ Minimalist black and white design with clean typography and high contrast
 
 ## Key Features
 
-### 📄 Professional Output
+### Professional Output
 - **Beautiful LaTeX Output** - Professional styling with color-coded sections
 - **Multiple Templates** - 3 built-in templates: default, compact, minimal  
 - **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
 - **Template Management** - Plug-and-play template system with easy selection
 
-### 🔀 Smart Generation
+### Smart Generation
 - **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
 - **Template Support** - Dynamic questions with variable substitution
+- **Custom Question Libraries** - Support for user-defined question sets from any location
 - **CLI Interface** - Full command-line control with reproducible seeds
 - **Robust Validation** - Input validation and graceful error handling
 
-### 🛡️ Security & Quality
+### Security & Quality
 - **Secure by Design** - No shell injection vulnerabilities, XSS protection
 - **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
 - **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
 - **Dependency Management** - Dependabot for automatic security updates
 - **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
 
-### 🔬 Educational Excellence  
+### Educational Excellence  
 - **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
 - **Answer Keys** - Detailed explanations and solutions
 - **Reproducible Assessment** - Consistent evaluation across different quiz sets
@@ -110,15 +111,36 @@ setwise list-templates
 
 # Use compact template for space-efficient layout
 setwise generate --template compact --sets 2
+
+# Use custom questions from any location
+setwise generate --questions-file /path/to/my_questions.py --sets 2
 ```
 
 ### Python API
 ```python
 from setwise import QuizGenerator
 
-# Create and use quiz generator
-generator = QuizGenerator(output_dir="my_output")
+# Create and use quiz generator with custom questions
+generator = QuizGenerator(
+    output_dir="my_output",
+    questions_file="/path/to/custom_questions.py"
+)
 generator.generate_quizzes(num_sets=3, seed=42)
+```
+
+## Custom Question Libraries
+
+You can create custom question libraries for any subject:
+
+```bash
+# Create a sample questions file
+setwise questions create-sample my_questions.py
+
+# Validate your questions file  
+setwise questions validate my_questions.py
+
+# Use your custom questions
+setwise generate --questions-file my_questions.py --sets 3
 ```
 
 ## Command Line Reference
@@ -135,13 +157,22 @@ Options:
   --no-pdf              Skip PDF compilation, generate only LaTeX files
   --output-dir DIR      Output directory for generated files (default: ./output)
   --template NAME       Template to use: default, compact, minimal (default: default)
+  --questions-file FILE Path to custom questions.py file (can be anywhere)
+```
+
+### Question Management Commands
+```bash
+setwise questions list                    # Find and list question libraries
+setwise questions validate FILE          # Validate a questions.py file
+setwise questions create-sample FILE     # Create a sample questions file
+setwise questions stats FILE             # Show statistics for a questions file
 ```
 
 ### Other Commands
 ```bash
-setwise list-templates    # List all available templates with descriptions
-setwise generate-figures  # Generate TikZ diagrams and matplotlib plots
-setwise --help           # Show complete help
+setwise list-templates                    # List all available templates with descriptions
+setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
+setwise --help                           # Show complete help
 ```
 
 ### Advanced Examples
@@ -152,6 +183,9 @@ setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
 
 # Generate only LaTeX files without PDF compilation
 setwise generate --no-pdf --sets 2
+
+# Use custom questions from anywhere
+setwise generate --questions-file ~/Documents/my_chemistry_quiz.py --sets 2
 
 # Use custom output directory
 setwise generate --output-dir ./my_quizzes --sets 1
