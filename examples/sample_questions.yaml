@@ -1,0 +1,17 @@
+mcq:
+- answer: '4'
+  marks: 1
+  options:
+  - '3'
+  - '4'
+  - '5'
+  - '6'
+  question: What is $2 + 2$?
+metadata:
+  format: setwise-yaml
+  title: Quiz Questions
+  version: '1.0'
+subjective:
+- answer: Gravity is a fundamental force that attracts objects with mass.
+  marks: 5
+  question: Explain the concept of gravity.

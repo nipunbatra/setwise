@@ -16,6 +16,7 @@ from jinja2 import Template, Environment, FileSystemLoader
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 from .latex_validator import LaTeXValidator
+from .formats import QuestionFormatConverter
 
 # Import template manager
 try:
@@ -54,31 +55,29 @@ class QuizGenerator:
         """Load questions from specified file or default location.
         
         Args:
-            questions_file: Path to custom questions.py file
+            questions_file: Path to custom questions file (supports .py, .yaml, .json, .csv, .md)
             
         Returns:
             Tuple of (mcq_questions, subjective_questions)
         """
         if questions_file:
-            # Load from custom file
+            # Load from custom file using format converter
             questions_path = Path(questions_file)
             if not questions_path.exists():
                 raise FileNotFoundError(f"Questions file not found: {questions_file}")
             
-            spec = importlib.util.spec_from_file_location("custom_questions", questions_path)
-            if spec is None or spec.loader is None:
-                raise ImportError(f"Could not load questions from: {questions_file}")
+            # Detect format and load appropriately
+            format_type = QuestionFormatConverter.detect_format(str(questions_path))
             
-            questions_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(questions_module)
+            if format_type == 'unknown':
+                # Fallback to Python loading for unknown extensions
+                format_type = 'python'
             
-            # Validate required attributes
-            if not hasattr(questions_module, 'mcq'):
-                raise AttributeError(f"Questions file must define 'mcq' variable: {questions_file}")
-            if not hasattr(questions_module, 'subjective'):
-                raise AttributeError(f"Questions file must define 'subjective' variable: {questions_file}")
-            
-            return questions_module.mcq, questions_module.subjective
+            try:
+                return QuestionFormatConverter.load_questions(str(questions_path))
+            except Exception as e:
+                raise RuntimeError(f"Failed to load questions from {questions_file} (format: {format_type}): {e}")
+        
         else:
             # Load from default location
             try:

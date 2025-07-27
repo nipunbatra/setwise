@@ -10,6 +10,7 @@ from pathlib import Path
 from .quiz_generator import QuizGenerator
 from .question_manager import QuestionManager
 from .latex_validator import LaTeXValidator, LaTeXErrorFixer
+from .formats import QuestionFormatConverter
 
 # Import with fallbacks  
 try:
@@ -37,9 +38,10 @@ def main():
         epilog="""
 Examples:
   setwise generate --seed 42 --sets 3 --mcq 5 --subjective 2
-  setwise generate --template compact --output-dir my_quizzes
+  setwise generate --questions-file questions.yaml --template compact
+  setwise questions convert questions.py questions.yaml
+  setwise questions create-examples --output-dir examples
   setwise list-templates
-  setwise generate-figures
         """
     )
     
@@ -54,7 +56,7 @@ Examples:
     gen_parser.add_argument("--template", default="default", help="Template to use")
     gen_parser.add_argument("--output-dir", default="output", help="Output directory")
     gen_parser.add_argument("--no-pdf", action="store_true", help="Skip PDF compilation")
-    gen_parser.add_argument("--questions-file", help="Path to custom questions.py file")
+    gen_parser.add_argument("--questions-file", help="Path to custom questions file (.py, .yaml, .json, .csv, .md)")
     
     # List templates command
     subparsers.add_parser('list-templates', help='List available templates')
@@ -90,6 +92,17 @@ Examples:
     
     # LaTeX help command
     questions_subparsers.add_parser('latex-help', help='Show LaTeX syntax help for writing questions')
+    
+    # Convert format command
+    convert_q_parser = questions_subparsers.add_parser('convert', help='Convert questions between different formats')
+    convert_q_parser.add_argument('input', help='Input questions file')
+    convert_q_parser.add_argument('output', help='Output file with desired format extension (.py, .yaml, .json, .csv, .md)')
+    convert_q_parser.add_argument('--format', choices=['python', 'yaml', 'json', 'csv', 'markdown'], 
+                                 help='Override output format detection')
+    
+    # Create examples command
+    examples_q_parser = questions_subparsers.add_parser('create-examples', help='Create example question files in all formats')
+    examples_q_parser.add_argument('--output-dir', default='examples', help='Directory to create example files')
     
     args = parser.parse_args()
     
@@ -225,6 +238,97 @@ Examples:
         
         elif args.questions_command == 'latex-help':
             print(LaTeXValidator.get_latex_help())
+        
+        elif args.questions_command == 'convert':
+            # Convert between formats
+            try:
+                # Load questions from input format
+                mcq, subjective = QuestionFormatConverter.load_questions(args.input)
+                
+                # Determine output format
+                output_format = args.format
+                if not output_format:
+                    output_format = QuestionFormatConverter.detect_format(args.output)
+                
+                # Save in output format
+                success = QuestionFormatConverter.save_questions(mcq, subjective, args.output, output_format)
+                
+                if success:
+                    print(f"✅ Successfully converted {args.input} to {args.output} ({output_format} format)")
+                    
+                    # Show statistics
+                    print(f"📊 Converted {len(mcq)} MCQ and {len(subjective)} subjective questions")
+                else:
+                    print(f"❌ Failed to convert {args.input} to {args.output}")
+                    sys.exit(1)
+                    
+            except Exception as e:
+                print(f"❌ Conversion failed: {e}")
+                sys.exit(1)
+        
+        elif args.questions_command == 'create-examples':
+            # Create example files in all formats
+            try:
+                output_dir = Path(args.output_dir)
+                output_dir.mkdir(exist_ok=True)
+                
+                # Sample questions for examples
+                mcq = [
+                    {
+                        "question": r"What is the capital of France?",
+                        "options": [r"London", r"Berlin", r"Paris", r"Madrid"],
+                        "answer": r"Paris",
+                        "marks": 1
+                    },
+                    {
+                        "question": r"Calculate: $2^3 + 5 \times 2$",
+                        "options": [r"16", r"18", r"20", r"22"],
+                        "answer": r"18",
+                        "marks": 2
+                    }
+                ]
+                
+                subjective = [
+                    {
+                        "question": r"Explain Newton's first law of motion.",
+                        "answer": r"An object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force.",
+                        "marks": 5
+                    },
+                    {
+                        "question": r"Derive the quadratic formula from $ax^2 + bx + c = 0$.",
+                        "answer": r"Starting with $ax^2 + bx + c = 0$, divide by $a$: $x^2 + \frac{b}{a}x + \frac{c}{a} = 0$. Complete the square to get $x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$.",
+                        "marks": 8
+                    }
+                ]
+                
+                # Create files in all formats
+                formats = [
+                    ('sample_questions.py', 'python'),
+                    ('sample_questions.yaml', 'yaml'),
+                    ('sample_questions.json', 'json'),
+                    ('sample_questions.csv', 'csv'),
+                    ('sample_questions.md', 'markdown')
+                ]
+                
+                created_files = []
+                for filename, format_type in formats:
+                    file_path = output_dir / filename
+                    success = QuestionFormatConverter.save_questions(mcq, subjective, str(file_path), format_type)
+                    if success:
+                        created_files.append(str(file_path))
+                
+                print(f"✅ Created {len(created_files)} example files in {output_dir}:")
+                for file_path in created_files:
+                    print(f"   📄 {file_path}")
+                
+                print(f"\n📚 Usage examples:")
+                print(f"   setwise generate --questions-file {output_dir}/sample_questions.yaml")
+                print(f"   setwise generate --questions-file {output_dir}/sample_questions.json")
+                print(f"   setwise questions validate {output_dir}/sample_questions.csv")
+                
+            except Exception as e:
+                print(f"❌ Failed to create examples: {e}")
+                sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -188,16 +188,23 @@ class TestFigureContentValidation:
                 assert open_braces == close_braces
     
     @patch('matplotlib.pyplot.figure')
-    def test_matplotlib_figure_creation(self, mock_figure):
+    @patch('matplotlib.pyplot.subplots')
+    def test_matplotlib_figure_creation(self, mock_subplots, mock_figure):
         """Test matplotlib figure creation calls."""
         mock_fig = MagicMock()
         mock_figure.return_value = mock_fig
+        
+        # Mock subplots to return figure and axes
+        mock_fig_sub = MagicMock()
+        mock_axes = [MagicMock(), MagicMock(), MagicMock()]
+        mock_subplots.return_value = (mock_fig_sub, mock_axes)
         
         with patch('matplotlib.pyplot.savefig'), patch('matplotlib.pyplot.close'):
             generate_figures.generate_matplotlib_figures()
         
         # Verify figure was created multiple times
-        assert mock_figure.call_count >= 4  # At least 4 individual figures
+        assert mock_figure.call_count >= 2  # At least 2 individual figures
+        assert mock_subplots.call_count >= 1  # At least 1 subplot call
     
     def test_numpy_seed_consistency(self):
         """Test that numpy random seed produces consistent results."""

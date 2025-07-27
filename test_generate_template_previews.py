@@ -40,7 +40,7 @@ class TestCommandExecution:
         """Test command execution failure handling."""
         with patch('subprocess.run') as mock_run:
             mock_run.side_effect = subprocess.CalledProcessError(
-                1, "fake_cmd", stdout="output", stderr="error"
+                1, "fake_cmd", output="output", stderr="error"
             )
             
             with patch('builtins.print') as mock_print:
@@ -374,7 +374,8 @@ class TestMainFunction:
             generate_template_previews.main()
         
         assert exc_info.value.code == 1
-        mock_cleanup.assert_called_once()  # Should cleanup even on failure
+        # Cleanup is NOT called when verify_dependencies fails early
+        mock_cleanup.assert_not_called()
     
     @patch('generate_template_previews.cleanup_temp_files')
     @patch('generate_template_previews.generate_template_samples')

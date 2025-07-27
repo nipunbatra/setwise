@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 import sys
 from .latex_validator import LaTeXValidator, LaTeXErrorFixer
+from .formats import QuestionFormatConverter
 
 
 class QuestionManager:
@@ -17,10 +18,10 @@ class QuestionManager:
     
     @staticmethod
     def validate_questions_file(file_path: str) -> Tuple[bool, str]:
-        """Validate a questions.py file format and structure.
+        """Validate a questions file format and structure (supports multiple formats).
         
         Args:
-            file_path: Path to the questions.py file
+            file_path: Path to the questions file (.py, .yaml, .json, .csv, .md)
             
         Returns:
             Tuple of (is_valid, message)
@@ -30,27 +31,21 @@ class QuestionManager:
             if not questions_path.exists():
                 return False, f"File not found: {file_path}"
             
-            if not questions_path.suffix == ".py":
-                return False, f"File must have .py extension: {file_path}"
+            # Detect format and load questions
+            format_type = QuestionFormatConverter.detect_format(file_path)
             
-            # Load the module
-            spec = importlib.util.spec_from_file_location("questions_validation", questions_path)
-            if spec is None or spec.loader is None:
-                return False, f"Could not load Python file: {file_path}"
+            if format_type == 'unknown':
+                return False, f"Unsupported file format: {questions_path.suffix}. Supported: .py, .yaml, .json, .csv, .md"
             
-            questions_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(questions_module)
-            
-            # Check required variables
-            if not hasattr(questions_module, 'mcq'):
-                return False, "File must define 'mcq' variable (list of MCQ questions)"
-            
-            if not hasattr(questions_module, 'subjective'):
-                return False, "File must define 'subjective' variable (list of subjective questions)"
+            # Load questions using format converter
+            mcq, subjective = QuestionFormatConverter.load_questions(file_path)
             
             # Validate structure
-            mcq = questions_module.mcq
-            subjective = questions_module.subjective
+            if not isinstance(mcq, list):
+                return False, "'mcq' must be a list"
+            
+            if not isinstance(subjective, list):
+                return False, "'subjective' must be a list"
             
             if not isinstance(mcq, list):
                 return False, "'mcq' must be a list"
@@ -111,33 +106,38 @@ class QuestionManager:
     
     @staticmethod
     def list_question_libraries(search_dirs: Optional[List[str]] = None) -> List[Dict[str, Any]]:
-        """Find and list available question libraries.
+        """Find and list available question libraries (supports multiple formats).
         
         Args:
-            search_dirs: Directories to search for questions.py files
+            search_dirs: Directories to search for question files
             
         Returns:
             List of dictionaries with library information
         """
         if search_dirs is None:
-            search_dirs = ['.', 'data', 'questions']
+            search_dirs = ['.', 'data', 'questions', 'examples']
         
         libraries = []
+        
+        # Supported extensions
+        extensions = ['*.py', '*.yaml', '*.yml', '*.json', '*.csv', '*.md']
         
         for search_dir in search_dirs:
             search_path = Path(search_dir)
             if search_path.exists():
-                # Look for questions.py files
-                for py_file in search_path.rglob("*questions*.py"):
-                    is_valid, message = QuestionManager.validate_questions_file(str(py_file))
+                # Look for question files with supported extensions
+                for extension in extensions:
+                    for question_file in search_path.rglob(f"*questions*{extension[1:]}"):
+                        is_valid, message = QuestionManager.validate_questions_file(str(question_file))
                     
-                    libraries.append({
-                        'path': str(py_file),
-                        'name': py_file.stem,
-                        'valid': is_valid,
-                        'info': message,
-                        'size': py_file.stat().st_size if py_file.exists() else 0
-                    })
+                        libraries.append({
+                            'path': str(question_file),
+                            'name': question_file.stem,
+                            'format': QuestionFormatConverter.detect_format(str(question_file)),
+                            'valid': is_valid,
+                            'info': message,
+                            'size': question_file.stat().st_size if question_file.exists() else 0
+                        })
         
         return libraries
     
@@ -219,10 +219,10 @@ subjective = [
     
     @staticmethod
     def get_question_stats(file_path: str) -> Dict[str, Any]:
-        """Get statistics about a questions file.
+        """Get statistics about a questions file (supports multiple formats).
         
         Args:
-            file_path: Path to the questions.py file
+            file_path: Path to the questions file (.py, .yaml, .json, .csv, .md)
             
         Returns:
             Dictionary with statistics
@@ -232,13 +232,9 @@ subjective = [
             if not questions_path.exists():
                 return {"error": "File not found"}
             
-            # Load the module
-            spec = importlib.util.spec_from_file_location("questions_stats", questions_path)
-            if spec is None or spec.loader is None:
-                return {"error": "Could not load file"}
-            
-            questions_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(questions_module)
+            # Load questions using format converter
+            mcq, subjective = QuestionFormatConverter.load_questions(file_path)
+            format_type = QuestionFormatConverter.detect_format(file_path)
             
             stats = {
                 "file_path": str(questions_path),
