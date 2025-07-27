@@ -43,6 +43,48 @@ def main():
         initial_sidebar_state="expanded"
     )
     
+    # Custom CSS for better styling
+    st.markdown("""
+    <style>
+    .main > div {
+        padding-top: 2rem;
+    }
+    .stTextArea > div > div > textarea {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    .editor-header {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .preview-header {
+        background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .quick-insert {
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 0.3rem;
+        border: 1px solid #dee2e6;
+        margin-bottom: 1rem;
+    }
+    .metric-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("Setwise Quiz Generator")
     st.markdown("**Professional LaTeX Quiz Generator with Custom Question Libraries**")
     
@@ -50,17 +92,324 @@ def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox(
         "Choose a page:",
-        ["Generate Quiz", "Question Library Manager", "LaTeX Help", "Examples"]
+        ["Generate Quiz", "Live Question Editor", "Question Library Manager", "LaTeX Help", "Examples"]
     )
     
     if page == "Generate Quiz":
         generate_quiz_page()
+    elif page == "Live Question Editor":
+        live_editor_page()
     elif page == "Question Library Manager":
         question_manager_page()
     elif page == "LaTeX Help":
         latex_help_page()
     elif page == "Examples":
         examples_page()
+
+
+def live_editor_page():
+    """Live question editor with real-time preview like Overleaf."""
+    st.header("Live Question Editor")
+    st.markdown("**Edit questions on the left, see live preview on the right**")
+    
+    # File management section
+    st.subheader("File Management")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("📁 New File", help="Start with a blank questions file"):
+            st.session_state.editor_content = get_default_questions_template()
+            st.session_state.current_filename = "new_questions.py"
+    
+    with col2:
+        uploaded_file = st.file_uploader("📂 Open File", type=['py'], key="editor_upload", label_visibility="collapsed")
+        if uploaded_file:
+            content = uploaded_file.read().decode('utf-8')
+            st.session_state.editor_content = content
+            st.session_state.current_filename = uploaded_file.name
+    
+    with col3:
+        filename = st.text_input("📝 Filename", 
+                                value=st.session_state.get('current_filename', 'my_questions.py'),
+                                key="filename_input")
+        if filename:
+            st.session_state.current_filename = filename
+    
+    with col4:
+        if st.button("💾 Save Locally", help="Download the current file"):
+            content = st.session_state.get('editor_content', get_default_questions_template())
+            filename = st.session_state.get('current_filename', 'my_questions.py')
+            st.download_button(
+                label="⬇️ Download",
+                data=content,
+                file_name=filename,
+                mime="text/plain"
+            )
+    
+    # Initialize session state for editor content
+    if 'editor_content' not in st.session_state:
+        st.session_state.editor_content = get_default_questions_template()
+    
+    # Split screen layout
+    col_left, col_right = st.columns([1, 1])
+    
+    with col_left:
+        st.subheader("📝 Editor")
+        
+        # Quick insert buttons
+        st.markdown("**Quick Insert:**")
+        quick_col1, quick_col2, quick_col3, quick_col4 = st.columns(4)
+        
+        with quick_col1:
+            if st.button("➕ MCQ", help="Insert MCQ template"):
+                mcq_template = '''
+    {
+        "question": r"Your question here?",
+        "options": [
+            r"Option A",
+            r"Option B", 
+            r"Option C",
+            r"Option D"
+        ],
+        "answer": r"Option A",
+        "marks": 1
+    },'''
+                st.session_state.editor_content += mcq_template
+        
+        with quick_col2:
+            if st.button("➕ Subjective", help="Insert subjective template"):
+                subj_template = '''
+    {
+        "question": r"Your subjective question here.",
+        "answer": r"Sample answer or solution.",
+        "marks": 5
+    },'''
+                st.session_state.editor_content += subj_template
+        
+        with quick_col3:
+            if st.button("🧪 Chemistry", help="Insert chemistry template"):
+                chem_template = '''
+    {
+        "question": r"Balance the equation: H$_2$ + O$_2$ $\\rightarrow$ H$_2$O",
+        "answer": r"2H$_2$ + O$_2$ $\\rightarrow$ 2H$_2$O",
+        "marks": 3
+    },'''
+                st.session_state.editor_content += chem_template
+        
+        with quick_col4:
+            if st.button("📐 Math", help="Insert math template"):
+                math_template = '''
+    {
+        "question": r"Find $\\lim_{x \\to 0} \\frac{\\sin x}{x}$",
+        "options": [
+            r"0",
+            r"1",
+            r"$\\infty$",
+            r"Does not exist"
+        ],
+        "answer": r"1",
+        "marks": 2
+    },'''
+                st.session_state.editor_content += math_template
+        
+        # Main editor
+        editor_content = st.text_area(
+            "Edit your questions.py file:",
+            value=st.session_state.editor_content,
+            height=600,
+            key="main_editor"
+        )
+        
+        # Update session state when content changes
+        if editor_content != st.session_state.editor_content:
+            st.session_state.editor_content = editor_content
+        
+        # Auto-fix button
+        if st.button("🔧 Auto-Fix LaTeX", help="Automatically fix common LaTeX errors"):
+            fixed_content, fixes = LaTeXErrorFixer.fix_common_errors(st.session_state.editor_content)
+            if fixes:
+                st.session_state.editor_content = fixed_content
+                st.success(f"Applied {len(fixes)} fixes!")
+                for fix in fixes:
+                    st.write(f"• {fix}")
+                st.rerun()
+            else:
+                st.info("No fixes needed - looks good!")
+    
+    with col_right:
+        st.subheader("🔍 Live Preview")
+        
+        # Validation section
+        if st.session_state.editor_content:
+            # Save content to temporary file for validation
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+                f.write(st.session_state.editor_content)
+                temp_file = f.name
+            
+            try:
+                # Validate the file
+                is_valid, message = QuestionManager.validate_questions_file(temp_file)
+                
+                if is_valid:
+                    st.success(f"✅ {message}")
+                    
+                    # Show statistics
+                    stats = QuestionManager.get_question_stats(temp_file)
+                    if 'error' not in stats:
+                        stat_col1, stat_col2 = st.columns(2)
+                        with stat_col1:
+                            st.metric("MCQ Questions", stats['mcq_count'])
+                            st.metric("Total Marks", stats['total_marks'])
+                        with stat_col2:
+                            st.metric("Subjective Questions", stats['subjective_count'])
+                            st.metric("Templated Questions", stats['templated_subjective'])
+                    
+                    # Preview questions
+                    st.markdown("**Question Preview:**")
+                    try:
+                        # Load and preview questions
+                        import importlib.util
+                        spec = importlib.util.spec_from_file_location("preview_questions", temp_file)
+                        questions_module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(questions_module)
+                        
+                        # Show MCQ preview
+                        if hasattr(questions_module, 'mcq') and questions_module.mcq:
+                            with st.expander(f"📋 MCQ Questions ({len(questions_module.mcq)})"):
+                                for i, q in enumerate(questions_module.mcq[:3]):  # Show first 3
+                                    st.markdown(f"**Q{i+1}:** {q.get('question', 'No question text')}")
+                                    if 'options' in q:
+                                        for j, opt in enumerate(q['options'][:4]):  # Show first 4 options
+                                            marker = "✅" if opt == q.get('answer') else "○"
+                                            st.markdown(f"  {marker} {opt}")
+                                    st.markdown(f"*Marks: {q.get('marks', 1)}*")
+                                    st.divider()
+                                
+                                if len(questions_module.mcq) > 3:
+                                    st.info(f"... and {len(questions_module.mcq) - 3} more questions")
+                        
+                        # Show subjective preview
+                        if hasattr(questions_module, 'subjective') and questions_module.subjective:
+                            with st.expander(f"📝 Subjective Questions ({len(questions_module.subjective)})"):
+                                for i, q in enumerate(questions_module.subjective[:3]):  # Show first 3
+                                    st.markdown(f"**Q{i+1}:** {q.get('question', q.get('template', 'No question text'))}")
+                                    if 'answer' in q:
+                                        st.markdown(f"*Sample Answer: {q['answer'][:100]}...*" if len(q['answer']) > 100 else f"*Answer: {q['answer']}*")
+                                    st.markdown(f"*Marks: {q.get('marks', 5)}*")
+                                    st.divider()
+                                
+                                if len(questions_module.subjective) > 3:
+                                    st.info(f"... and {len(questions_module.subjective) - 3} more questions")
+                        
+                        # Quick quiz generation
+                        st.markdown("**Quick Actions:**")
+                        action_col1, action_col2 = st.columns(2)
+                        
+                        with action_col1:
+                            if st.button("🎯 Generate Quiz", help="Generate quiz with current questions"):
+                                with st.spinner("Generating quiz..."):
+                                    try:
+                                        with tempfile.TemporaryDirectory() as output_dir:
+                                            generator = QuizGenerator(
+                                                output_dir=output_dir,
+                                                questions_file=temp_file
+                                            )
+                                            success = generator.generate_quizzes(
+                                                num_sets=1,
+                                                compile_pdf=True,
+                                                seed=42
+                                            )
+                                            
+                                            if success:
+                                                # Create download package
+                                                zip_path = create_download_package(output_dir, 1, True)
+                                                with open(zip_path, 'rb') as f:
+                                                    st.download_button(
+                                                        label="📥 Download Quiz",
+                                                        data=f.read(),
+                                                        file_name="generated_quiz.zip",
+                                                        mime="application/zip"
+                                                    )
+                                                st.success("Quiz generated successfully!")
+                                            else:
+                                                st.error("Failed to generate quiz")
+                                    except Exception as e:
+                                        st.error(f"Error: {str(e)}")
+                        
+                        with action_col2:
+                            num_sets = st.number_input("Sets", min_value=1, max_value=5, value=1, key="preview_sets")
+                    
+                    except Exception as e:
+                        st.error(f"Error loading questions: {str(e)}")
+                        st.markdown("**Raw content preview:**")
+                        st.code(st.session_state.editor_content[:500] + "..." if len(st.session_state.editor_content) > 500 else st.session_state.editor_content)
+                
+                else:
+                    st.error(f"❌ {message}")
+                    
+                    # Show LaTeX help for errors
+                    if "LaTeX" in message:
+                        with st.expander("💡 LaTeX Help"):
+                            st.markdown("""
+                            **Common LaTeX fixes:**
+                            - Math expressions need `$`: `x^2` → `$x^{2}$`
+                            - Chemical formulas: `H2O` → `H$_2$O`
+                            - Fractions: `\\frac{numerator}{denominator}`
+                            - Greek letters: `\\alpha`, `\\beta`, `\\pi`
+                            """)
+                    
+                    # Auto-fix suggestion
+                    fixed_content, fixes = LaTeXErrorFixer.fix_common_errors(st.session_state.editor_content)
+                    if fixes:
+                        st.info("💡 Automatic fixes available!")
+                        if st.button("🔧 Apply Auto-fixes", key="preview_autofix"):
+                            st.session_state.editor_content = fixed_content
+                            st.rerun()
+            
+            finally:
+                # Clean up temp file
+                try:
+                    os.unlink(temp_file)
+                except:
+                    pass
+        
+        else:
+            st.info("Start typing in the editor to see live preview")
+
+
+def get_default_questions_template():
+    """Get default template for new questions file."""
+    return '''"""
+Custom Questions for Setwise Quiz Generator
+
+Edit this file to create your own questions.
+The editor will show live validation and preview on the right.
+"""
+
+# Multiple Choice Questions
+mcq = [
+    {
+        "question": r"What is $2 + 2$?",
+        "options": [
+            r"3",
+            r"4", 
+            r"5",
+            r"6"
+        ],
+        "answer": r"4",
+        "marks": 1
+    }
+]
+
+# Subjective Questions  
+subjective = [
+    {
+        "question": r"Explain the concept you want to test.",
+        "answer": r"Provide a sample answer or solution steps here.",
+        "marks": 5
+    }
+]
+'''
 
 
 def generate_quiz_page():

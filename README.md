@@ -212,12 +212,40 @@ streamlit run setwise_web.py
 ```
 
 The web interface provides:
-- Point-and-click quiz generation
-- Visual question library management
-- Real-time LaTeX validation and error fixing
-- Interactive LaTeX syntax help
+- **Live Question Editor** - Split-screen editor like Overleaf with real-time preview
+- Point-and-click quiz generation with visual controls
+- Visual question library management with statistics
+- Real-time LaTeX validation and automatic error fixing
+- Interactive LaTeX syntax help with live testing
 - Example question libraries for different subjects
-- Drag-and-drop file uploads
+- Drag-and-drop file uploads with instant validation
+- Local file management (open, edit, save locally)
+
+### Live Question Editor (Like Overleaf)
+
+The web interface includes a professional split-screen editor for creating questions:
+
+**Left Panel - Editor:**
+- Syntax-highlighted Python editor for questions.py files
+- Quick insert buttons for MCQ, subjective, chemistry, and math templates
+- Auto-fix LaTeX errors with one click
+- File management: New, Open, Save locally
+
+**Right Panel - Live Preview:**
+- Real-time validation with detailed error messages
+- Live statistics (question count, marks, etc.)
+- Question preview with formatted LaTeX
+- One-click quiz generation and download
+- Automatic LaTeX help for syntax errors
+
+**Features:**
+```bash
+# Launch the live editor
+streamlit run setwise_web.py
+# → Navigate to "Live Question Editor"
+# → Edit questions on left, see preview on right
+# → Save locally or generate quiz instantly
+```
 
 ## Custom Question Libraries
 
