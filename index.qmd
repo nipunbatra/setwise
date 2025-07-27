@@ -139,7 +139,34 @@ generator = QuizGenerator(
 generator.generate_quizzes(num_sets=3, seed=42)
 ```
 
-## Easy-to-Use Web Interface
+## Multiple User Interfaces
+
+### VSCode Extension (Professional Development)
+
+For developers and power users, Setwise includes a comprehensive VSCode extension with professional LaTeX editing:
+
+```bash
+# Install the VSCode extension
+cd vscode-extension
+./install.sh
+```
+
+**VSCode Extension Features:**
+- **Smart Question Editing** - Advanced syntax highlighting for questions.py files with LaTeX support
+- **Live Preview & Generation** - One-click PDF preview and multi-set quiz generation
+- **LaTeX Intelligence** - Automatic error fixing, validation, and context-aware help
+- **Rich Snippets Library** - Quick templates for MCQ, subjective, physics, chemistry, math
+- **Real-time Validation** - Instant feedback with detailed error messages as you type
+- **Integrated Workflow** - All Setwise CLI features accessible via VSCode Command Palette
+
+**Professional Workflow in VSCode:**
+1. Open any `questions.py` file → automatic syntax highlighting and validation
+2. Type `mcq` + Tab for MCQ template, `subjective` + Tab for subjective question
+3. Press `Ctrl+Shift+P` (`Cmd+Shift+P` on Mac) for instant PDF preview
+4. Press `Ctrl+Shift+G` to generate complete quiz sets with answer keys
+5. Use `Ctrl+Shift+V` for comprehensive LaTeX validation and auto-fixing
+
+### Easy-to-Use Web Interface
 
 For users who prefer a graphical interface, Setwise includes a comprehensive web application:
 

@@ -199,7 +199,33 @@ setwise list-templates                    # List all available templates with de
 setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
 ```
 
-## Easy-to-Use Web Interface
+## Multiple User Interfaces
+
+### VSCode Extension (Professional Development)
+
+For developers and power users, Setwise includes a comprehensive VSCode extension:
+
+```bash
+# Install the extension
+cd vscode-extension
+./install.sh
+```
+
+**VSCode Extension Features:**
+- **Smart Question Editing** - Syntax highlighting for questions.py with LaTeX support
+- **Live Preview & Generation** - One-click preview and quiz generation
+- **LaTeX Intelligence** - Auto-fixing, validation, and smart error messages
+- **Rich Snippets** - Quick templates (mcq, subjective, physics, chemistry)
+- **Real-time Validation** - Instant feedback as you type
+- **Integrated Commands** - All Setwise features accessible via Command Palette
+
+**Quick Start in VSCode:**
+1. Install extension and open any `questions.py` file
+2. Type `mcq` + Tab for MCQ template, `subjective` + Tab for subjective
+3. Press `Ctrl+Shift+P` (Cmd+Shift+P) to preview quiz
+4. Press `Ctrl+Shift+G` to generate final quiz sets
+
+### Easy-to-Use Web Interface
 
 For users who prefer a graphical interface, Setwise includes a web application built with Streamlit:
 

@@ -1,0 +1,50 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Setwise Questions",
+    "scopeName": "source.python.setwise",
+    "patterns": [
+        {
+            "include": "source.python"
+        },
+        {
+            "name": "string.quoted.double.latex.setwise",
+            "begin": "r\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "markup.bold.latex",
+                    "match": "\\\\\\w+\\{[^}]*\\}"
+                },
+                {
+                    "name": "markup.italic.latex",
+                    "match": "\\$[^$]*\\$"
+                },
+                {
+                    "name": "constant.character.escape.latex",
+                    "match": "\\\\\\\\[a-zA-Z]+"
+                },
+                {
+                    "name": "keyword.control.latex",
+                    "match": "\\\\(frac|sqrt|sum|int|lim|alpha|beta|gamma|delta|pi|theta|mu|sigma|rightarrow|leftarrow|to|infty)"
+                },
+                {
+                    "name": "markup.underline.latex",
+                    "match": "\\{[^}]*\\}"
+                }
+            ]
+        },
+        {
+            "name": "entity.name.function.setwise",
+            "match": "\\b(mcq|subjective|question|options|answer|marks|template|variables)\\b"
+        },
+        {
+            "name": "comment.line.setwise",
+            "match": "#.*quiz.*|#.*setwise.*|#.*latex.*",
+            "captures": {
+                "0": {
+                    "name": "comment.line.number-sign.python"
+                }
+            }
+        }
+    ]
+}
