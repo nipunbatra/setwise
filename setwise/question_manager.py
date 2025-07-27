@@ -9,6 +9,7 @@ import importlib.util
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 import sys
+from .latex_validator import LaTeXValidator, LaTeXErrorFixer
 
 
 class QuestionManager:
@@ -75,6 +76,11 @@ class QuestionManager:
                 
                 if q['answer'] not in q['options']:
                     return False, f"MCQ question {i+1} answer must be one of the options"
+                
+                # Validate LaTeX syntax
+                is_valid, latex_errors = LaTeXValidator.validate_question_dict(q)
+                if not is_valid:
+                    return False, f"MCQ question {i+1} LaTeX errors: {'; '.join(latex_errors)}"
             
             # Validate subjective format
             for i, q in enumerate(subjective):
@@ -92,6 +98,11 @@ class QuestionManager:
                     
                     if not isinstance(q['variables'], list):
                         return False, f"Subjective question {i+1} 'variables' must be a list"
+                
+                # Validate LaTeX syntax
+                is_valid, latex_errors = LaTeXValidator.validate_question_dict(q)
+                if not is_valid:
+                    return False, f"Subjective question {i+1} LaTeX errors: {'; '.join(latex_errors)}"
             
             return True, f"Valid questions file with {len(mcq)} MCQ and {len(subjective)} subjective questions"
             

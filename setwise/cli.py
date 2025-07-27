@@ -9,6 +9,7 @@ from pathlib import Path
 
 from .quiz_generator import QuizGenerator
 from .question_manager import QuestionManager
+from .latex_validator import LaTeXValidator, LaTeXErrorFixer
 
 # Import with fallbacks  
 try:
@@ -80,6 +81,15 @@ Examples:
     # Stats command
     stats_q_parser = questions_subparsers.add_parser('stats', help='Show statistics for a questions file')
     stats_q_parser.add_argument('file', help='Path to questions.py file')
+    
+    # Fix LaTeX command
+    fix_q_parser = questions_subparsers.add_parser('fix-latex', help='Automatically fix common LaTeX errors in questions file')
+    fix_q_parser.add_argument('file', help='Path to questions.py file to fix')
+    fix_q_parser.add_argument('--output', help='Output file (default: overwrites input)')
+    fix_q_parser.add_argument('--dry-run', action='store_true', help='Show fixes without applying them')
+    
+    # LaTeX help command
+    questions_subparsers.add_parser('latex-help', help='Show LaTeX syntax help for writing questions')
     
     args = parser.parse_args()
     
@@ -176,6 +186,45 @@ Examples:
             print(f"Subjective questions: {stats['subjective_count']} ({stats['total_subjective_marks']} marks)")
             print(f"Templated subjective: {stats['templated_subjective']}")
             print(f"Total marks: {stats['total_marks']}")
+        
+        elif args.questions_command == 'fix-latex':
+            try:
+                with open(args.file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                fixed_content, fixes_applied = LaTeXErrorFixer.fix_common_errors(content)
+                
+                if args.dry_run:
+                    print("LaTeX fixes that would be applied:")
+                    if fixes_applied:
+                        for fix in fixes_applied:
+                            print(f"  - {fix}")
+                    else:
+                        print("  No automatic fixes needed")
+                    
+                    if fixed_content != content:
+                        print("\nPreview of changes:")
+                        print("-" * 40)
+                        print(fixed_content[:500] + "..." if len(fixed_content) > 500 else fixed_content)
+                else:
+                    output_file = args.output or args.file
+                    with open(output_file, 'w', encoding='utf-8') as f:
+                        f.write(fixed_content)
+                    
+                    print(f"Fixed LaTeX errors in: {output_file}")
+                    if fixes_applied:
+                        print("Applied fixes:")
+                        for fix in fixes_applied:
+                            print(f"  - {fix}")
+                    else:
+                        print("No automatic fixes were needed")
+                        
+            except Exception as e:
+                print(f"Error fixing LaTeX: {e}")
+                sys.exit(1)
+        
+        elif args.questions_command == 'latex-help':
+            print(LaTeXValidator.get_latex_help())
 
 
 if __name__ == "__main__":

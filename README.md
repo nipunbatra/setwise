@@ -106,6 +106,9 @@ Minimalist black and white design with clean typography and high contrast
 # Install from GitHub source
 pip install git+https://github.com/nipunbatra/setwise.git
 
+# With web interface support
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+
 # For development with all tools
 pip install git+https://github.com/nipunbatra/setwise.git[dev,security]
 ```
@@ -183,9 +186,11 @@ Options:
 ### Question Management Commands
 ```bash
 setwise questions list                    # Find and list question libraries
-setwise questions validate FILE          # Validate a questions.py file
+setwise questions validate FILE          # Validate a questions.py file (includes LaTeX validation)
 setwise questions create-sample FILE     # Create a sample questions file
 setwise questions stats FILE             # Show statistics for a questions file
+setwise questions fix-latex FILE         # Automatically fix common LaTeX errors
+setwise questions latex-help             # Show LaTeX syntax help and examples
 ```
 
 ### Other Commands
@@ -193,6 +198,26 @@ setwise questions stats FILE             # Show statistics for a questions file
 setwise list-templates                    # List all available templates with descriptions
 setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
 ```
+
+## Easy-to-Use Web Interface
+
+For users who prefer a graphical interface, Setwise includes a web application built with Streamlit:
+
+```bash
+# Install streamlit if not already installed
+pip install streamlit
+
+# Launch the web interface
+streamlit run setwise_web.py
+```
+
+The web interface provides:
+- Point-and-click quiz generation
+- Visual question library management
+- Real-time LaTeX validation and error fixing
+- Interactive LaTeX syntax help
+- Example question libraries for different subjects
+- Drag-and-drop file uploads
 
 ## Custom Question Libraries
 
@@ -204,11 +229,18 @@ You can create custom question libraries for any subject by creating a `question
 # Create a sample questions file to get started
 setwise questions create-sample my_physics_questions.py
 
-# Validate your questions file
+# Validate your questions file (includes LaTeX syntax checking)
 setwise questions validate my_physics_questions.py
+
+# Automatically fix common LaTeX errors
+setwise questions fix-latex my_physics_questions.py --dry-run  # Preview fixes
+setwise questions fix-latex my_physics_questions.py            # Apply fixes
 
 # Check statistics about your questions
 setwise questions stats my_physics_questions.py
+
+# Get LaTeX syntax help
+setwise questions latex-help
 
 # Use your custom questions
 setwise generate --questions-file my_physics_questions.py --sets 3
@@ -250,6 +282,58 @@ subjective = [
         "marks": 3
     }
 ]
+```
+
+### LaTeX Error Prevention and Fixing
+
+Setwise includes comprehensive LaTeX validation and automatic error fixing:
+
+```bash
+# Check for LaTeX syntax errors before generating quizzes
+setwise questions validate my_questions.py
+
+# Automatically fix common LaTeX errors
+setwise questions fix-latex my_questions.py
+
+# Preview what fixes would be applied without changing the file
+setwise questions fix-latex my_questions.py --dry-run
+
+# Get help with LaTeX syntax
+setwise questions latex-help
+```
+
+**Common issues automatically fixed:**
+- Missing `$` delimiters for math expressions
+- Unescaped special characters (%, &, #)
+- Chemical formulas (H2O → H$_2$O)
+- Degree symbols (45 degrees → 45°)
+- Subscript/superscript without braces
+
+**LaTeX compilation errors get user-friendly explanations:**
+- "Missing $ inserted" → "Missing $ for math mode - surround math expressions with $"
+- "Undefined control sequence" → "Undefined LaTeX command - check spelling of commands like \\frac, \\sqrt"
+- "Extra }" → "Extra closing brace } - check for matching braces"
+
+### Multiple Subject Examples
+
+Download and use these example question libraries:
+
+```bash
+# Physics questions with equations and scientific notation
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
+setwise generate --questions-file physics_questions.py --sets 2
+
+# Chemistry with chemical equations and calculations  
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/chemistry_questions.py
+setwise generate --questions-file chemistry_questions.py --sets 2
+
+# Mathematics with calculus and algebra
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/mathematics_questions.py
+setwise generate --questions-file mathematics_questions.py --sets 2
+
+# Computer Science with algorithms and complexity
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/computer_science_questions.py  
+setwise generate --questions-file computer_science_questions.py --sets 2
 ```
 
 ### Advanced Examples

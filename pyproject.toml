@@ -42,6 +42,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+web = [
+    "streamlit>=1.28.0"
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -50,7 +53,8 @@ dev = [
     "black>=22.0.0",
     "flake8>=5.0.0",
     "isort>=5.10.0",
-    "mypy>=0.991"
+    "mypy>=0.991",
+    "streamlit>=1.28.0"
 ]
 security = [
     "bandit>=1.7.0",

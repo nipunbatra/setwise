@@ -15,6 +15,7 @@ import importlib.util
 from jinja2 import Template, Environment, FileSystemLoader
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
+from .latex_validator import LaTeXValidator
 
 # Import template manager
 try:
@@ -243,24 +244,50 @@ class QuizGenerator:
         return "\n".join(answer_lines)
 
     def compile_latex(self, tex_file_path: Path, output_dir: Path) -> bool:
-        """Compile LaTeX file to PDF."""
+        """Compile LaTeX file to PDF with enhanced error handling."""
         try:
             # Run pdflatex twice for proper cross-references
-            for _ in range(2):
+            for run_num in range(2):
                 result = subprocess.run(
                     ['pdflatex', f'-output-directory={output_dir}', tex_file_path],
                     capture_output=True,
                     text=True,
-                    check=True
+                    check=False  # Don't raise exception immediately
                 )
+                
+                # Check for errors in the output
+                if result.returncode != 0:
+                    print(f"LaTeX compilation failed on run {run_num + 1}")
+                    
+                    # Parse LaTeX log for user-friendly errors
+                    log_file = output_dir / f"{tex_file_path.stem}.log"
+                    if log_file.exists():
+                        with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+                            log_content = f.read()
+                        
+                        latex_errors = LaTeXValidator.check_compilation_errors(log_content)
+                        if latex_errors:
+                            print("LaTeX Error Help:")
+                            for error in latex_errors:
+                                print(f"  - {error}")
+                        
+                        # Show raw error if no specific help available
+                        if not latex_errors and result.stderr:
+                            print(f"Raw LaTeX error: {result.stderr}")
+                    
+                    return False
+            
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"LaTeX compilation failed: {e}")
-            print(f"STDOUT: {e.stdout}")
-            print(f"STDERR: {e.stderr}")
-            return False
+            
         except FileNotFoundError:
-            print("Error: pdflatex not found. Please install LaTeX.")
+            print("Error: pdflatex not found.")
+            print("Please install LaTeX:")
+            print("  - On Ubuntu/Debian: sudo apt-get install texlive-full")
+            print("  - On macOS: brew install --cask mactex")
+            print("  - On Windows: Download from https://miktex.org/")
+            return False
+        except Exception as e:
+            print(f"Unexpected error during LaTeX compilation: {e}")
             return False
 
     def generate_quizzes(self, num_sets: int = 3, num_mcq: Optional[int] = None,
