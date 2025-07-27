@@ -110,12 +110,45 @@ class LaTeXValidator:
             if re.search(r'[&%#]', math):
                 errors.append(f"Invalid characters (&, %, #) in math mode: {math}")
         
-        # Check for missing spaces after LaTeX commands
-        if re.search(r'\\[a-zA-Z]+[a-zA-Z]', text):
-            # This is too strict, so let's be more specific
-            pass
+        # Check for potential math expressions without $ delimiters
+        if not LaTeXValidator._is_in_math_environment(text):
+            math_patterns = [
+                (r'\b[a-zA-Z]\^[0-9+]', "variable with superscript"),
+                (r'\b[a-zA-Z]_[0-9+]', "variable with subscript"), 
+                (r'\\frac\{[^}]*\}\{[^}]*\}', "fraction"),
+                (r'\\sqrt\{[^}]*\}', "square root"),
+                (r'\\sum|\\int|\\lim', "mathematical operator")
+            ]
+            
+            for pattern, description in math_patterns:
+                matches = re.findall(pattern, text)
+                for match in matches:
+                    if not LaTeXValidator._is_in_math_mode(text, match):
+                        errors.append(f"Math expression '{match}' ({description}) should be in math mode: ${match}$")
         
         return len(errors) == 0, errors
+    
+    @staticmethod
+    def _is_in_math_environment(text: str) -> bool:
+        """Check if entire text is within a math environment."""
+        return (text.startswith('$') and text.endswith('$')) or \
+               ('\\begin{equation}' in text) or \
+               ('\\begin{align}' in text) or \
+               ('\\begin{gather}' in text)
+    
+    @staticmethod
+    def _is_in_math_mode(text: str, expression: str) -> bool:
+        """Check if expression is already in math mode (between $ delimiters)."""
+        # Find position of expression
+        pos = text.find(expression)
+        if pos == -1:
+            return False
+        
+        # Count $ before this position
+        dollars_before = text[:pos].count('$')
+        
+        # If odd number of $ before, we're in math mode
+        return dollars_before % 2 == 1
     
     @staticmethod
     def suggest_fixes(text: str) -> str:

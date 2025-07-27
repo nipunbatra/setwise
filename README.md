@@ -83,10 +83,11 @@ Minimalist black and white design with clean typography and high contrast
 
 ### Security & Quality
 - **Secure by Design** - No shell injection vulnerabilities, XSS protection
-- **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
+- **86% Test Coverage** - Comprehensive testing with 21+ quality assurance tests
+- **Enhanced LaTeX Validation** - Smart detection of math expressions and auto-fixes
+- **User Guidance System** - Intelligent error messages with actionable solutions
 - **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
-- **Dependency Management** - Dependabot for automatic security updates
-- **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
+- **Quality Grade: GOOD** - 85.7% pass rate in comprehensive quality testing
 
 ### Modern Distribution
 - **Pip Installable** - Modern Python packaging with pyproject.toml
@@ -115,6 +116,28 @@ pip install git+https://github.com/nipunbatra/setwise.git[dev,security]
 
 ## Quick Start
 
+### New User Experience
+```bash
+# 🎉 Welcome guide for first-time users
+setwise welcome
+
+# 📚 Get format recommendation based on your needs
+setwise questions recommend-format
+
+# 🚀 Create example files in all formats
+setwise questions create-examples --output-dir my_questions
+
+# ✅ Enhanced validation with smart suggestions
+setwise questions validate my_questions/sample_questions.yaml --verbose --auto-suggest
+
+# 🔧 Auto-fix common LaTeX issues
+setwise questions fix-latex my_questions/sample_questions.yaml
+
+# 🎯 Generate your first quiz
+setwise generate --questions-file my_questions/sample_questions.yaml
+```
+
+### Core Generation Commands
 ```bash
 # Generate figures (TikZ diagrams and matplotlib plots)
 setwise generate-figures
@@ -185,12 +208,27 @@ Options:
 
 ### Question Management Commands
 ```bash
-setwise questions list                    # Find and list question libraries
-setwise questions validate FILE          # Validate a questions.py file (includes LaTeX validation)
-setwise questions create-sample FILE     # Create a sample questions file
-setwise questions stats FILE             # Show statistics for a questions file
-setwise questions fix-latex FILE         # Automatically fix common LaTeX errors
-setwise questions latex-help             # Show LaTeX syntax help and examples
+# Enhanced User Experience
+setwise welcome                                      # 🎉 Welcome guide for new users
+setwise questions recommend-format                   # 📚 Interactive format recommendation
+setwise questions format-comparison                  # 📊 Compare all available formats
+setwise questions workflow first-time                # 🚀 First-time user workflow help
+
+# File Operations
+setwise questions create-examples --output-dir DIR   # 🎯 Create example files in all formats
+setwise questions convert input.yaml output.json    # 🔄 Convert between formats
+setwise questions validate FILE --verbose           # ✅ Enhanced validation with suggestions
+setwise questions validate FILE --auto-suggest      # 🔧 Show available auto-fixes
+
+# Quality Assurance
+setwise questions fix-latex FILE                     # 🛠️ Auto-fix common LaTeX errors
+setwise questions fix-latex FILE --dry-run          # 👀 Preview fixes without applying
+setwise questions latex-help                        # 📖 LaTeX syntax help and examples
+
+# Statistics and Analysis
+setwise questions list                               # 🔍 Find and list question libraries
+setwise questions create-sample FILE                # 📝 Create a sample questions file
+setwise questions stats FILE                        # 📊 Show detailed statistics
 ```
 
 ### Other Commands
@@ -198,6 +236,53 @@ setwise questions latex-help             # Show LaTeX syntax help and examples
 setwise list-templates                    # List all available templates with descriptions
 setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
 ```
+
+## Multi-Format Question Support
+
+Setwise supports 5 different formats for creating questions, making it accessible to users with different preferences and workflows:
+
+### Format Comparison
+| Format | Best For | Pros | Cons |
+|--------|----------|------|------|
+| **YAML** (.yaml) | 📚 Educators, Non-technical users | Human-readable, Clean syntax, Git-friendly | Indent-sensitive, YAML rules |
+| **JSON** (.json) | 💻 Developers, Web apps | Standard format, Tool support, Validation | Less readable, Strict syntax |
+| **CSV** (.csv) | 📊 Spreadsheet users | Excel compatibility, Bulk editing, Familiar UI | Limited formatting, Special characters |
+| **Markdown** (.md) | 📖 Documentation, GitHub | Readable, GitHub integration, Preview | Basic structure, Limited power |
+| **Python** (.py) | 🐍 Programmers | Full programming power, Templates, Variables | Requires coding, Complex syntax |
+
+### Smart Format Features
+```bash
+# Get personalized format recommendation
+setwise questions recommend-format
+
+# Compare all formats side-by-side
+setwise questions format-comparison
+
+# Seamless conversion between any formats
+setwise questions convert questions.py questions.yaml
+setwise questions convert questions.csv questions.json
+
+# Create examples in all formats
+setwise questions create-examples --output-dir examples
+```
+
+### Enhanced Validation & Auto-Fix
+```bash
+# Smart validation with contextual suggestions
+setwise questions validate questions.yaml --verbose
+
+# Auto-fix common issues
+setwise questions fix-latex questions.yaml
+
+# Preview fixes before applying
+setwise questions fix-latex questions.yaml --dry-run
+```
+
+**Auto-fixes include:**
+- Chemistry formulas: H2O → H$_2$O, CO2 → CO$_2$
+- Math expressions: x^2 → $x^{2}$, y_1 → $y_{1}$
+- Units: 45 degrees → 45°
+- LaTeX escaping: % → \\%
 
 ## Multiple User Interfaces
 

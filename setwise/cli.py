@@ -11,6 +11,7 @@ from .quiz_generator import QuizGenerator
 from .question_manager import QuestionManager
 from .latex_validator import LaTeXValidator, LaTeXErrorFixer
 from .formats import QuestionFormatConverter
+from .user_guidance import UserGuidance
 
 # Import with fallbacks  
 try:
@@ -64,6 +65,9 @@ Examples:
     # Generate figures command
     subparsers.add_parser('generate-figures', help='Generate TikZ and matplotlib figures')
     
+    # Welcome command for new users
+    subparsers.add_parser('welcome', help='Welcome guide for new users')
+    
     # Question management commands
     questions_parser = subparsers.add_parser('questions', help='Question library management')
     questions_subparsers = questions_parser.add_subparsers(dest='questions_command', help='Question commands')
@@ -75,6 +79,8 @@ Examples:
     # Validate questions command
     validate_q_parser = questions_subparsers.add_parser('validate', help='Validate a questions file')
     validate_q_parser.add_argument('file', help='Path to questions.py file to validate')
+    validate_q_parser.add_argument('--verbose', action='store_true', help='Show detailed suggestions and tips')
+    validate_q_parser.add_argument('--auto-suggest', action='store_true', help='Provide automatic improvement suggestions')
     
     # Create sample command
     sample_q_parser = questions_subparsers.add_parser('create-sample', help='Create a sample questions.py file')
@@ -103,6 +109,14 @@ Examples:
     # Create examples command
     examples_q_parser = questions_subparsers.add_parser('create-examples', help='Create example question files in all formats')
     examples_q_parser.add_argument('--output-dir', default='examples', help='Directory to create example files')
+    
+    # User guidance commands
+    questions_subparsers.add_parser('recommend-format', help='Get personalized format recommendation')
+    questions_subparsers.add_parser('format-comparison', help='Compare all available formats')
+    
+    workflow_q_parser = questions_subparsers.add_parser('workflow', help='Show workflow help for specific scenarios')
+    workflow_q_parser.add_argument('type', choices=['first-time', 'collaboration', 'bulk-editing', 'latex-heavy'], 
+                                   help='Type of workflow help')
     
     args = parser.parse_args()
     
@@ -148,6 +162,42 @@ Examples:
         generate_figures()
         print("Figures generated successfully!")
     
+    elif args.command == 'welcome':
+        print("""
+🎉 Welcome to Setwise - Professional LaTeX Quiz Generator!
+
+🚀 Quick Start Guide:
+
+1️⃣ Get Your First Quiz in 3 Steps:
+   $ setwise questions create-examples --output-dir my_questions
+   $ setwise questions validate my_questions/sample_questions.yaml --verbose
+   $ setwise generate --questions-file my_questions/sample_questions.yaml
+
+2️⃣ Choose Your Format:
+   • 📚 Educator? Try YAML (human-readable)
+   • 💻 Developer? Try JSON (web-friendly) 
+   • 📊 Spreadsheet user? Try CSV (Excel-compatible)
+   • 🐍 Programmer? Try Python (full power)
+   
+   Get personalized recommendation:
+   $ setwise questions recommend-format
+
+3️⃣ Need Help?
+   • Format comparison: setwise questions format-comparison
+   • LaTeX help: setwise questions latex-help  
+   • Workflow guide: setwise questions workflow first-time
+   • Validate files: setwise questions validate <file> --verbose
+
+4️⃣ Pro Tips:
+   ✨ Auto-fix LaTeX: setwise questions fix-latex <file>
+   ✨ Convert formats: setwise questions convert input.yaml output.json
+   ✨ Batch create: setwise questions create-examples --output-dir examples
+
+🎯 Ready to create amazing quizzes? Start with step 1 above!
+
+💡 Need detailed help? Run: setwise --help
+        """)
+    
     elif args.command == 'questions':
         if not args.questions_command:
             questions_parser.print_help()
@@ -173,9 +223,49 @@ Examples:
         elif args.questions_command == 'validate':
             is_valid, message = QuestionManager.validate_questions_file(args.file)
             if is_valid:
-                print(f"Valid: {message}")
+                print(f"✅ Valid: {message}")
+                
+                # Show additional suggestions for valid files
+                try:
+                    suggestions = UserGuidance.detect_common_issues(args.file)
+                    if suggestions:
+                        print(f"\n💡 Suggestions for improvement ({len(suggestions)} found):")
+                        for i, suggestion in enumerate(suggestions[:10]):  # Limit to 10 suggestions
+                            print(f"   {i+1}. {suggestion}")
+                        
+                        if len(suggestions) > 10:
+                            print(f"   ... and {len(suggestions) - 10} more suggestions")
+                            
+                        if args.auto_suggest:
+                            print(f"\n🔧 To auto-fix common issues, run:")
+                            print(f"   setwise questions fix-latex {args.file}")
+                    else:
+                        print("\n✨ No issues detected - your questions look great!")
+                        
+                    if args.verbose:
+                        print(f"\n📊 Quick Stats:")
+                        stats = QuestionManager.get_question_stats(args.file)
+                        if 'error' not in stats:
+                            print(f"   📝 Total questions: {stats['total_questions']}")
+                            print(f"   🔢 MCQ: {stats['mcq_count']} ({stats['total_mcq_marks']} marks)")
+                            print(f"   📖 Subjective: {stats['subjective_count']} ({stats['total_subjective_marks']} marks)")
+                            print(f"   🏆 Total marks: {stats['total_marks']}")
+                            
+                except Exception as e:
+                    if args.verbose:
+                        print(f"\n⚠️ Could not generate suggestions: {e}")
             else:
-                print(f"Invalid: {message}")
+                # Enhanced error message with guidance
+                enhanced_message = UserGuidance.enhance_error_message(message)
+                print(f"❌ Invalid: {enhanced_message}")
+                
+                if args.verbose:
+                    print(f"\n🔍 Troubleshooting tips:")
+                    print(f"   • Check file format and syntax")
+                    print(f"   • Ensure all required fields are present")
+                    print(f"   • Validate LaTeX expressions")
+                    print(f"   • Run: setwise questions latex-help for LaTeX syntax help")
+                
                 sys.exit(1)
         
         elif args.questions_command == 'create-sample':
@@ -329,6 +419,30 @@ Examples:
             except Exception as e:
                 print(f"❌ Failed to create examples: {e}")
                 sys.exit(1)
+        
+        elif args.questions_command == 'recommend-format':
+            # Get personalized format recommendation
+            try:
+                rec = UserGuidance.get_format_recommendation()
+                print(f"\n🎯 Recommended format: {rec['primary'].upper()}")
+                print(f"📝 Reason: {rec['reason']}")
+                print(f"💡 Example use: {rec['example']}")
+                
+                # Show how to get started
+                print(f"\n🚀 Get started:")
+                print(f"   setwise questions create-examples --format {rec['primary']}")
+                
+            except Exception as e:
+                print(f"❌ Error getting recommendation: {e}")
+                sys.exit(1)
+        
+        elif args.questions_command == 'format-comparison':
+            # Show format comparison table
+            UserGuidance.show_format_comparison()
+        
+        elif args.questions_command == 'workflow':
+            # Show workflow-specific help
+            UserGuidance.show_workflow_help(args.type)
 
 
 if __name__ == "__main__":
