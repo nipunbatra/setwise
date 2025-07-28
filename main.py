@@ -350,6 +350,9 @@ def main():
     
     print(f"Generated {num_sets} quiz sets successfully!")
     print(f"Files saved in: {os.path.abspath(output_dir)}")
+    
+    # Explicit exit to prevent hanging
+    sys.exit(0)
 
 
 if __name__ == "__main__":

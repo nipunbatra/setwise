@@ -28,28 +28,36 @@ A professional Python-based quiz generation system that creates beautiful, rando
 
 ## Quick Start
 
-### Installation
+### Easy Installation (Recommended)
 
 ```bash
-# Install from GitHub
+# Create virtual environment
+python3 -m venv setwise-env
+source setwise-env/bin/activate  # Windows: setwise-env\Scripts\activate
+
+# Install Setwise
 pip install git+https://github.com/nipunbatra/setwise.git
 
-# With web interface support
-pip install git+https://github.com/nipunbatra/setwise.git[web]
+# Generate your first quiz (no LaTeX required)
+setwise generate --seed 42 --no-pdf
 ```
 
-### Generate Your First Quiz
+### Alternative: Run from Source
+
+If you prefer to clone the repository:
 
 ```bash
-# Welcome guide for new users
-setwise welcome
+git clone https://github.com/nipunbatra/setwise.git
+cd setwise
+python3 -m venv setwise-env
+source setwise-env/bin/activate
+pip install -r requirements.txt
 
-# Create example questions
-setwise questions create-examples --output-dir my_questions
-
-# Generate quiz from examples
-setwise generate --questions-file my_questions/sample_questions.yaml
+# Generate quiz without PDF to avoid LaTeX issues
+python main.py --seed 42 --no-pdf
 ```
+
+**Having issues?** See [QUICKSTART.md](QUICKSTART.md) for troubleshooting.
 
 **[Complete installation guide →](docs/INSTALLATION.md)**
 
