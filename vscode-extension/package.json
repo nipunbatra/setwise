@@ -130,26 +130,6 @@
         }
       ]
     },
-    "keybindings": [
-      {
-        "command": "setwise.previewQuiz",
-        "key": "ctrl+shift+q",
-        "mac": "cmd+shift+q",
-        "when": "resourceFilename =~ /.*questions.*\\.py$/"
-      },
-      {
-        "command": "setwise.generateQuiz", 
-        "key": "ctrl+shift+g",
-        "mac": "cmd+shift+g",
-        "when": "resourceFilename =~ /.*questions.*\\.py$/"
-      },
-      {
-        "command": "setwise.validateQuestions",
-        "key": "ctrl+shift+v",
-        "mac": "cmd+shift+v", 
-        "when": "resourceFilename =~ /.*questions.*\\.py$/"
-      }
-    ],
     "snippets": [
       {
         "language": "python",
