@@ -29,8 +29,8 @@ npm run compile
 # Package extension
 echo "📦 Packaging extension..."
 if ! command -v vsce &> /dev/null; then
-    echo "Installing vsce (Visual Studio Code Extension manager)..."
-    npm install -g vsce
+    echo "Installing @vscode/vsce (Visual Studio Code Extension manager)..."
+    npm install -g @vscode/vsce
 fi
 
 vsce package
