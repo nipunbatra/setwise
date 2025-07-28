@@ -12,9 +12,7 @@ import base64
 import sys
 from pathlib import Path
 
-# Add the current directory to path to import setwise modules
-sys.path.insert(0, str(Path(__file__).parent))
-
+# Try to import setwise package
 try:
     from setwise.quiz_generator import QuizGenerator
     from setwise.template_manager import TemplateManager
@@ -256,19 +254,18 @@ subjective = [
     return examples.get(subject, "")
 
 def generate_quiz_pdfs(questions_text, template, num_sets):
-    """Generate quiz PDFs and return their data with answer keys"""
+    """Generate quiz PDFs using the setwise package"""
     try:
-        # Check if setwise modules are available
         if not SETWISE_AVAILABLE:
-            return None, "Setwise modules are not available. Please install the setwise package."
+            return None, "Setwise package is not available. Please check the installation."
         
-        # First validate the questions format
+        # Validate questions format
         try:
             exec(questions_text)
         except SyntaxError as e:
-            return None, f"Python syntax error in questions: {str(e)}\n\nCheck your question format - make sure you have 'mcq = [...]' and 'subjective = [...]'"
+            return None, f"Python syntax error: {str(e)}\n\nCheck your mcq = [...] and subjective = [...] format."
         except Exception as e:
-            return None, f"Error in questions format: {str(e)}\n\nMake sure your questions follow the correct format."
+            return None, f"Error in questions format: {str(e)}"
         
         # Create temporary file for questions
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -279,13 +276,12 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         output_dir = tempfile.mkdtemp()
         
         try:
-            # Use QuizGenerator directly instead of CLI
+            # Use QuizGenerator API
             generator = QuizGenerator(
                 output_dir=output_dir,
                 questions_file=questions_file
             )
             
-            # Generate quiz sets
             success = generator.generate_quizzes(
                 num_sets=num_sets,
                 template_name=template,
@@ -297,9 +293,9 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                 return None, "Quiz generation failed. Check your question format and LaTeX syntax."
             
         except Exception as e:
-            return None, f"Quiz generation error: {str(e)}\n\nThis might be due to LaTeX compilation issues or question format problems."
+            return None, f"Generation error: {str(e)}"
         
-        # Collect generated PDFs and answer keys
+        # Collect results
         quiz_sets = []
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
@@ -326,13 +322,10 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         except:
             pass
         
-        if not quiz_sets:
-            return None, "No quiz PDFs were generated. Check that your questions are in the correct format and LaTeX compilation succeeded."
-        
         return quiz_sets, None
         
     except Exception as e:
-        return None, f"Unexpected error: {str(e)}\n\nPlease check your questions format and try again."
+        return None, f"Unexpected error: {str(e)}"
 
 def display_pdf_embed(pdf_data, height=400):
     """Display PDF using iframe"""
@@ -366,12 +359,6 @@ def main():
     
     st.title("Setwise Quiz Generator")
     st.markdown("Simple interface: Edit questions → Generate PDFs → Download")
-    
-    # Show status
-    if not SETWISE_AVAILABLE:
-        st.error("⚠️ Setwise modules not available. Some features may not work.")
-    else:
-        st.success("✅ Setwise modules loaded successfully")
     
     # Controls row
     col_ctrl1, col_ctrl2, col_ctrl3, col_ctrl4 = st.columns([1, 1, 1, 2])
