@@ -1,130 +1,260 @@
+#!/usr/bin/env python3
+"""
+Simple Setwise Web Interface 
+Clean split-pane design: questions editor on left, PDF previews on right
+"""
+
 import streamlit as st
 import tempfile
-import os
-import sys
 import subprocess
-from pathlib import Path
+import os
 import base64
-from io import BytesIO
-
-# Add the setwise package to path for import
-sys.path.insert(0, str(Path(__file__).parent))
-
-from setwise.quiz_generator import QuizGenerator
-from setwise.formats import QuestionFormatConverter
+from pathlib import Path
 
 st.set_page_config(
     page_title="Setwise Quiz Generator",
     page_icon="🎯",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
 def load_example_questions(subject):
     """Load example questions for different subjects"""
     examples = {
-        "Physics": '''mcq_questions = [
+        "Physics": '''mcq = [
     {
         "question": r"What is the SI unit of force?",
-        "options": [
-            r"Joule",
-            r"Newton", 
-            r"Watt",
-            r"Pascal"
-        ],
+        "options": [r"Joule", r"Newton", r"Watt", r"Pascal"],
         "answer": r"Newton",
         "marks": 1
     },
     {
-        "question": r"The acceleration due to gravity on Earth is approximately:",
-        "options": [
-            r"$9.8 \\, \\text{m/s}^2$",
-            r"$10 \\, \\text{m/s}^2$",
-            r"$8.9 \\, \\text{m/s}^2$",
-            r"$11 \\, \\text{m/s}^2$"
-        ],
-        "answer": r"$9.8 \\, \\text{m/s}^2$",
+        "question": r"The acceleration due to gravity is approximately:",
+        "options": [r"$9.8\\,\\text{m/s}^2$", r"$10\\,\\text{m/s}^2$", r"$8.9\\,\\text{m/s}^2$", r"$11\\,\\text{m/s}^2$"],
+        "answer": r"$9.8\\,\\text{m/s}^2$",
+        "marks": 1
+    },
+    {
+        "question": r"Which law states that force equals mass times acceleration?",
+        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Law of Conservation"],
+        "answer": r"Newton's Second Law",
+        "marks": 1
+    },
+    {
+        "question": r"What is the formula for electric power?",
+        "options": [r"$P = VI$", r"$P = IR$", r"$P = \\frac{V}{I}$", r"$P = V + I$"],
+        "answer": r"$P = VI$",
+        "marks": 1
+    },
+    {
+        "question": r"The speed of light in vacuum is:",
+        "options": [r"$3 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^6\\,\\text{m/s}$", r"$9 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^{10}\\,\\text{m/s}$"],
+        "answer": r"$3 \\times 10^8\\,\\text{m/s}$",
+        "marks": 1
+    },
+    {
+        "question": r"What type of wave is sound?",
+        "options": [r"Electromagnetic", r"Longitudinal", r"Transverse", r"Surface"],
+        "answer": r"Longitudinal",
+        "marks": 1
+    },
+    {
+        "question": r"The unit of electric current is:",
+        "options": [r"Volt", r"Ohm", r"Ampere", r"Watt"],
+        "answer": r"Ampere",
+        "marks": 1
+    },
+    {
+        "question": r"Which particle has no electric charge?",
+        "options": [r"Proton", r"Electron", r"Neutron", r"Ion"],
+        "answer": r"Neutron",
         "marks": 1
     }
 ]
 
-subjective_questions = [
+subjective = [
     {
-        "question": r"Derive the equation for kinetic energy. Show that $KE = \\frac{1}{2}mv^2$.",
-        "answer": r"Starting with Newton's second law and work-energy theorem...",
+        "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.",
+        "answer": r"Starting with Newton's second law F=ma and work-energy theorem, we integrate force over distance to get kinetic energy.",
+        "marks": 5
+    },
+    {
+        "question": r"Explain Ohm's Law and derive the relationship between voltage, current, and resistance.",
+        "answer": r"Ohm's Law states V=IR. For a conductor at constant temperature, voltage is directly proportional to current.",
+        "marks": 4
+    },
+    {
+        "question": r"Describe the photoelectric effect and explain why it supports the particle nature of light.",
+        "answer": r"The photoelectric effect shows electrons are emitted when light hits a surface, demonstrating light's quantum nature.",
+        "marks": 6
+    },
+    {
+        "question": r"What is simple harmonic motion? Give examples and derive the equation of motion.",
+        "answer": r"SHM is periodic motion where restoring force is proportional to displacement: F = -kx, leading to x(t) = A cos(ωt + φ).",
         "marks": 5
     }
 ]''',
-        "Mathematics": '''mcq_questions = [
+        
+        "Mathematics": '''mcq = [
     {
         "question": r"What is the derivative of $\\sin(x)$?",
-        "options": [
-            r"$\\cos(x)$",
-            r"$-\\cos(x)$",
-            r"$\\tan(x)$",
-            r"$-\\sin(x)$"
-        ],
+        "options": [r"$\\cos(x)$", r"$-\\cos(x)$", r"$\\tan(x)$", r"$-\\sin(x)$"],
         "answer": r"$\\cos(x)$",
         "marks": 1
     },
     {
         "question": r"The integral $\\int x^2 dx$ equals:",
-        "options": [
-            r"$\\frac{x^3}{3} + C$",
-            r"$2x + C$",
-            r"$x^3 + C$",
-            r"$\\frac{x^2}{2} + C$"
-        ],
+        "options": [r"$\\frac{x^3}{3} + C$", r"$2x + C$", r"$x^3 + C$", r"$\\frac{x^2}{2} + C$"],
         "answer": r"$\\frac{x^3}{3} + C$",
+        "marks": 1
+    },
+    {
+        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
+        "options": [r"0", r"1", r"$\\infty$", r"Does not exist"],
+        "answer": r"1",
+        "marks": 2
+    },
+    {
+        "question": r"The slope of the line $y = 3x + 5$ is:",
+        "options": [r"3", r"5", r"8", r"$\\frac{5}{3}$"],
+        "answer": r"3",
+        "marks": 1
+    },
+    {
+        "question": r"Which of these is NOT a rational number?",
+        "options": [r"$\\frac{22}{7}$", r"$0.\\overline{3}$", r"$\\sqrt{2}$", r"$-5$"],
+        "answer": r"$\\sqrt{2}$",
+        "marks": 1
+    },
+    {
+        "question": r"The quadratic formula is:",
+        "options": [r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{b^2+4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{4ac-b^2}}{2a}$"],
+        "answer": r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$",
+        "marks": 1
+    },
+    {
+        "question": r"What is the value of $\\pi$ to 3 decimal places?",
+        "options": [r"3.142", r"3.141", r"3.140", r"3.143"],
+        "answer": r"3.142",
+        "marks": 1
+    },
+    {
+        "question": r"The factorial of 5 is:",
+        "options": [r"25", r"120", r"20", r"100"],
+        "answer": r"120",
         "marks": 1
     }
 ]
 
-subjective_questions = [
+subjective = [
     {
-        "question": r"Prove that the sum of first $n$ natural numbers is $\\frac{n(n+1)}{2}$.",
-        "answer": r"We can prove this using mathematical induction...",
+        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.",
+        "answer": r"Base case: n=1, LHS=1, RHS=1(2)/2=1. Inductive step: assume true for k, prove for k+1.",
         "marks": 5
+    },
+    {
+        "question": r"Find the area under the curve $y = x^2$ from $x = 0$ to $x = 2$.",
+        "answer": r"Area = $\\int_0^2 x^2 dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$",
+        "marks": 4
+    },
+    {
+        "question": r"Solve the system of equations: $2x + 3y = 7$ and $x - y = 1$.",
+        "answer": r"From second equation: x = y + 1. Substituting: 2(y+1) + 3y = 7, so y = 1, x = 2.",
+        "marks": 4
+    },
+    {
+        "question": r"Prove that the square root of 2 is irrational.",
+        "answer": r"Assume $\\sqrt{2} = \\frac{p}{q}$ in lowest terms. Then $2q^2 = p^2$, so p is even. This leads to contradiction.",
+        "marks": 6
     }
 ]''',
-        "Programming": '''mcq_questions = [
+
+        "Programming": '''mcq = [
     {
-        "question": r"Which of the following is used to create a list in Python?",
-        "options": [
-            r"[]",
-            r"{}",
-            r"()",
-            r"<>"
-        ],
+        "question": r"Which creates a list in Python?",
+        "options": [r"[]", r"{}", r"()", r"<>"],
         "answer": r"[]",
         "marks": 1
     },
     {
-        "question": r"What is the time complexity of binary search?",
-        "options": [
-            r"$O(n)$",
-            r"$O(\\log n)$",
-            r"$O(n^2)$",
-            r"$O(1)$"
-        ],
+        "question": r"Time complexity of binary search?",
+        "options": [r"$O(n)$", r"$O(\\log n)$", r"$O(n^2)$", r"$O(1)$"],
         "answer": r"$O(\\log n)$",
+        "marks": 1
+    },
+    {
+        "question": r"What does SQL stand for?",
+        "options": [r"Structured Query Language", r"Simple Query Language", r"Standard Query Language", r"Sequential Query Language"],
+        "answer": r"Structured Query Language",
+        "marks": 1
+    },
+    {
+        "question": r"Which sorting algorithm has best average case complexity?",
+        "options": [r"Bubble Sort", r"Quick Sort", r"Selection Sort", r"Insertion Sort"],
+        "answer": r"Quick Sort",
+        "marks": 2
+    },
+    {
+        "question": r"In Python, what is the output of print(type([]))?",
+        "options": [r"<class 'list'>", r"<class 'array'>", r"list", r"array"],
+        "answer": r"<class 'list'>",
+        "marks": 1
+    },
+    {
+        "question": r"Which data structure uses LIFO principle?",
+        "options": [r"Queue", r"Stack", r"Array", r"Tree"],
+        "answer": r"Stack",
+        "marks": 1
+    },
+    {
+        "question": r"What is the purpose of a constructor in OOP?",
+        "options": [r"Destroy objects", r"Initialize objects", r"Copy objects", r"Compare objects"],
+        "answer": r"Initialize objects",
+        "marks": 1
+    },
+    {
+        "question": r"Which HTTP method is used to retrieve data?",
+        "options": [r"POST", r"GET", r"PUT", r"DELETE"],
+        "answer": r"GET",
         "marks": 1
     }
 ]
 
-subjective_questions = [
+subjective = [
     {
-        "question": r"Explain the concept of recursion with an example. Write a recursive function to calculate factorial.",
-        "answer": r"Recursion is when a function calls itself. Example: def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
+        "question": r"Explain recursion with an example. Write a recursive factorial function.",
+        "answer": r"Recursion is when a function calls itself. def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
+        "marks": 5
+    },
+    {
+        "question": r"Compare and contrast arrays and linked lists. When would you use each?",
+        "answer": r"Arrays have O(1) access but fixed size. Linked lists have dynamic size but O(n) access. Use arrays for frequent access, linked lists for frequent insertions.",
+        "marks": 6
+    },
+    {
+        "question": r"Explain the concept of Big O notation and give examples.",
+        "answer": r"Big O describes algorithm efficiency. O(1) constant, O(n) linear, O(n²) quadratic. Example: array access O(1), linear search O(n).",
+        "marks": 4
+    },
+    {
+        "question": r"What is the difference between SQL JOIN types? Provide examples.",
+        "answer": r"INNER JOIN returns matching records. LEFT JOIN returns all left records. RIGHT JOIN returns all right records. FULL JOIN returns all records.",
         "marks": 5
     }
 ]'''
     }
     return examples.get(subject, "")
 
-def generate_quiz_preview(questions_text, template, num_sets):
-    """Generate quiz preview PDFs"""
+def generate_quiz_pdfs(questions_text, template, num_sets):
+    """Generate quiz PDFs and return their data with answer keys"""
     try:
+        # First validate the questions format
+        try:
+            exec(questions_text)
+        except SyntaxError as e:
+            return None, f"Python syntax error in questions: {str(e)}\n\nCheck your question format - make sure you have 'mcq = [...]' and 'subjective = [...]'"
+        except Exception as e:
+            return None, f"Error in questions format: {str(e)}\n\nMake sure your questions follow the correct format."
+        
         # Create temporary file for questions
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
             f.write(questions_text)
@@ -146,173 +276,265 @@ def generate_quiz_preview(questions_text, template, num_sets):
         result = subprocess.run(cmd, capture_output=True, text=True)
         
         if result.returncode != 0:
-            return None, f"Error: {result.stderr}"
+            error_msg = f"Quiz generation failed:\n\n"
+            if result.stderr:
+                error_msg += f"Error details: {result.stderr}\n\n"
+            if result.stdout:
+                error_msg += f"Output: {result.stdout}\n\n"
+            
+            # Add helpful suggestions based on common errors
+            if "No module named" in result.stderr:
+                error_msg += "💡 This appears to be a missing dependency issue. Try refreshing the page."
+            elif "FileNotFoundError" in result.stderr:
+                error_msg += "💡 LaTeX compiler not found. This might be a deployment issue."
+            elif "questions" in result.stderr.lower():
+                error_msg += "💡 Check your question format - make sure you have both 'mcq' and 'subjective' arrays."
+            elif "latex" in result.stderr.lower():
+                error_msg += "💡 LaTeX compilation error. Check your math expressions use proper LaTeX syntax like $x^2$ for math."
+            
+            return None, error_msg
         
-        # Find generated PDFs
-        pdf_files = []
+        # Collect generated PDFs and answer keys
+        quiz_sets = []
         for i in range(1, num_sets + 1):
             pdf_path = os.path.join(output_dir, f'quiz_set_{i}.pdf')
+            answer_path = os.path.join(output_dir, f'answer_key_{i}.txt')
+            
             if os.path.exists(pdf_path):
                 with open(pdf_path, 'rb') as f:
                     pdf_data = f.read()
-                pdf_files.append({
+                
+                answer_key = ""
+                if os.path.exists(answer_path):
+                    with open(answer_path, 'r') as f:
+                        answer_key = f.read()
+                
+                quiz_sets.append({
                     'name': f'Quiz Set {i}',
-                    'data': pdf_data,
-                    'path': pdf_path
+                    'pdf_data': pdf_data,
+                    'answer_key': answer_key
                 })
         
         # Cleanup
         os.unlink(questions_file)
         
-        return pdf_files, None
+        if not quiz_sets:
+            return None, "No quiz PDFs were generated. Check that your questions are in the correct format and LaTeX compilation succeeded."
+        
+        return quiz_sets, None
         
     except Exception as e:
-        return None, f"Error generating quiz: {str(e)}"
+        return None, f"Unexpected error: {str(e)}\n\nPlease check your questions format and try again."
 
-def display_pdf(pdf_data, height=600):
-    """Display PDF in iframe"""
+def display_pdf_embed(pdf_data, height=400):
+    """Display PDF using iframe"""
     base64_pdf = base64.b64encode(pdf_data).decode('utf-8')
-    pdf_display = f'''
+    pdf_html = f'''
     <iframe src="data:application/pdf;base64,{base64_pdf}" 
-            width="100%" height="{height}px" type="application/pdf">
+            width="100%" height="{height}px" type="application/pdf"
+            style="border: 1px solid #ddd; border-radius: 4px;">
     </iframe>
     '''
-    st.markdown(pdf_display, unsafe_allow_html=True)
+    st.markdown(pdf_html, unsafe_allow_html=True)
 
 def main():
-    st.title("🎯 Setwise Quiz Generator")
-    st.markdown("Create professional LaTeX quizzes with live preview")
+    # Custom CSS for better appearance
+    st.markdown("""
+    <style>
+    .main > div { padding-top: 1rem; }
+    .stTextArea textarea { 
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 14px;
+    }
+    .quiz-set-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
-    # Sidebar controls
-    with st.sidebar:
-        st.header("⚙️ Settings")
-        
-        # Template selection
-        template = st.selectbox(
-            "Template",
-            ["default", "compact", "minimal"],
-            help="Choose quiz template style"
-        )
-        
-        # Number of sets
-        num_sets = st.slider(
-            "Number of Sets",
-            min_value=1,
-            max_value=5,
-            value=2,
-            help="Generate multiple quiz variations"
-        )
-        
-        st.header("📚 Examples")
-        example_subject = st.selectbox(
-            "Load Example",
-            ["", "Physics", "Mathematics", "Programming"],
-            help="Load sample questions"
-        )
-        
-        if st.button("Load Example", disabled=not example_subject):
-            st.session_state.questions_text = load_example_questions(example_subject)
+    st.title("Setwise Quiz Generator")
+    st.markdown("Simple interface: Edit questions → Generate PDFs → Download")
+    
+    # Controls row
+    col_ctrl1, col_ctrl2, col_ctrl3, col_ctrl4 = st.columns([1, 1, 1, 2])
+    
+    with col_ctrl1:
+        template = st.selectbox("Template", ["default", "compact", "minimal"])
+    
+    with col_ctrl2:
+        num_sets = st.slider("Sets", 1, 5, 2)
+    
+    with col_ctrl3:
+        example = st.selectbox("Examples", ["", "Physics", "Mathematics", "Programming"])
+    
+    with col_ctrl4:
+        if st.button("Load Example", disabled=not example):
+            st.session_state.questions = load_example_questions(example)
             st.rerun()
     
-    # Main layout - two columns
-    col1, col2 = st.columns([1, 1])
+    # Main split pane layout
+    col_left, col_right = st.columns([1, 1])
     
-    with col1:
-        st.header("📝 Questions Editor")
+    # LEFT PANE: Questions Editor
+    with col_left:
+        st.subheader("Questions Editor")
         
-        # Initialize session state
-        if 'questions_text' not in st.session_state:
-            st.session_state.questions_text = '''mcq_questions = [
+        # Initialize default questions
+        if 'questions' not in st.session_state:
+            st.session_state.questions = '''mcq = [
     {
-        "question": r"What is the capital of France?",
-        "options": [
-            r"London",
-            r"Berlin",
-            r"Paris",
-            r"Madrid"
-        ],
-        "answer": r"Paris",
+        "question": r"What is $2 + 2$?",
+        "options": [r"3", r"4", r"5", r"6"],
+        "answer": r"4",
+        "marks": 1
+    },
+    {
+        "question": r"Which planet is closest to the Sun?",
+        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
+        "answer": r"Mercury",
+        "marks": 1
+    },
+    {
+        "question": r"What is the capital of Japan?",
+        "options": [r"Seoul", r"Beijing", r"Tokyo", r"Bangkok"],
+        "answer": r"Tokyo",
+        "marks": 1
+    },
+    {
+        "question": r"How many sides does a hexagon have?",
+        "options": [r"5", r"6", r"7", r"8"],
+        "answer": r"6",
+        "marks": 1
+    },
+    {
+        "question": r"What is the chemical symbol for gold?",
+        "options": [r"Go", r"Gd", r"Au", r"Ag"],
+        "answer": r"Au",
         "marks": 1
     }
 ]
 
-subjective_questions = [
+subjective = [
     {
-        "question": r"Explain the concept of democracy.",
-        "answer": r"Democracy is a system of government...",
+        "question": r"Explain the concept of photosynthesis and its importance.",
+        "answer": r"Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen.",
         "marks": 5
+    },
+    {
+        "question": r"Describe the water cycle and its main stages.",
+        "answer": r"The water cycle includes evaporation, condensation, precipitation, and collection stages.",
+        "marks": 4
+    },
+    {
+        "question": r"What are the main causes of climate change?",
+        "answer": r"Main causes include greenhouse gas emissions, deforestation, and industrial activities.",
+        "marks": 6
     }
 ]'''
         
-        # Text area for questions
+        # Text editor
         questions_text = st.text_area(
             "Questions (Python format)",
-            value=st.session_state.questions_text,
-            height=400,
-            help="Edit your questions here. Use Python dictionary format.",
-            key="questions_editor"
+            value=st.session_state.questions,
+            height=500,
+            key="editor"
         )
         
         # Update session state
-        st.session_state.questions_text = questions_text
+        st.session_state.questions = questions_text
         
-        # Validation
-        col1_1, col1_2 = st.columns(2)
-        with col1_1:
-            if st.button("🔍 Validate", type="secondary"):
+        # Validation and generation buttons
+        col_btn1, col_btn2 = st.columns(2)
+        
+        with col_btn1:
+            if st.button("Validate Questions", use_container_width=True):
                 try:
                     exec(questions_text)
                     st.success("✅ Questions format is valid!")
-                except Exception as e:
+                except SyntaxError as e:
                     st.error(f"❌ Syntax error: {str(e)}")
+                except Exception as e:
+                    st.error(f"❌ Format error: {str(e)}")
         
-        with col1_2:
-            if st.button("🚀 Generate Preview", type="primary"):
-                st.session_state.generate_preview = True
+        with col_btn2:
+            if st.button("Generate Quiz Sets", type="primary", use_container_width=True):
+                st.session_state.generate_now = True
                 st.rerun()
     
-    with col2:
-        st.header("👀 Live Preview")
+    # RIGHT PANE: PDF Previews (X rows where X = num_sets)
+    with col_right:
+        st.subheader(f"PDF Preview ({num_sets} sets)")
         
-        if st.session_state.get('generate_preview', False) and questions_text.strip():
-            with st.spinner(f"Generating {num_sets} quiz set(s)..."):
-                pdf_files, error = generate_quiz_preview(questions_text, template, num_sets)
+        if st.session_state.get('generate_now', False) and questions_text.strip():
+            with st.spinner(f"Generating {num_sets} quiz sets..."):
+                quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets)
             
             if error:
-                st.error(error)
-            elif pdf_files:
-                # Display each PDF set
-                for i, pdf_file in enumerate(pdf_files):
-                    st.subheader(f"📄 {pdf_file['name']}")
+                st.error("Generation Failed")
+                with st.expander("View Error Details"):
+                    st.text(error)
+            elif quiz_sets:
+                # Display each PDF set in rows
+                for i, quiz_set in enumerate(quiz_sets):
+                    st.markdown(f"**{quiz_set['name']}**")
                     
-                    # Display PDF
-                    display_pdf(pdf_file['data'], height=400)
+                    # Three sub-columns: PDF preview, downloads, answer key
+                    sub_col1, sub_col2, sub_col3 = st.columns([2, 1, 1])
                     
-                    # Download button
-                    st.download_button(
-                        label=f"⬇️ Download {pdf_file['name']}",
-                        data=pdf_file['data'],
-                        file_name=f"quiz_set_{i+1}.pdf",
-                        mime="application/pdf"
-                    )
+                    with sub_col1:
+                        display_pdf_embed(quiz_set['pdf_data'])
                     
-                    if i < len(pdf_files) - 1:
-                        st.divider()
+                    with sub_col2:
+                        st.download_button(
+                            label="Download PDF",
+                            data=quiz_set['pdf_data'],
+                            file_name=f"quiz_set_{i+1}.pdf",
+                            mime="application/pdf",
+                            key=f"download_pdf_{i}",
+                            use_container_width=True
+                        )
+                    
+                    with sub_col3:
+                        if quiz_set['answer_key']:
+                            st.download_button(
+                                label="Download Answers",
+                                data=quiz_set['answer_key'],
+                                file_name=f"answer_key_{i+1}.txt",
+                                mime="text/plain",
+                                key=f"download_answers_{i}",
+                                use_container_width=True
+                            )
+                            
+                            # Show preview of answer key
+                            with st.expander("View Answers"):
+                                st.text(quiz_set['answer_key'])
+                    
+                    # Add spacing between sets
+                    if i < len(quiz_sets) - 1:
+                        st.markdown("---")
                 
                 # Reset generate flag
-                st.session_state.generate_preview = False
+                st.session_state.generate_now = False
             else:
-                st.warning("No PDFs generated. Check your questions format.")
+                st.warning("No PDFs generated")
         else:
-            st.info("📋 Enter questions and click 'Generate Preview' to see live preview")
+            # Show instructions when no preview
+            st.info("Enter questions and click 'Generate Quiz Sets'")
             st.markdown("""
-            **Features:**
-            - 📝 Real-time editing
-            - 👀 Live PDF preview
-            - 📄 Multiple quiz sets
-            - ⬇️ Direct downloads
-            - 🎨 Template options
-            - 📚 Example questions
+            **How to use:**
+            1. Edit questions in left pane
+            2. Choose template and number of sets
+            3. Click generate to see live PDF previews
+            4. Download PDFs and answer keys
+            
+            **Question format:**
+            - Use `mcq` and `subjective` arrays (not mcq_questions)
+            - LaTeX math: `r"What is $x^2$?"`
+            - MCQ needs `answer` field matching an option
             """)
 
 if __name__ == "__main__":
