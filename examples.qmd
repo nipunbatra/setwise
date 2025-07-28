@@ -1,0 +1,183 @@
+# Examples
+
+Ready-to-use question libraries and templates for different subjects.
+
+## Download Examples
+
+Click to download complete question files:
+
+::: {.grid}
+
+::: {.g-col-6}
+### 🔬 Physics
+Professional physics questions with proper scientific notation and LaTeX formatting.
+
+[Download physics_questions.py](https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py){.btn .btn-primary}
+
+**Includes:** Mechanics, thermodynamics, electromagnetism, waves
+:::
+
+::: {.g-col-6}
+### 🧪 Chemistry  
+Chemical equations, balancing, and molecular calculations.
+
+[Download chemistry_questions.py](https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/chemistry_questions.py){.btn .btn-primary}
+
+**Includes:** Organic, inorganic, physical chemistry, stoichiometry
+:::
+
+::: {.g-col-6}
+### 📐 Mathematics
+Mathematical expressions with proper LaTeX formatting.
+
+[Download mathematics_questions.py](https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/mathematics_questions.py){.btn .btn-primary}
+
+**Includes:** Calculus, algebra, geometry, statistics
+:::
+
+::: {.g-col-6}
+### 💻 Computer Science
+Programming, algorithms, and theoretical computer science.
+
+[Download computer_science_questions.py](https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/computer_science_questions.py){.btn .btn-primary}
+
+**Includes:** Data structures, algorithms, machine learning
+:::
+
+:::
+
+## Usage
+
+```bash
+# Download an example
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
+
+# Generate quiz sets
+setwise generate --questions-file physics_questions.py --sets 3
+
+# Use different templates
+setwise generate --questions-file chemistry_questions.py --template compact --sets 2
+```
+
+## Sample Questions
+
+### Physics Template
+
+```python
+{
+    "template": r"A projectile is launched at {{ angle }}° with velocity {{ v0 }} m/s. Calculate the maximum height.",
+    "variables": [
+        {
+            "angle": 30, "v0": 20,
+            "answer": "H = (v₀ sin θ)²/(2g) = (20 × 0.5)²/19.6 = 5.1 m"
+        },
+        {
+            "angle": 45, "v0": 25,
+            "answer": "H = (v₀ sin θ)²/(2g) = (25 × 0.707)²/19.6 = 15.9 m"
+        }
+    ],
+    "marks": 8
+}
+```
+
+### Chemistry MCQ
+
+```python
+{
+    "template": r"Balance the equation: {{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + {{ product2 }}",
+    "options": [
+        r"{{ coeff1 }}{{ reactant1 }} + {{ coeff2 }}{{ reactant2 }} → {{ coeff3 }}{{ product1 }} + {{ coeff4 }}{{ product2 }}",
+        r"{{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + {{ product2 }}",
+        r"2{{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + 2{{ product2 }}"
+    ],
+    "answer": r"{{ coeff1 }}{{ reactant1 }} + {{ coeff2 }}{{ reactant2 }} → {{ coeff3 }}{{ product1 }} + {{ coeff4 }}{{ product2 }}",
+    "variables": [
+        {
+            "reactant1": "Al", "reactant2": "Fe₂O₃", 
+            "product1": "Al₂O₃", "product2": "Fe",
+            "coeff1": "2", "coeff2": "", "coeff3": "", "coeff4": "2"
+        }
+    ],
+    "marks": 3
+}
+```
+
+### Mathematics Problem
+
+```python
+{
+    "template": r"Find the derivative of f(x) = {{ function }}",
+    "options": [
+        r"${{ derivative }}$",        # Correct
+        r"${{ wrong1 }}$",
+        r"${{ wrong2 }}$",
+        r"${{ wrong3 }}$"
+    ],
+    "answer": r"${{ derivative }}$",
+    "variables": [
+        {
+            "function": "x^3 + 2x^2", 
+            "derivative": "3x^2 + 4x",
+            "wrong1": "x^4 + x^3", 
+            "wrong2": "3x + 4", 
+            "wrong3": "x^2 + 2x"
+        }
+    ],
+    "marks": 4
+}
+```
+
+## Creating Custom Examples
+
+### Basic Template
+
+```python
+#!/usr/bin/env python3
+"""Custom Quiz Questions"""
+
+# Quiz metadata
+quiz_metadata = {
+    "title": "My Custom Quiz",
+    "subject": "Your Subject",
+    "duration": "60 minutes",
+    "total_marks": 50
+}
+
+# Multiple choice questions
+mcq = [
+    {
+        "question": r"Your question here?",
+        "options": [r"Option A", r"Option B", r"Option C", r"Option D"],
+        "answer": r"Option B",
+        "marks": 2
+    }
+]
+
+# Subjective questions
+subjective = [
+    {
+        "question": r"Explain your concept here.",
+        "answer": r"Your answer explanation here.",
+        "marks": 8
+    }
+]
+```
+
+### Testing Your Examples
+
+```bash
+# Validate questions
+setwise questions validate your_questions.py
+
+# Generate test quiz
+setwise generate --questions-file your_questions.py --sets 1
+
+# Check output
+ls output/
+```
+
+---
+
+Need more examples? Check the [GitHub repository](https://github.com/nipunbatra/setwise/tree/main/examples) for the complete collection.
+
+[Get Started](quickstart.qmd){.btn .btn-primary} [View Features](features.qmd){.btn .btn-outline-secondary}

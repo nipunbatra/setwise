@@ -1,81 +1,51 @@
-# Setwise: Professional LaTeX Quiz Generator
+# Setwise
 
 ::: {.hero-banner}
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
-[![LaTeX](https://img.shields.io/badge/LaTeX-Required-green.svg)](https://www.latex-project.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/github/actions/workflow/status/nipunbatra/setwise/ci.yml?branch=main&label=tests)](https://github.com/nipunbatra/setwise/actions/workflows/ci.yml)
 
-> **Transform your question banks into beautiful, randomized LaTeX quiz sets with professional formatting and advanced templating capabilities.**
+**Professional LaTeX quiz generator with advanced templating**
 :::
 
-## 🎉 NEW in v2.0!
+## What is Setwise?
 
-::: {.callout-tip}
-## ✨ Major Enhancements Just Released!
+Setwise transforms question banks into beautiful, randomized LaTeX quiz sets. Create professional quizzes with dynamic questions, multiple templates, and automatic answer keys.
 
-Setwise v2.0 brings revolutionary features that make quiz creation more powerful and intuitive:
-
-- **🎯 Templated MCQ Questions** - Dynamic variables in both questions AND options
-- **📋 Easy Quiz Metadata** - Professional headers with title, duration, instructions  
-- **🧩 Multi-Part Questions** - Complex problems with individual marks
-- **🔧 Python-Only Format** - Simplified from 5 formats to just `.py` for reliability
-- **📚 Enhanced Examples** - Physics, Machine Learning, and more with live templates
-
-**[See all v2.0 features →](v2-features.qmd)**
-:::
-
-## Why Choose Setwise?
+## Key Features
 
 ::: {.grid}
 
 ::: {.g-col-4}
 ### 🎲 Smart Randomization
-Questions and MCQ options automatically shuffled while maintaining fairness across quiz sets
+Questions and MCQ options automatically shuffled while maintaining fairness
 :::
 
 ::: {.g-col-4}
-### 📝 Advanced Templates
-Create question variants using Jinja2 templates - now supports both MCQ and subjective questions!
+### 📝 Dynamic Templates  
+Create question variants using variables - works with both MCQ and subjective questions
 :::
 
 ::: {.g-col-4}
 ### 🎨 Professional Output
-Beautiful LaTeX formatting with multiple themes and customizable layouts
-:::
-
-::: {.g-col-4}
-### ⚡ Lightning Fast
-Generate hundreds of unique quiz variations instantly with reproducible seeds
-:::
-
-::: {.g-col-4}
-### 🔧 Simple Setup
-Python-only format, no complex configurations, works out of the box
-:::
-
-::: {.g-col-4}
-### 📊 Comprehensive
-MCQ, subjective, multi-part questions with individual scoring and detailed answer keys
+Beautiful LaTeX formatting with multiple themes and clean typography
 :::
 
 :::
 
-## Quick Demo: 30-Second Quiz Creation
+## Quick Example
 
-:::: {.columns}
+Create `questions.py`:
 
-::: {.column width="50%"}
-**Create `questions.py`:**
 ```python
-# NEW v2.0: Easy metadata!
+# Professional quiz metadata
 quiz_metadata = {
     "title": "Physics Quiz",
     "duration": "60 minutes",
     "total_marks": 25
 }
 
-# NEW v2.0: Templated MCQ!
+# Templated MCQ question
 mcq = [{
     "template": r"A ball drops from {{ h }}m. Final velocity?",
     "options": [
@@ -91,198 +61,97 @@ mcq = [{
     "marks": 3
 }]
 ```
-:::
 
-::: {.column width="50%"}
-**Generate quiz sets:**
+Generate quiz:
+
 ```bash
-# Install
 pip install git+https://github.com/nipunbatra/setwise.git
-
-# Generate 3 randomized quiz sets
 setwise generate --questions-file questions.py --sets 3
-
-# Output: 3 beautiful PDFs + answer keys!
 ```
 
-**Result:** Professional LaTeX quiz sets with:
-- ✅ Randomized question order
-- ✅ Shuffled MCQ options  
-- ✅ Professional formatting
-- ✅ Complete answer keys
-- ✅ Dynamic question variants
-:::
+**Result:** 3 professional PDF quiz sets with randomized questions and complete answer keys!
 
-::::
+## Templates
 
-## Template Showcase
-
-### Three Professional Templates
+Choose from three professional templates:
 
 ::: {.panel-tabset}
 
-## Default (Professional)
+## Default
 Professional single-column layout perfect for formal exams
 
-![Default Template](assets/images/default_set1_page-1.png){fig-alt="Default template preview" width="400"}
+![Default Template](assets/images/default_set1_page-1.png){width="300"}
 
-[Download PDF Sample](assets/default_sample.pdf){.btn .btn-primary}
+[Download Sample](assets/default_sample.pdf){.btn .btn-primary}
 
-## Compact (Space-Efficient)  
-Two-column layout maximizing content per page
+## Compact  
+Space-efficient two-column layout for printing
 
-![Compact Template](assets/images/compact_set1_page-1.png){fig-alt="Compact template preview" width="400"}
+![Compact Template](assets/images/compact_set1_page-1.png){width="300"}
 
-[Download PDF Sample](assets/compact_sample.pdf){.btn .btn-primary}
+[Download Sample](assets/compact_sample.pdf){.btn .btn-primary}
 
-## Minimal (Clean)
-Clean black & white design for distraction-free assessment
+## Minimal
+Clean black & white design for simple assessments
 
-![Minimal Template](assets/images/minimal_set1_page-1.png){fig-alt="Minimal template preview" width="400"}
+![Minimal Template](assets/images/minimal_set1_page-1.png){width="300"}
 
-[Download PDF Sample](assets/minimal_sample.pdf){.btn .btn-primary}
+[Download Sample](assets/minimal_sample.pdf){.btn .btn-primary}
 
-:::
-
-## Multiple Ways to Use Setwise
-
-::: {.grid}
-
-::: {.g-col-6}
-### 🖥️ Web Interface
-Perfect for educators who prefer point-and-click
-
-```bash
-streamlit run setwise_web.py
-```
-
-- Visual question editor
-- Live PDF preview
-- Drag-and-drop file uploads
-- Built-in examples library
-:::
-
-::: {.g-col-6}
-### ⌨️ Command Line
-Powerful CLI for developers and power users
-
-```bash
-setwise generate --seed 42 --sets 5
-setwise questions validate my_quiz.py
-setwise list-templates
-```
-
-- Full automation support
-- Reproducible generation
-- Batch processing
-:::
-
-::: {.g-col-6}
-### 🔧 VSCode Extension
-Professional development experience
-
-```bash
-cd vscode-extension && ./install.sh
-```
-
-- Syntax highlighting
-- Live validation
-- One-click generation
-- LaTeX IntelliSense
-:::
-
-::: {.g-col-6}
-### 🐍 Python API
-Programmatic integration
-
-```python
-from setwise import QuizGenerator
-
-gen = QuizGenerator("questions.py")
-gen.generate_quizzes(num_sets=3, seed=42)
-```
-
-- Full programmatic control
-- Custom workflows
-- Integration with other tools
-:::
-
-:::
-
-## What's New in v2.0
-
-::: {.callout-important}
-## 🚀 Revolutionary Template Support
-
-The biggest update in Setwise history! MCQ questions now support full templating:
-
-**Before v2.0:** Only subjective questions could use templates  
-**After v2.0:** Both MCQ and subjective questions support dynamic variables
-
-```python
-# This now works in v2.0!
-{
-    "template": r"Calculate {{ a }} × {{ b }} = ?",
-    "options": [
-        r"{{ a * b }}",      # Correct answer  
-        r"{{ a + b }}",      # Common mistake
-        r"{{ a - b }}",      # Wrong operation
-        r"{{ a / b if b != 0 else 'undefined' }}"
-    ],
-    "answer": r"{{ a * b }}",
-    "variables": [
-        {"a": 6, "b": 7},   # Creates: 6 × 7 = 42
-        {"a": 8, "b": 9},   # Creates: 8 × 9 = 72
-        {"a": 4, "b": 5}    # Creates: 4 × 5 = 20
-    ],
-    "marks": 2
-}
-```
 :::
 
 ## Getting Started
 
 ::: {.grid}
 
-::: {.g-col-4}
-### 📥 [Installation](installation.qmd)
-Quick setup guide for all platforms
+::: {.g-col-6}
+### 📥 Installation
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git
+```
+
+[Full Guide](installation.qmd){.btn .btn-outline-secondary}
 :::
 
-::: {.g-col-4}
-### 🚀 [Quick Start](quickstart.qmd)  
-Create your first quiz in 5 minutes
-:::
+::: {.g-col-6}
+### 🚀 Quick Start
+Generate your first quiz in 5 minutes
 
-::: {.g-col-4}
-### 📖 [Examples](examples.qmd)
-Ready-to-use question libraries
+[Get Started](quickstart.qmd){.btn .btn-primary}
 :::
 
 :::
 
-## Community & Support
+## Use Setwise
 
 ::: {.grid}
 
 ::: {.g-col-3}
-### 🐛 [Issues](https://github.com/nipunbatra/setwise/issues)
-Report bugs and request features
+### 🖥️ Web Interface
+Try online with live preview
+
+[Launch Demo](https://setwise-web.streamlit.app){.btn .btn-outline-secondary}
 :::
 
 ::: {.g-col-3}
-### 💬 [Discussions](https://github.com/nipunbatra/setwise/discussions)
-Community Q&A and ideas
+### ⌨️ Command Line
+Full automation and scripting
+
+[CLI Guide](quickstart.qmd){.btn .btn-outline-secondary}
 :::
 
 ::: {.g-col-3}
-### 📚 [Documentation](question-format.qmd)
-Complete guides and references
+### 🔧 VSCode Extension
+Professional editing experience
+
+[Install Extension](https://github.com/nipunbatra/setwise-vscode-extension){.btn .btn-outline-secondary}
 :::
 
 ::: {.g-col-3}
-### ⭐ [GitHub](https://github.com/nipunbatra/setwise)
-Star us and contribute!
+### 🐍 Python API
+Programmatic integration
+
+[View Examples](examples.qmd){.btn .btn-outline-secondary}
 :::
 
 :::
@@ -290,7 +159,7 @@ Star us and contribute!
 ---
 
 ::: {.text-center}
-**Ready to transform your quiz creation workflow?**
+Ready to create professional quizzes?
 
-[Get Started Now](quickstart.qmd){.btn .btn-primary .btn-lg} [View Examples](examples.qmd){.btn .btn-outline-secondary .btn-lg}
+[Get Started](quickstart.qmd){.btn .btn-primary .btn-lg} [View Examples](examples.qmd){.btn .btn-outline-secondary .btn-lg}
 :::

@@ -1,5 +1,0 @@
-type,question,option1,option2,option3,option4,option5,answer,marks
-MCQ,What is the capital of France?,London,Berlin,Paris,Madrid,,Paris,1
-MCQ,Calculate: $2^3 + 5 \times 2$,16,18,20,22,,18,2
-Subjective,Explain Newton's first law of motion.,,,,,,An object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force.,5
-Subjective,Derive the quadratic formula from $ax^2 + bx + c = 0$.,,,,,,"Starting with $ax^2 + bx + c = 0$, divide by $a$: $x^2 + \frac{b}{a}x + \frac{c}{a} = 0$. Complete the square to get $x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$.",8

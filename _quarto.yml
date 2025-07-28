@@ -3,79 +3,44 @@ project:
   output-dir: _site
 
 website:
-  title: "Setwise: Professional LaTeX Quiz Generator"
-  description: "Transform your question banks into beautiful, randomized LaTeX quiz sets with professional formatting and advanced templating capabilities"
+  title: "Setwise"
+  description: "Professional LaTeX Quiz Generator"
   site-url: "https://nipunbatra.github.io/setwise"
   repo-url: "https://github.com/nipunbatra/setwise"
   
   navbar:
+    background: light
+    foreground: dark
     title: "🎯 Setwise"
     left:
       - href: index.qmd
         text: Home
-      - text: "Getting Started"
-        menu:
-          - href: quickstart.qmd
-            text: Quick Start
-          - href: installation.qmd
-            text: Installation
-          - href: examples.qmd
-            text: Examples
-      - text: "Features"
-        menu:
-          - href: v2-features.qmd
-            text: "✨ NEW v2.0 Features"
-          - href: templates.qmd
-            text: Templates & Themes
-          - href: templated-questions.qmd
-            text: Dynamic Questions
-          - href: multi-part.qmd
-            text: Multi-Part Questions
-      - text: "Interfaces"
-        menu:
-          - href: cli.qmd
-            text: Command Line
-          - href: web-interface.qmd
-            text: Web Interface
-          - href: vscode.qmd
-            text: VSCode Extension
-          - href: python-api.qmd
-            text: Python API
-      - text: "Documentation"
-        menu:
-          - href: question-format.qmd
-            text: Question Format
-          - href: latex-help.qmd
-            text: LaTeX Guide
-          - href: troubleshooting.qmd
-            text: Troubleshooting
-      - href: https://github.com/nipunbatra/setwise
-        text: GitHub
+      - href: quickstart.qmd
+        text: Quick Start
+      - href: features.qmd
+        text: Features
+      - href: examples.qmd
+        text: Examples
+      - href: installation.qmd
+        text: Install
+    right:
+      - icon: github
+        href: https://github.com/nipunbatra/setwise
+        aria-label: GitHub
         
   page-footer:
-    left: "© 2024 Setwise - Made for educators and students worldwide"
-    right: 
-      - href: https://github.com/nipunbatra/setwise/issues
-        text: "Report Issues"
-      - href: https://github.com/nipunbatra/setwise/discussions  
-        text: "Discussions"
+    center: "© 2024 Setwise - MIT License"
 
 format:
   html:
     theme: 
-      - cosmo
-      - custom.scss
+      light: [cosmo, custom.scss]
     css: styles.css
     toc: true
-    toc-location: left
-    code-fold: false
-    code-tools: true
+    toc-location: right
     code-copy: true
-    number-sections: true
-    anchor-sections: true
+    code-fold: false
     smooth-scroll: true
-    highlight-style: github
-    mainfont: "Inter"
     
 execute:
   freeze: auto

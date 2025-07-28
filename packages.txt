@@ -1,4 +1,0 @@
-texlive-latex-base
-texlive-fonts-recommended
-texlive-latex-extra
-texlive-lang-english

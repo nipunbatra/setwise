@@ -1,0 +1,206 @@
+# Features
+
+Setwise provides powerful features for creating professional quiz sets with dynamic content and beautiful formatting.
+
+## Core Features
+
+### 🎯 Templated Questions
+
+The most powerful feature! Create dynamic questions with variables that generate unique variants.
+
+**MCQ Templates:**
+```python
+{
+    "template": r"Calculate {{ a }} × {{ b }} = ?",
+    "options": [
+        r"{{ a * b }}",      # Correct answer  
+        r"{{ a + b }}",      # Common mistake
+        r"{{ a - b }}",      # Wrong operation
+        r"{{ a / b if b != 0 else 'undefined' }}"
+    ],
+    "answer": r"{{ a * b }}",
+    "variables": [
+        {"a": 6, "b": 7},   # Creates: 6 × 7 = 42
+        {"a": 8, "b": 9},   # Creates: 8 × 9 = 72
+        {"a": 4, "b": 5}    # Creates: 4 × 5 = 20
+    ],
+    "marks": 2
+}
+```
+
+**Subjective Templates:**
+```python
+{
+    "template": r"Calculate kinetic energy with mass {{ m }} kg and velocity {{ v }} m/s",
+    "variables": [
+        {
+            "m": 10, "v": 5,
+            "answer": "KE = ½mv² = ½ × 10 × 5² = 125 J"
+        },
+        {
+            "m": 2, "v": 15,
+            "answer": "KE = ½mv² = ½ × 2 × 15² = 225 J"
+        }
+    ],
+    "marks": 6
+}
+```
+
+### 📋 Quiz Metadata
+
+Professional headers with customizable information:
+
+```python
+quiz_metadata = {
+    "title": "Advanced Physics Quiz",
+    "subject": "Physics",
+    "duration": "90 minutes",
+    "total_marks": 50,
+    "instructions": [
+        "Show all calculations",
+        "Use proper units",
+        "Partial credit available"
+    ]
+}
+```
+
+### 🧩 Multi-Part Questions
+
+Complex questions with individual marks for each part:
+
+```python
+{
+    "question": r"Projectile Motion Analysis:",
+    "parts": [
+        {
+            "question": r"Calculate maximum height with v₀ = 20 m/s at 30°",
+            "answer": r"h = (v₀sinθ)²/2g = 5.1 m",
+            "marks": 4
+        },
+        {
+            "question": r"Find the range of the projectile",
+            "answer": r"R = v₀²sin(2θ)/g = 35.3 m",
+            "marks": 4
+        }
+    ],
+    "marks": 8
+}
+```
+
+### 🎲 Smart Randomization
+
+- **Question order** randomized across quiz sets
+- **MCQ options** shuffled automatically  
+- **Answer keys** updated with correct positions
+- **Reproducible** with seed values
+
+### 🎨 Professional Templates
+
+Choose from multiple LaTeX templates:
+
+| Template | Description | Best For |
+|----------|-------------|----------|
+| **Default** | Single-column, professional | Formal exams |
+| **Compact** | Two-column, space-efficient | Quick assessments |
+| **Minimal** | Clean black & white | Print-friendly |
+
+## Advanced Features
+
+### Template Syntax
+
+Uses Jinja2 templating with full Python expressions:
+
+```python
+# Mathematical operations
+r"{{ a + b }}"          # Addition
+r"{{ a ** 2 }}"         # Exponentiation
+r"{{ value:.2f }}"      # Formatting
+
+# Conditionals
+r"{{ 'positive' if x > 0 else 'negative' }}"
+r"{{ a / b if b != 0 else 'undefined' }}"
+
+# LaTeX integration
+r"${{ a }}x^2 + {{ b }}x + {{ c }} = 0$"
+```
+
+### Subject-Specific Examples
+
+**Physics:**
+```python
+{
+    "template": r"Ball dropped from {{ h }}m. Final velocity?",
+    "options": [
+        r"√(2g×{{ h }}) ≈ {{ v:.1f }} m/s",  # Correct
+        r"g×{{ h }} = {{ h*9.8 }} m/s",
+        r"{{ h }}/2 = {{ h/2 }} m/s"
+    ],
+    "variables": [
+        {"h": 20, "v": 19.8},
+        {"h": 45, "v": 29.7}
+    ]
+}
+```
+
+**Chemistry:**
+```python
+{
+    "template": r"Balance: {{ reactant }} + O₂ → {{ product }}",
+    "options": [
+        r"{{ coeff }}{{ reactant }} + O₂ → {{ product }}",
+        r"{{ reactant }} + O₂ → {{ product }}",
+        r"2{{ reactant }} + O₂ → {{ product }}"
+    ],
+    "variables": [
+        {
+            "reactant": "CH₄", "product": "CO₂ + 2H₂O", 
+            "coeff": ""
+        }
+    ]
+}
+```
+
+**Mathematics:**
+```python
+{
+    "template": r"Find derivative of f(x) = {{ function }}",
+    "options": [
+        r"{{ derivative }}",        # Correct
+        r"{{ wrong1 }}",
+        r"{{ wrong2 }}"
+    ],
+    "variables": [
+        {
+            "function": "x³ + 2x²", 
+            "derivative": "3x² + 4x",
+            "wrong1": "x⁴ + x³"
+        }
+    ]
+}
+```
+
+## Technical Features
+
+### LaTeX Support
+- **Math expressions** with proper formatting
+- **Chemical formulas** with subscripts/superscripts  
+- **Tables and figures** support
+- **Custom commands** and packages
+
+### Error Handling
+- **Intelligent validation** of question format
+- **LaTeX syntax checking** before compilation
+- **User-friendly error messages**
+- **Automatic error fixing** for common issues
+
+### Output Generation
+- **PDF compilation** with pdfLaTeX
+- **Answer keys** with detailed solutions
+- **Multiple formats** (LaTeX source + PDF)
+- **Reproducible generation** with seeds
+
+---
+
+Ready to explore these features?
+
+[Quick Start](quickstart.qmd){.btn .btn-primary} [View Examples](examples.qmd){.btn .btn-outline-secondary}
