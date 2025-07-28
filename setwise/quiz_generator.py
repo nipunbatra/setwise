@@ -16,7 +16,6 @@ from jinja2 import Template, Environment, FileSystemLoader
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 from .latex_validator import LaTeXValidator
-from .formats import QuestionFormatConverter
 
 # Import template manager
 try:
@@ -45,6 +44,9 @@ class QuizGenerator:
         self.output_dir = Path(output_dir)
         self.template_manager = TemplateManager(template_dir)
         
+        # Initialize quiz metadata (will be populated by _load_questions)
+        self.quiz_metadata = {}
+        
         # Load questions from custom file or default
         self.mcq, self.subjective = self._load_questions(questions_file)
         
@@ -52,36 +54,59 @@ class QuizGenerator:
         self.output_dir.mkdir(exist_ok=True)
     
     def _load_questions(self, questions_file: Optional[str] = None) -> Tuple[List[Dict], List[Dict]]:
-        """Load questions from specified file or default location.
+        """Load questions from Python file (.py only for simplicity).
         
         Args:
-            questions_file: Path to custom questions file (supports .py, .yaml, .json, .csv, .md)
+            questions_file: Path to Python questions file (.py)
             
         Returns:
             Tuple of (mcq_questions, subjective_questions)
         """
         if questions_file:
-            # Load from custom file using format converter
+            # Load from custom Python file only
             questions_path = Path(questions_file)
             if not questions_path.exists():
                 raise FileNotFoundError(f"Questions file not found: {questions_file}")
             
-            # Detect format and load appropriately
-            format_type = QuestionFormatConverter.detect_format(str(questions_path))
+            # Ensure it's a Python file
+            if questions_path.suffix.lower() != '.py':
+                raise ValueError(f"Only Python files (.py) are supported. Got: {questions_path.suffix}")
             
-            if format_type == 'unknown':
-                # Fallback to Python loading for unknown extensions
-                format_type = 'python'
-            
+            # Load Python module dynamically
             try:
-                return QuestionFormatConverter.load_questions(str(questions_path))
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("questions", questions_path)
+                if spec is None or spec.loader is None:
+                    raise ImportError(f"Could not load module from {questions_path}")
+                
+                questions_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(questions_module)
+                
+                # Extract questions and metadata
+                mcq = getattr(questions_module, 'mcq', [])
+                subjective = getattr(questions_module, 'subjective', [])
+                
+                # Also extract quiz metadata if present
+                if hasattr(questions_module, 'quiz_metadata'):
+                    self.quiz_metadata = questions_module.quiz_metadata
+                else:
+                    self.quiz_metadata = {}
+                
+                return mcq, subjective
+                
             except Exception as e:
-                raise RuntimeError(f"Failed to load questions from {questions_file} (format: {format_type}): {e}")
+                raise RuntimeError(f"Failed to load questions from {questions_file}: {e}")
         
         else:
             # Load from default location
             try:
                 from .data.questions import mcq, subjective
+                # Try to load default metadata too
+                try:
+                    from .data.questions import quiz_metadata
+                    self.quiz_metadata = quiz_metadata
+                except ImportError:
+                    self.quiz_metadata = {}
                 return mcq, subjective
             except ImportError:
                 # Fallback for development/backward compatibility
@@ -128,22 +153,46 @@ class QuizGenerator:
         """
         Process questions that have multiple variable templates.
         For templated questions, randomly select one variant.
+        Now supports both MCQ and subjective templated questions.
         """
         processed_questions = []
         
         for q in question_list:
-            if "variables" in q:
+            if "variables" in q and "template" in q:
                 # Templated question - randomly select one variant
                 selected_vars = random.choice(q["variables"])
                 
-                # Create Jinja2 template and render
-                template = Template(q["question"])
+                # Create Jinja2 template and render the template field
+                template = Template(q["template"])
                 rendered_question = template.render(**selected_vars)
                 
                 # Update the question with rendered content
                 processed_q = q.copy()
-                processed_q["question"] = rendered_question
+                processed_q["question"] = rendered_question  # Convert template to question
+                
+                # For MCQ questions, also render options and answer
+                if "options" in q:
+                    rendered_options = []
+                    for option in q["options"]:
+                        option_template = Template(option)
+                        rendered_option = option_template.render(**selected_vars)
+                        rendered_options.append(rendered_option)
+                    processed_q["options"] = rendered_options
+                    
+                    # Render the answer
+                    answer_template = Template(q["answer"])
+                    rendered_answer = answer_template.render(**selected_vars)
+                    processed_q["answer"] = rendered_answer
+                
+                # For subjective questions, render answer if it exists in selected_vars
+                if "answer" in selected_vars:
+                    processed_q["answer"] = selected_vars["answer"]
+                
                 processed_q["selected_variables"] = selected_vars
+                
+                # Remove the template field since we've converted it to question
+                if "template" in processed_q:
+                    del processed_q["template"]
                 
                 processed_questions.append(processed_q)
             else:

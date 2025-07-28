@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 import sys
 from .latex_validator import LaTeXValidator, LaTeXErrorFixer
-from .formats import QuestionFormatConverter
 
 
 class QuestionManager:
@@ -18,10 +17,10 @@ class QuestionManager:
     
     @staticmethod
     def validate_questions_file(file_path: str) -> Tuple[bool, str]:
-        """Validate a questions file format and structure (supports multiple formats).
+        """Validate a Python questions file format and structure (.py only).
         
         Args:
-            file_path: Path to the questions file (.py, .yaml, .json, .csv, .md)
+            file_path: Path to the Python questions file (.py)
             
         Returns:
             Tuple of (is_valid, message)
@@ -31,14 +30,22 @@ class QuestionManager:
             if not questions_path.exists():
                 return False, f"File not found: {file_path}"
             
-            # Detect format and load questions
-            format_type = QuestionFormatConverter.detect_format(file_path)
+            # Ensure it's a Python file
+            if questions_path.suffix.lower() != '.py':
+                return False, f"Only Python files (.py) are supported. Got: {questions_path.suffix}"
             
-            if format_type == 'unknown':
-                return False, f"Unsupported file format: {questions_path.suffix}. Supported: .py, .yaml, .json, .csv, .md"
+            # Load questions from Python file
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("questions", questions_path)
+            if spec is None or spec.loader is None:
+                return False, f"Could not load Python module from {questions_path}"
             
-            # Load questions using format converter
-            mcq, subjective = QuestionFormatConverter.load_questions(file_path)
+            questions_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(questions_module)
+            
+            # Extract questions
+            mcq = getattr(questions_module, 'mcq', [])
+            subjective = getattr(questions_module, 'subjective', [])
             
             # Validate structure
             if not isinstance(mcq, list):
@@ -53,15 +60,28 @@ class QuestionManager:
             if not isinstance(subjective, list):
                 return False, "'subjective' must be a list"
             
-            # Validate MCQ format
+            # Validate MCQ format (now supports both regular and templated questions)
             for i, q in enumerate(mcq):
                 if not isinstance(q, dict):
                     return False, f"MCQ question {i+1} must be a dictionary"
                 
-                required_fields = ['question', 'options', 'answer']
+                # Check for either 'question' or 'template' field (like subjective questions)
+                if 'question' not in q and 'template' not in q:
+                    return False, f"MCQ question {i+1} must have either 'question' or 'template' field"
+                
+                # Required fields for all MCQ questions
+                required_fields = ['options', 'answer']
                 for field in required_fields:
                     if field not in q:
                         return False, f"MCQ question {i+1} missing required field: {field}"
+                
+                # If template is used, validate variables
+                if 'template' in q:
+                    if 'variables' not in q:
+                        return False, f"MCQ question {i+1} with template must have 'variables' field"
+                    
+                    if not isinstance(q['variables'], list):
+                        return False, f"MCQ question {i+1} 'variables' must be a list"
                 
                 if not isinstance(q['options'], list):
                     return False, f"MCQ question {i+1} 'options' must be a list"
@@ -69,7 +89,9 @@ class QuestionManager:
                 if len(q['options']) < 2:
                     return False, f"MCQ question {i+1} must have at least 2 options"
                 
-                if q['answer'] not in q['options']:
+                # For templated questions, we can't validate answer in options at this stage
+                # (will be validated after template rendering)
+                if 'question' in q and q['answer'] not in q['options']:
                     return False, f"MCQ question {i+1} answer must be one of the options"
                 
                 # Validate LaTeX syntax
