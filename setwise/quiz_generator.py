@@ -216,16 +216,29 @@ class QuizGenerator:
         Returns:
             Tuple of (quiz_content, answer_key)
         """
+        # Validate we have questions to work with
+        if not self.mcq and not self.subjective:
+            raise ValueError("No questions available. Both mcq and subjective lists are empty.")
+        
         # Process templated subjective questions first
-        processed_subjective = self.process_templated_questions(self.subjective)
+        try:
+            processed_subjective = self.process_templated_questions(self.subjective)
+        except Exception as e:
+            raise RuntimeError(f"Failed to process templated subjective questions: {e}") from e
+        
+        # Validate processed questions
+        if num_mcq is not None and num_mcq > len(self.mcq):
+            print(f"Warning: Requested {num_mcq} MCQ questions but only {len(self.mcq)} available")
+        if num_subjective is not None and num_subjective > len(processed_subjective):
+            print(f"Warning: Requested {num_subjective} subjective questions but only {len(processed_subjective)} available")
         
         # Sample questions if limits specified
-        if num_mcq is not None:
+        if num_mcq is not None and len(self.mcq) > 0:
             sampled_mcq = random.sample(self.mcq, min(num_mcq, len(self.mcq)))
         else:
             sampled_mcq = self.mcq.copy()
             
-        if num_subjective is not None:
+        if num_subjective is not None and len(processed_subjective) > 0:
             sampled_subjective = random.sample(processed_subjective, 
                                              min(num_subjective, len(processed_subjective)))
         else:
@@ -248,17 +261,34 @@ class QuizGenerator:
             loader=FileSystemLoader(str(self.template_dir)),
             autoescape=True  # Enable autoescape for security
         )
+        
+        # Validate template exists
         template_file = self.template_manager.get_template_file(template_name)
+        if template_file is None:
+            raise ValueError(f"Template '{template_name}' not found. Available templates: {list(self.template_manager.templates.keys())}")
+        
+        # Check if template file exists on disk
+        template_path = self.template_dir / template_file
+        if not template_path.exists():
+            raise FileNotFoundError(f"Template file '{template_path}' not found")
+        
         template = env.get_template(template_file)
         
-        quiz_content = template.render(
-            set_id=set_id,
-            mcq_questions=shuffled_mcq,
-            subjective_questions=sampled_subjective,
-            total_marks=total_marks,
-            mcq_marks=mcq_marks,
-            subjective_marks=subjective_marks
-        )
+        # Prepare template context
+        template_context = {
+            'quiz_metadata': self.quiz_metadata,
+            'set_id': set_id,
+            'mcq_questions': shuffled_mcq,
+            'subjective_questions': sampled_subjective,
+            'total_marks': total_marks,
+            'mcq_marks': mcq_marks,
+            'subjective_marks': subjective_marks
+        }
+        
+        try:
+            quiz_content = template.render(**template_context)
+        except Exception as e:
+            raise RuntimeError(f"Template rendering failed for '{template_name}': {e}") from e
         
         # Generate answer key
         answer_key = self._generate_answer_key(set_id, shuffled_mcq, sampled_subjective)

@@ -1,4 +1,4 @@
-name: Deploy Quarto Site
+name: Deploy Quarto Documentation to GitHub Pages
 
 on:
   push:
@@ -29,54 +29,45 @@ jobs:
       with:
         python-version: "3.11"
     
-    - name: Install TinyTeX and system dependencies
+    - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y poppler-utils imagemagick
-        wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
-        echo "export PATH=$HOME/.TinyTeX/bin/x86_64-linux:$PATH" >> $GITHUB_ENV
-        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
-        # Install only packages we need that aren't already included
-        tlmgr install enumitem pgf xcolor fancyhdr booktabs tcolorbox || true
+        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended poppler-utils
     
-    - name: Install Python dependencies
+    - name: Install Python dependencies and Setwise package
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -e .
+        pip install matplotlib Pillow  # For generating sample content if needed
     
-    - name: Configure ImageMagick for PDF conversion
+    - name: Generate sample quiz content for documentation
       run: |
-        sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml
+        # Create output directory
+        mkdir -p assets
+        
+        # Generate sample quiz PDFs using the setwise CLI
+        setwise generate --sets 2 --output-dir assets/ --template default || echo "⚠️ Quiz generation failed, proceeding with available content"
+        
+        # List what we have
+        echo "Generated content:"
+        ls -la assets/ || true
     
-    - name: Generate figures and sample PDFs
-      run: |
-        export PATH="$HOME/.TinyTeX/bin/x86_64-linux:$PATH"
-        python generate_figures.py
-        python main.py --seed 42 --sets 2 --mcq 4 --subjective 3
-        ls -la output/
-    
-    - name: Convert PDF to images for preview
+    - name: Convert PDFs to preview images (if available)
       run: |
         mkdir -p assets/images
-        # Convert all pages of both PDFs to PNG with high quality
-        if [ -f output/quiz_set_1.pdf ]; then
-          pdftoppm -png -r 200 output/quiz_set_1.pdf assets/images/quiz_set_1_page
-          pdftoppm -png -r 200 output/quiz_set_2.pdf assets/images/quiz_set_2_page
-          echo "PDF pages converted to PNG previews"
-        else
-          echo "PDF not found, creating placeholder"
-          mkdir -p assets/images
-          # Create a placeholder image
-          convert -size 800x600 xc:lightblue -gravity center -pointsize 36 -annotate +0+0 "Quiz Preview\n(PDF compilation required)" assets/images/quiz_preview.png
-        fi
-    
-    - name: Copy PDFs to assets
-      run: |
-        mkdir -p assets
-        if [ -f output/quiz_set_1.pdf ]; then
-          cp output/quiz_set_1.pdf assets/
-          cp output/quiz_set_2.pdf assets/
-          echo "PDFs copied to assets"
+        
+        # Convert PDFs to images for web preview
+        for pdf in assets/*.pdf; do
+          if [ -f "$pdf" ]; then
+            filename=$(basename "$pdf" .pdf)
+            pdftoppm -png -r 150 "$pdf" "assets/images/${filename}_page" || true
+            echo "Converted $pdf to preview images"
+          fi
+        done
+        
+        # If no PDFs, create placeholder
+        if [ ! -f assets/*.pdf ]; then
+          echo "No PDFs found, documentation will show without preview images"
         fi
     
     - name: Setup Quarto
@@ -84,17 +75,17 @@ jobs:
       with:
         version: pre-release
     
-    - name: Render Quarto site
+    - name: Render Quarto documentation
       run: |
-        echo "Rendering Quarto site..."
+        echo "📚 Rendering Quarto documentation..."
         quarto render
-        echo "Quarto render completed"
+        echo "✅ Quarto render completed"
         
-        echo "Files in _site directory:"
-        ls -la _site/
+        echo "📁 Files in _site directory:"
+        ls -la _site/ || echo "❌ _site directory not found"
         
-        echo "Checking for assets:"
-        find _site -name "*.png" -o -name "*.pdf" | head -10
+        echo "🖼️ Checking for assets:"
+        find _site -name "*.png" -o -name "*.pdf" | head -10 || echo "No assets found"
     
     - name: Setup Pages
       uses: actions/configure-pages@v5
@@ -113,8 +104,3 @@ jobs:
         echo "🚀 Deployment completed!"
         echo "📡 Site URL: ${{ steps.deployment.outputs.page_url }}"
         echo "🔗 Direct link: https://nipunbatra.github.io/setwise/"
-        
-        # Wait a moment and try to curl the site
-        sleep 30
-        echo "🌐 Testing site accessibility..."
-        curl -I https://nipunbatra.github.io/setwise/ || echo "❌ Site not accessible yet"
