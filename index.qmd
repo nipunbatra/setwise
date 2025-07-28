@@ -1,634 +1,296 @@
 # Setwise: Professional LaTeX Quiz Generator
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/nipunbatra/setwise/ci.yml?branch=main&label=CI)](https://github.com/nipunbatra/setwise/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/nipunbatra/setwise/branch/main/graph/badge.svg)](https://codecov.io/gh/nipunbatra/setwise)
-[![Security Issues](https://img.shields.io/github/issues-search?query=repo%3Anipunbatra%2Fsetwise%20is%3Aissue%20is%3Aopen%20label%3Asecurity&label=security%20issues&color=red)](https://github.com/nipunbatra/setwise/issues?q=is%3Aissue+is%3Aopen+label%3Asecurity)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+::: {.hero-banner}
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
+[![LaTeX](https://img.shields.io/badge/LaTeX-Required-green.svg)](https://www.latex-project.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/github/actions/workflow/status/nipunbatra/setwise/ci.yml?branch=main&label=tests)](https://github.com/nipunbatra/setwise/actions/workflows/ci.yml)
 
-> A professional Python-based quiz generation system that creates beautiful, randomized PDF quizzes with comprehensive machine learning content.
+> **Transform your question banks into beautiful, randomized LaTeX quiz sets with professional formatting and advanced templating capabilities.**
+:::
 
-## Template Showcase - 3 Professional Templates
+## 🎉 NEW in v2.0!
 
-### Default Template (Professional)
-Professional single-column layout with color-coded sections and spacious design
+::: {.callout-tip}
+## ✨ Major Enhancements Just Released!
 
-**Quiz Set 1 (All Pages)**
+Setwise v2.0 brings revolutionary features that make quiz creation more powerful and intuitive:
 
-| Page 1 | Page 2 | Page 3 |
-|--------|--------|--------|
-| ![Default Set 1 Page 1](assets/images/default_set1_page-1.png) | ![Default Set 1 Page 2](assets/images/default_set1_page-2.png) | ![Default Set 1 Page 3](assets/images/default_set1_page-3.png) |
+- **🎯 Templated MCQ Questions** - Dynamic variables in both questions AND options
+- **📋 Easy Quiz Metadata** - Professional headers with title, duration, instructions  
+- **🧩 Multi-Part Questions** - Complex problems with individual marks
+- **🔧 Python-Only Format** - Simplified from 5 formats to just `.py` for reliability
+- **📚 Enhanced Examples** - Physics, Machine Learning, and more with live templates
 
-**Quiz Set 2 (Same Questions, Different Order)**
+**[See all v2.0 features →](v2-features.qmd)**
+:::
 
-| Page 1 | Page 2 | Page 3 |
-|--------|--------|--------|
-| ![Default Set 2 Page 1](assets/images/default_set2_page-1.png) | ![Default Set 2 Page 2](assets/images/default_set2_page-2.png) | ![Default Set 2 Page 3](assets/images/default_set2_page-3.png) |
+## Why Choose Setwise?
 
-[Download PDF - Default Template](assets/default_sample.pdf){.btn .btn-primary}
+::: {.grid}
 
-**Use case:** Formal presentations, exams, professional documentation (3-4 pages typical)
+::: {.g-col-4}
+### 🎲 Smart Randomization
+Questions and MCQ options automatically shuffled while maintaining fairness across quiz sets
+:::
 
-### Compact Template (Space-Efficient)
-Two-column layout with multi-column MCQ options for maximum space efficiency
+::: {.g-col-4}
+### 📝 Advanced Templates
+Create question variants using Jinja2 templates - now supports both MCQ and subjective questions!
+:::
 
-**Quiz Set 1 vs Set 2 Comparison**
+::: {.g-col-4}
+### 🎨 Professional Output
+Beautiful LaTeX formatting with multiple themes and customizable layouts
+:::
 
-| Quiz Set 1 | Quiz Set 2 |
-|-------------|-------------|
-| ![Compact Set 1](assets/images/compact_set1_page-1.png) | ![Compact Set 2](assets/images/compact_set2_page-1.png) |
+::: {.g-col-4}
+### ⚡ Lightning Fast
+Generate hundreds of unique quiz variations instantly with reproducible seeds
+:::
 
-[Download PDF - Compact Template](assets/compact_sample.pdf){.btn .btn-primary}
+::: {.g-col-4}
+### 🔧 Simple Setup
+Python-only format, no complex configurations, works out of the box
+:::
 
-**Use case:** Printing, quick distribution, saving paper (1-2 pages typical)
+::: {.g-col-4}
+### 📊 Comprehensive
+MCQ, subjective, multi-part questions with individual scoring and detailed answer keys
+:::
 
-### Minimal Template (Clean)
-Minimalist black and white design with clean typography and high contrast
+:::
 
-**Quiz Set 1 vs Set 2 Comparison**
+## Quick Demo: 30-Second Quiz Creation
 
-| Quiz Set 1 | Quiz Set 2 |
-|-------------|-------------|
-| ![Minimal Set 1](assets/images/minimal_set1_page-1.png) | ![Minimal Set 2](assets/images/minimal_set2_page-1.png) |
+:::: {.columns}
 
-[Download PDF - Minimal Template](assets/minimal_sample.pdf){.btn .btn-primary}
-
-**Use case:** Black & white printing, simple assessments, distraction-free (1-2 pages typical)
-
-**Notice the Smart Randomization:** Same questions appear in both sets, but with shuffled MCQ options and different question order. Perfect for preventing cheating while maintaining fair assessment.
-
-## Key Features
-
-### Professional Output
-- **Beautiful LaTeX Output** - Professional styling with color-coded sections
-- **Multiple Templates** - 3 built-in templates: default, compact, minimal  
-- **Rich Content** - Tables, TikZ diagrams, matplotlib plots, mathematical equations
-- **Template Management** - Plug-and-play template system with easy selection
-
-### Smart Generation
-- **Smart Randomization** - MCQ options and question order shuffling with same questions across sets
-- **Template Support** - Dynamic questions with variable substitution
-- **Custom Question Libraries** - Support for user-defined question sets from any location
-- **CLI Interface** - Full command-line control with reproducible seeds
-- **Robust Validation** - Input validation and graceful error handling
-
-### Security & Quality
-- **Secure by Design** - No shell injection vulnerabilities, XSS protection
-- **85% Test Coverage** - Comprehensive pytest suite with 84+ test cases
-- **Automated Security Scanning** - Bandit, Safety, CodeQL, pip-audit
-- **Dependency Management** - Dependabot for automatic security updates
-- **CI/CD Pipeline** - Multi-stage testing, security scanning, and deployment
-
-### LaTeX Robustness
-- **Intelligent Error Detection** - Validates LaTeX syntax before compilation
-- **Automatic Error Fixing** - Fixes common LaTeX mistakes automatically
-- **User-Friendly Error Messages** - Clear explanations instead of cryptic LaTeX errors
-- **Comprehensive Help System** - Interactive LaTeX syntax guidance
-- **Chemical Formula Support** - Automatic conversion (H2O → H$_2$O)
-
-### Educational Excellence  
-- **Multi-Subject Support** - Built-in templates for Physics, Chemistry, Mathematics, Computer Science
-- **Comprehensive ML Content** - 20 MCQ + 15 subjective questions on supervised learning
-- **Answer Keys** - Detailed explanations and solutions
-- **Reproducible Assessment** - Consistent evaluation across different quiz sets
-
-## Installation & Quick Start
-
-```bash
-# Install from GitHub source
-pip install git+https://github.com/nipunbatra/setwise.git
-
-# With web interface support
-pip install git+https://github.com/nipunbatra/setwise.git[web]
-
-# For development with all tools
-pip install git+https://github.com/nipunbatra/setwise.git[dev,security]
-```
-
-### Basic Usage
-```bash
-# Generate figures (TikZ diagrams and matplotlib plots)
-setwise generate-figures
-
-# Generate sample quizzes with default settings
-setwise generate --seed 42
-
-# Generate 5 quiz sets with specific question counts  
-setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
-
-# List available templates
-setwise list-templates
-
-# Use compact template for space-efficient layout
-setwise generate --template compact --sets 2
-
-# Use custom questions from any location
-setwise generate --questions-file /path/to/my_questions.py --sets 2
-```
-
-### Python API
+::: {.column width="50%"}
+**Create `questions.py`:**
 ```python
-from setwise import QuizGenerator
+# NEW v2.0: Easy metadata!
+quiz_metadata = {
+    "title": "Physics Quiz",
+    "duration": "60 minutes",
+    "total_marks": 25
+}
 
-# Create and use quiz generator with custom questions
-generator = QuizGenerator(
-    output_dir="my_output",
-    questions_file="/path/to/custom_questions.py"
-)
-generator.generate_quizzes(num_sets=3, seed=42)
-```
-
-## Multiple User Interfaces
-
-### VSCode Extension (Professional Development)
-
-For developers and power users, Setwise includes a comprehensive VSCode extension with professional LaTeX editing:
-
-```bash
-# Install the VSCode extension
-cd vscode-extension
-./install.sh
-```
-
-**VSCode Extension Features:**
-- **Smart Question Editing** - Advanced syntax highlighting for questions.py files with LaTeX support
-- **Live Preview & Generation** - One-click PDF preview and multi-set quiz generation
-- **LaTeX Intelligence** - Automatic error fixing, validation, and context-aware help
-- **Rich Snippets Library** - Quick templates for MCQ, subjective, physics, chemistry, math
-- **Real-time Validation** - Instant feedback with detailed error messages as you type
-- **Integrated Workflow** - All Setwise CLI features accessible via VSCode Command Palette
-
-**Professional Workflow in VSCode:**
-1. Open any `questions.py` file → automatic syntax highlighting and validation
-2. Type `mcq` + Tab for MCQ template, `subjective` + Tab for subjective question
-3. Press `Ctrl+Shift+P` (`Cmd+Shift+P` on Mac) for instant PDF preview
-4. Press `Ctrl+Shift+G` to generate complete quiz sets with answer keys
-5. Use `Ctrl+Shift+V` for comprehensive LaTeX validation and auto-fixing
-
-### Easy-to-Use Web Interface
-
-For users who prefer a graphical interface, Setwise includes a comprehensive web application:
-
-```bash
-# Launch the web interface
-streamlit run setwise_web.py
-```
-
-**Web Interface Features:**
-- **Live Question Editor** - Split-screen editor like Overleaf with real-time preview
-- Point-and-click quiz generation with visual controls
-- Drag-and-drop question file uploads with instant validation
-- Real-time LaTeX error checking and automatic fixing
-- Interactive LaTeX syntax help with live testing
-- Built-in examples for Physics, Chemistry, Mathematics, Computer Science
-- Visual question library management and statistics
-- Local file management (open, edit, save locally)
-
-**Live Editor Experience:**
-- **Left Panel**: Syntax-highlighted editor with quick insert templates
-- **Right Panel**: Real-time validation, preview, and one-click quiz generation
-- **Auto-LaTeX fixing**: Instant error detection and correction suggestions
-- **Professional workflow**: Edit → Validate → Preview → Generate → Download
-
-## Custom Question Libraries
-
-Create question libraries for any subject with robust LaTeX support:
-
-```bash
-# Create a sample questions file
-setwise questions create-sample my_questions.py
-
-# Validate questions with LaTeX syntax checking
-setwise questions validate my_questions.py
-
-# Automatically fix common LaTeX errors
-setwise questions fix-latex my_questions.py
-
-# Get comprehensive LaTeX syntax help
-setwise questions latex-help
-
-# Use your custom questions
-setwise generate --questions-file my_questions.py --sets 3
-```
-
-**Built-in Subject Examples:**
-```bash
-# Download and use professional question libraries
-wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
-wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/chemistry_questions.py
-wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/mathematics_questions.py
-wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/computer_science_questions.py
-
-# Generate subject-specific quizzes
-setwise generate --questions-file physics_questions.py --sets 2
-setwise generate --questions-file chemistry_questions.py --sets 2
-```
-
-## Command Line Reference
-
-### Generate Command
-```bash
-setwise generate [OPTIONS]
-
-Options:
-  --seed SEED           Random seed for reproducibility (default: random)
-  --sets SETS           Number of quiz sets to generate (default: 3)
-  --mcq MCQ             Number of MCQ questions per set (default: all available)
-  --subjective NUM      Number of subjective questions per set (default: all available)
-  --no-pdf              Skip PDF compilation, generate only LaTeX files
-  --output-dir DIR      Output directory for generated files (default: ./output)
-  --template NAME       Template to use: default, compact, minimal (default: default)
-  --questions-file FILE Path to custom questions.py file (can be anywhere)
-```
-
-### Question Management Commands
-```bash
-setwise questions list                    # Find and list question libraries
-setwise questions validate FILE          # Validate questions with LaTeX syntax checking
-setwise questions create-sample FILE     # Create a sample questions file
-setwise questions stats FILE             # Show detailed statistics for a questions file
-setwise questions fix-latex FILE         # Automatically fix common LaTeX errors
-setwise questions latex-help             # Comprehensive LaTeX syntax help and examples
-```
-
-### Other Commands
-```bash
-setwise list-templates                    # List all available templates with descriptions
-setwise generate-figures                 # Generate TikZ diagrams and matplotlib plots
-setwise --help                           # Show complete help
-```
-
-## LaTeX Error Prevention & Fixing
-
-Setwise includes intelligent LaTeX validation and automatic error fixing to make quiz creation effortless:
-
-### Automatic Error Detection
-```bash
-# Validate LaTeX syntax before generating quizzes
-setwise questions validate my_questions.py
-# ✅ Valid questions file with 10 MCQ and 5 subjective questions
-# OR
-# ❌ MCQ question 3 LaTeX errors: Unmatched $ delimiters
-```
-
-### Smart Error Fixing
-```bash
-# Preview fixes without applying them
-setwise questions fix-latex my_questions.py --dry-run
-
-# Automatically fix common errors
-setwise questions fix-latex my_questions.py
-# Applied fixes:
-#   - Fixed chemical formula: H2O → H$_2$O
-#   - Added math mode for 5 expressions
-#   - Escaped percentage symbols
-```
-
-### Common Issues Automatically Fixed
-- **Missing math delimiters**: `x^2` → `$x^{2}$`
-- **Chemical formulas**: `H2O` → `H$_2$O`, `CO2` → `CO$_2$`
-- **Degree symbols**: `45 degrees` → `45°`
-- **Special characters**: `%` → `\\%`
-- **Subscripts/superscripts**: `x_1` → `$x_{1}$`
-
-### User-Friendly Error Messages
-Instead of cryptic LaTeX errors, get helpful guidance:
-- `"Missing $ inserted"` → `"Missing $ for math mode - surround math expressions with $"`
-- `"Undefined control sequence"` → `"Undefined LaTeX command - check spelling of \\frac, \\sqrt"`
-- `"Extra }"` → `"Extra closing brace } - check for matching braces"`
-
-### LaTeX Syntax Help
-```bash
-# Get comprehensive LaTeX help with examples
-setwise questions latex-help
-```
-
-## Subject-Specific Examples
-
-### Physics Questions
-```python
-# Professional physics questions with proper scientific notation
-{
-    "question": r"A projectile is launched at {{ angle }}° with velocity {{ velocity }} m/s. Calculate the range.",
+# NEW v2.0: Templated MCQ!
+mcq = [{
+    "template": r"A ball drops from {{ h }}m. Final velocity?",
+    "options": [
+        r"√(2g×{{ h }}) ≈ {{ v:.1f }} m/s",  # Correct
+        r"g×{{ h }} = {{ h*9.8 }} m/s",
+        r"{{ h }}/2 = {{ h/2 }} m/s"
+    ],
+    "answer": r"√(2g×{{ h }}) ≈ {{ v:.1f }} m/s",
     "variables": [
-        {"angle": 30, "velocity": 20, "answer": "Range = v²sin(2θ)/g = 35.35 m"},
-        {"angle": 45, "velocity": 25, "answer": "Range = v²sin(2θ)/g = 63.78 m"}
-    ]
-}
+        {"h": 20, "v": 19.8},
+        {"h": 45, "v": 29.7}
+    ],
+    "marks": 3
+}]
 ```
+:::
 
-### Chemistry Questions
-```python
-# Chemical equations with proper molecular formulas
-{
-    "question": r"Balance: Al + Fe$_2$O$_3$ → Al$_2$O$_3$ + Fe",
-    "answer": r"2Al + Fe$_2$O$_3$ → Al$_2$O$_3$ + 2Fe"
-}
-```
-
-### Mathematics Questions
-```python
-# Mathematical expressions with proper LaTeX formatting
-{
-    "question": r"Find $\\lim_{x \\to 0} \\frac{\\sin x}{x}$",
-    "options": ["0", "1", "$\\infty$", "Does not exist"],
-    "answer": "1"
-}
-```
-
-### Advanced Examples
-
-```bash
-# Generate 5 sets with specific question counts and reproducible seed
-setwise generate --seed 123 --sets 5 --mcq 3 --subjective 2
-
-# Generate only LaTeX files without PDF compilation
-setwise generate --no-pdf --sets 2
-
-# Use custom questions from anywhere with automatic validation
-setwise generate --questions-file ~/Documents/my_chemistry_quiz.py --sets 2
-
-# Use custom output directory
-setwise generate --output-dir ./my_quizzes --sets 1
-
-# Use compact template for space-efficient 2-column layout
-setwise generate --seed 42 --sets 2 --template compact
-
-# Use minimal template for clean black & white printing
-setwise generate --seed 42 --sets 2 --template minimal
-
-# Generate figures first, then quiz sets
-setwise generate-figures
-setwise generate --seed 42 --sets 3
-
-# Fix LaTeX errors before generating
-setwise questions fix-latex my_questions.py
-setwise generate --questions-file my_questions.py --sets 3
-```
-
-## Complete Usage Guide
-
-### For Educators (Non-Technical Users)
-
-**Step 1: Install with Web Interface**
-```bash
-pip install git+https://github.com/nipunbatra/setwise.git[web]
-```
-
-**Step 2: Launch Web Interface**
-```bash
-streamlit run setwise_web.py
-```
-
-**Step 3: Create Your Quiz**
-1. Choose "Generate Quiz" from the sidebar
-2. Configure quiz parameters (number of sets, questions per set)
-3. Either use built-in ML questions or upload your own
-4. Click "Generate Quiz" and download the results
-
-**Step 4: Manage Question Libraries**
-1. Use "Question Library Manager" to create new questions
-2. Upload and validate existing question files
-3. Automatically fix LaTeX syntax errors
-4. View detailed statistics about your question libraries
-
-### For Technical Users (Command Line)
-
-**Quick Start Workflow:**
+::: {.column width="50%"}
+**Generate quiz sets:**
 ```bash
 # Install
 pip install git+https://github.com/nipunbatra/setwise.git
 
-# Generate quiz with built-in ML questions
-setwise generate --seed 42 --sets 3
+# Generate 3 randomized quiz sets
+setwise generate --questions-file questions.py --sets 3
 
-# Create custom questions
-setwise questions create-sample my_subject_questions.py
-# Edit the file with your questions
-setwise questions validate my_subject_questions.py
-setwise generate --questions-file my_subject_questions.py --sets 2
+# Output: 3 beautiful PDFs + answer keys!
 ```
 
-**Advanced Workflow:**
+**Result:** Professional LaTeX quiz sets with:
+- ✅ Randomized question order
+- ✅ Shuffled MCQ options  
+- ✅ Professional formatting
+- ✅ Complete answer keys
+- ✅ Dynamic question variants
+:::
+
+::::
+
+## Template Showcase
+
+### Three Professional Templates
+
+::: {.panel-tabset}
+
+## Default (Professional)
+Professional single-column layout perfect for formal exams
+
+![Default Template](assets/images/default_set1_page-1.png){fig-alt="Default template preview" width="400"}
+
+[Download PDF Sample](assets/default_sample.pdf){.btn .btn-primary}
+
+## Compact (Space-Efficient)  
+Two-column layout maximizing content per page
+
+![Compact Template](assets/images/compact_set1_page-1.png){fig-alt="Compact template preview" width="400"}
+
+[Download PDF Sample](assets/compact_sample.pdf){.btn .btn-primary}
+
+## Minimal (Clean)
+Clean black & white design for distraction-free assessment
+
+![Minimal Template](assets/images/minimal_set1_page-1.png){fig-alt="Minimal template preview" width="400"}
+
+[Download PDF Sample](assets/minimal_sample.pdf){.btn .btn-primary}
+
+:::
+
+## Multiple Ways to Use Setwise
+
+::: {.grid}
+
+::: {.g-col-6}
+### 🖥️ Web Interface
+Perfect for educators who prefer point-and-click
+
 ```bash
-# Download subject-specific examples
-wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
-
-# Validate and fix LaTeX errors
-setwise questions validate physics_questions.py
-setwise questions fix-latex physics_questions.py --dry-run
-
-# Generate professional quiz sets
-setwise generate --questions-file physics_questions.py --seed 123 --sets 5 --template compact
-
-# View statistics
-setwise questions stats physics_questions.py
+streamlit run setwise_web.py
 ```
 
-### For Developers (Advanced Usage)
+- Visual question editor
+- Live PDF preview
+- Drag-and-drop file uploads
+- Built-in examples library
+:::
 
-**Development Environment:**
+::: {.g-col-6}
+### ⌨️ Command Line
+Powerful CLI for developers and power users
+
 ```bash
-# Clone and setup development environment
-git clone https://github.com/nipunbatra/setwise.git
-cd setwise
-pip install -e .[dev,security]
+setwise generate --seed 42 --sets 5
+setwise questions validate my_quiz.py
+setwise list-templates
 ```
 
-**Python API Usage:**
+- Full automation support
+- Reproducible generation
+- Batch processing
+:::
+
+::: {.g-col-6}
+### 🔧 VSCode Extension
+Professional development experience
+
+```bash
+cd vscode-extension && ./install.sh
+```
+
+- Syntax highlighting
+- Live validation
+- One-click generation
+- LaTeX IntelliSense
+:::
+
+::: {.g-col-6}
+### 🐍 Python API
+Programmatic integration
+
 ```python
-from setwise import QuizGenerator, TemplateManager
-from setwise.question_manager import QuestionManager
-from setwise.latex_validator import LaTeXValidator
+from setwise import QuizGenerator
 
-# Generate quizzes programmatically
-generator = QuizGenerator(
-    output_dir="my_output",
-    questions_file="custom_questions.py"
-)
-success = generator.generate_quizzes(num_sets=3, seed=42)
-
-# Validate question libraries
-is_valid, message = QuestionManager.validate_questions_file("my_questions.py")
-
-# Check LaTeX syntax
-is_valid, errors = LaTeXValidator.validate_latex_syntax("$x^2 + y^2 = z^2$")
+gen = QuizGenerator("questions.py")
+gen.generate_quizzes(num_sets=3, seed=42)
 ```
 
-## Development & Testing
+- Full programmatic control
+- Custom workflows
+- Integration with other tools
+:::
 
-### Development Setup
+:::
 
-### Testing & Quality Assurance
-```bash
-# Run comprehensive test suite
-python -m pytest -v
+## What's New in v2.0
 
-# Generate test coverage report  
-python -m pytest --cov=setwise --cov-report=html
+::: {.callout-important}
+## 🚀 Revolutionary Template Support
 
-# Run security tests locally
-./scripts/security_test.sh
+The biggest update in Setwise history! MCQ questions now support full templating:
 
-# Package building and validation
-python -m build
-twine check dist/*
+**Before v2.0:** Only subjective questions could use templates  
+**After v2.0:** Both MCQ and subjective questions support dynamic variables
+
+```python
+# This now works in v2.0!
+{
+    "template": r"Calculate {{ a }} × {{ b }} = ?",
+    "options": [
+        r"{{ a * b }}",      # Correct answer  
+        r"{{ a + b }}",      # Common mistake
+        r"{{ a - b }}",      # Wrong operation
+        r"{{ a / b if b != 0 else 'undefined' }}"
+    ],
+    "answer": r"{{ a * b }}",
+    "variables": [
+        {"a": 6, "b": 7},   # Creates: 6 × 7 = 42
+        {"a": 8, "b": 9},   # Creates: 8 × 9 = 72
+        {"a": 4, "b": 5}    # Creates: 4 × 5 = 20
+    ],
+    "marks": 2
+}
 ```
+:::
 
-**Test Coverage includes:**
-- MCQ option shuffling and answer key tracking
-- Subjective question processing with template variables
-- Quiz generation reproducibility with seeds
-- CLI argument parsing and validation
-- LaTeX compilation and error handling
-- Data integrity and question consistency checks
-- File operations and output validation
+## Getting Started
 
-## Machine Learning Content
+::: {.grid}
 
-The quiz system includes comprehensive supervised learning topics:
+::: {.g-col-4}
+### 📥 [Installation](installation.qmd)
+Quick setup guide for all platforms
+:::
 
-### Multiple Choice Questions (20 Questions, 5-6 Options Each)
-- **Bias-Variance Tradeoff** - Understanding model complexity implications
-- **Confusion Matrix Analysis** - Precision, recall, accuracy calculations  
-- **Regularization Techniques** - L1 (Lasso), L2 (Ridge), Elastic Net comparisons
-- **Decision Trees** - Impurity measures, pruning, overfitting
-- **Support Vector Machines** - Kernels, margin optimization, hyperparameters
-- **Cross-Validation** - k-fold, stratified, leave-one-out strategies
-- **Performance Metrics** - ROC curves, AUC, F1-score interpretations
-- **Neural Networks** - Activation functions, backpropagation, architectures
-- **Ensemble Methods** - Random Forest, bagging vs boosting principles
-- **Feature Engineering** - Scaling, normalization, preprocessing techniques
-- **Optimization** - Gradient descent, learning rates, convergence
-- **Model Evaluation** - Validation curves, hyperparameter selection
-- **k-Nearest Neighbors** - Distance metrics, curse of dimensionality
-- **Logistic Regression** - Sigmoid function, probability mapping
+::: {.g-col-4}
+### 🚀 [Quick Start](quickstart.qmd)  
+Create your first quiz in 5 minutes
+:::
 
-### Subjective Questions (15 Questions with Detailed Solutions)
-- **Decision Tree Analysis** - Depth calculation, Gini impurity, pruning benefits
-- **Linear Regression** - MSE calculation, regularization loss functions  
-- **Learning Curves** - Bias vs variance diagnosis, overfitting gap analysis
-- **Support Vector Machines** - Support vectors, margin concepts, kernel complexity
-- **Overfitting Analysis** - Model comparison, regularization parameter selection
-- **k-Nearest Neighbors** - Time complexity, preprocessing, parameter selection
-- **Neural Networks** - Backpropagation, weight updates, gradient problems
-- **Ensemble Methods** - Majority voting, accuracy calculations, method comparison
-- **Algorithm Comparison** - Assumptions, strengths, weaknesses analysis
-- **Mathematical Derivations** - Logistic regression gradient descent
-- **Model Selection** - Validation vs test error, data leakage prevention
-- **Real-world Applications** - Customer churn prediction pipeline design
-- **Optimization Analysis** - SGD vs Adam vs RMSprop comparison
-- **Dimensionality Reduction** - PCA vs t-SNE, curse of dimensionality
+::: {.g-col-4}
+### 📖 [Examples](examples.qmd)
+Ready-to-use question libraries
+:::
 
-## Repository Structure
+:::
 
-```
-setwise/
-├── .github/
-│   └── workflows/          # GitHub Actions CI/CD pipelines
-│       ├── ci.yml         # Multi-Python testing, linting, integration
-│       └── pages.yml      # GitHub Pages deployment with PDF conversion
-├── data/
-│   └── questions.py       # Machine learning question database
-├── templates/
-│   ├── quiz_template.tex.jinja         # Default professional template
-│   ├── quiz_template_compact.tex.jinja # Space-efficient 2-column template
-│   ├── quiz_template_minimal.tex.jinja # Clean minimal template
-│   └── template_config.py              # Template management system
-├── figures/               # Generated TikZ diagrams and plots
-│   ├── *.tikz            # TikZ diagram files
-│   └── *.pdf             # Matplotlib generated plots
-├── output/                # Generated quiz files
-│   ├── quiz_set_*.tex    # LaTeX source files
-│   ├── quiz_set_*.pdf    # Compiled PDF quizzes
-│   └── answer_key_*.txt  # Answer keys with explanations
-├── assets/                # GitHub Pages assets
-│   └── images/           # Images and downloadable PDFs
-├── test_main.py          # Comprehensive test suite
-├── main.py               # Main quiz generation engine
-├── generate_figures.py   # Figure generation script
-├── requirements.txt      # Python dependencies
-└── README.md            # This documentation
-```
+## Community & Support
 
-## Troubleshooting
+::: {.grid}
 
-### Common Issues and Solutions
+::: {.g-col-3}
+### 🐛 [Issues](https://github.com/nipunbatra/setwise/issues)
+Report bugs and request features
+:::
 
-**LaTeX Installation Issues:**
-```bash
-# Ubuntu/Debian
-sudo apt-get install texlive-full
+::: {.g-col-3}
+### 💬 [Discussions](https://github.com/nipunbatra/setwise/discussions)
+Community Q&A and ideas
+:::
 
-# macOS 
-brew install --cask mactex
+::: {.g-col-3}
+### 📚 [Documentation](question-format.qmd)
+Complete guides and references
+:::
 
-# Windows
-# Download from https://miktex.org/
-```
+::: {.g-col-3}
+### ⭐ [GitHub](https://github.com/nipunbatra/setwise)
+Star us and contribute!
+:::
 
-**LaTeX Compilation Errors:**
-```bash
-# Validate questions before generating
-setwise questions validate my_questions.py
-
-# Fix common LaTeX errors automatically
-setwise questions fix-latex my_questions.py
-
-# Get LaTeX syntax help
-setwise questions latex-help
-```
-
-**Question File Format Issues:**
-```bash
-# Check if your questions.py file is valid
-setwise questions validate my_questions.py
-
-# Create a new file from template if needed
-setwise questions create-sample fixed_questions.py
-```
-
-**Web Interface Issues:**
-```bash
-# Make sure streamlit is installed
-pip install streamlit
-
-# Launch with full path
-python -m streamlit run setwise_web.py
-
-# Check if port 8501 is available
-```
-
-**Import Errors:**
-```bash
-# Reinstall with all dependencies
-pip uninstall setwise
-pip install git+https://github.com/nipunbatra/setwise.git[web,dev]
-```
-
-### Getting Help
-
-- **LaTeX Syntax Help**: `setwise questions latex-help`
-- **Question Validation**: `setwise questions validate FILE`
-- **Error Fixing**: `setwise questions fix-latex FILE --dry-run`
-- **GitHub Issues**: [Report problems](https://github.com/nipunbatra/setwise/issues)
-- **Web Interface**: Use the interactive help sections
-
-## License & Usage
-
-**MIT License** - Free for educational and commercial use.
-
-## Support & Community
-
-- **Issues**: [Report bugs and request features](https://github.com/nipunbatra/setwise/issues)
-- **Discussions**: [Community discussions and Q&A](https://github.com/nipunbatra/setwise/discussions)
-- **Documentation**: [Full documentation on GitHub Pages](https://nipunbatra.github.io/setwise)
+:::
 
 ---
 
-<div align="center">
-**Made for educators and students worldwide**
+::: {.text-center}
+**Ready to transform your quiz creation workflow?**
 
-*Empowering assessment through technology*
-</div>
+[Get Started Now](quickstart.qmd){.btn .btn-primary .btn-lg} [View Examples](examples.qmd){.btn .btn-outline-secondary .btn-lg}
+:::

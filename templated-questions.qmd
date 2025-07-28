@@ -1,0 +1,468 @@
+# 🎯 Templated Questions Guide
+
+The most powerful feature in Setwise v2.0! Create dynamic questions with variables that generate unique variants automatically.
+
+::: {.callout-tip}
+## ✨ NEW in v2.0!
+
+Templated questions now work for **both MCQ and subjective questions**! This was the most requested feature and is now fully supported.
+:::
+
+## What are Templated Questions?
+
+Templated questions use **Jinja2 syntax** to create dynamic content with variables. Instead of writing multiple similar questions, you write one template that generates many variants.
+
+**Example:** Instead of writing 10 questions like "What is 3 + 4?", "What is 7 + 2?", etc., write one template:
+
+```python
+{
+    "template": r"What is {{ a }} + {{ b }}?",
+    "variables": [
+        {"a": 3, "b": 4},   # Creates: What is 3 + 4?
+        {"a": 7, "b": 2},   # Creates: What is 7 + 2?
+        {"a": 5, "b": 8}    # Creates: What is 5 + 8?
+    ]
+}
+```
+
+## Templated MCQ Questions (NEW!)
+
+::: {.callout-important}
+## 🚀 Revolutionary Feature
+
+Before v2.0, only subjective questions could use templates. Now **MCQ questions fully support templating** in both questions AND options!
+:::
+
+### Basic MCQ Template
+
+```python
+mcq = [{
+    "template": r"Calculate {{ a }} × {{ b }} = ?",
+    "options": [
+        r"{{ a * b }}",         # Correct answer
+        r"{{ a + b }}",         # Common mistake (addition instead)
+        r"{{ a - b }}",         # Wrong operation
+        r"{{ (a + b) * 2 }}"    # Completely wrong
+    ],
+    "answer": r"{{ a * b }}",   # Must match one of the options
+    "variables": [
+        {"a": 6, "b": 7},       # 6 × 7 = 42
+        {"a": 8, "b": 9},       # 8 × 9 = 72  
+        {"a": 4, "b": 5}        # 4 × 5 = 20
+    ],
+    "marks": 2
+}]
+```
+
+**What happens:**
+- Setwise randomly picks one variable set per quiz
+- Both question and options are rendered with those variables
+- Answer validation ensures the rendered answer matches a rendered option
+
+### Advanced MCQ with Formatting
+
+```python
+mcq = [{
+    "template": r"A circle has radius {{ r }} cm. What is its area? (π ≈ 3.14)",
+    "options": [
+        r"{{ 3.14 * r**2 }} cm²",      # Correct: πr²
+        r"{{ 2 * 3.14 * r }} cm²",     # Wrong: circumference formula
+        r"{{ 3.14 * r }} cm²",         # Wrong: π×r
+        r"{{ r**2 }} cm²"              # Wrong: just r²
+    ],
+    "answer": r"{{ 3.14 * r**2 }} cm²",
+    "variables": [
+        {"r": 3},   # Area = 28.26 cm²
+        {"r": 5},   # Area = 78.5 cm²
+        {"r": 2},   # Area = 12.56 cm²
+        {"r": 4}    # Area = 50.24 cm²
+    ],
+    "marks": 3
+}]
+```
+
+### Physics MCQ Template
+
+```python
+mcq = [{
+    "template": r"A ball is dropped from height {{ h }} m. What is its velocity just before hitting the ground? (g = 9.8 m/s²)",
+    "options": [
+        r"$\sqrt{2g \times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",  # Correct: √(2gh)
+        r"$g \times {{ h }}$ = {{ h * 9.8 }} m/s",               # Wrong: gh  
+        r"$\frac{g \times {{ h }}}{2}$ = {{ h * 4.9 }} m/s",     # Wrong: gh/2
+        r"$2g \times {{ h }}$ = {{ 2 * h * 9.8 }} m/s"          # Wrong: 2gh
+    ],
+    "answer": r"$\sqrt{2g \times {{ h }}}$ ≈ {{ velocity:.1f }} m/s",
+    "variables": [
+        {"h": 20, "velocity": 19.8},   # √(2×9.8×20) ≈ 19.8 m/s
+        {"h": 45, "velocity": 29.7},   # √(2×9.8×45) ≈ 29.7 m/s
+        {"h": 80, "velocity": 39.6}    # √(2×9.8×80) ≈ 39.6 m/s
+    ],
+    "marks": 4
+}]
+```
+
+## Templated Subjective Questions
+
+Subjective questions have supported templates since v1.0, now enhanced in v2.0:
+
+### Basic Subjective Template
+
+```python
+subjective = [{
+    "template": r"Calculate the kinetic energy of an object with mass {{ mass }} kg moving at {{ velocity }} m/s.",
+    "variables": [
+        {
+            "mass": 10, "velocity": 5,
+            "answer": "KE = ½mv² = ½ × 10 × 5² = ½ × 10 × 25 = 125 J"
+        },
+        {
+            "mass": 2, "velocity": 15,
+            "answer": "KE = ½mv² = ½ × 2 × 15² = ½ × 2 × 225 = 225 J"
+        },
+        {
+            "mass": 8, "velocity": 10,
+            "answer": "KE = ½mv² = ½ × 8 × 10² = ½ × 8 × 100 = 400 J"
+        }
+    ],
+    "marks": 6
+}]
+```
+
+### Advanced Template with Calculations
+
+```python
+subjective = [{
+    "template": r"A projectile is launched at {{ angle }}° with initial velocity {{ v0 }} m/s. Calculate the maximum height and range.",
+    "variables": [
+        {
+            "angle": 30, "v0": 20,
+            "answer": """
+Maximum height: H = (v₀ sin θ)²/(2g) = (20 × sin 30°)²/(2 × 9.8) = (20 × 0.5)²/19.6 = 100/19.6 = 5.1 m
+
+Range: R = v₀² sin(2θ)/g = 20² × sin(60°)/9.8 = 400 × 0.866/9.8 = 35.3 m
+            """
+        },
+        {
+            "angle": 45, "v0": 25,
+            "answer": """
+Maximum height: H = (v₀ sin θ)²/(2g) = (25 × sin 45°)²/(2 × 9.8) = (25 × 0.707)²/19.6 = 312.5/19.6 = 15.9 m
+
+Range: R = v₀² sin(2θ)/g = 25² × sin(90°)/9.8 = 625 × 1/9.8 = 63.8 m
+            """
+        }
+    ],
+    "marks": 10
+}]
+```
+
+## Template Syntax Reference
+
+### Jinja2 Expressions
+
+All standard Jinja2 syntax is supported:
+
+```python
+# Basic variables
+r"{{ variable_name }}"
+
+# Mathematical operations
+r"{{ a + b }}"          # Addition
+r"{{ a * b }}"          # Multiplication  
+r"{{ a ** 2 }}"         # Exponentiation
+r"{{ a / b }}"          # Division
+
+# Formatting
+r"{{ value:.2f }}"      # 2 decimal places: 3.14159 → 3.14
+r"{{ value:.1f }}"      # 1 decimal place: 3.14159 → 3.1
+r"{{ int(value) }}"     # Integer: 3.14159 → 3
+
+# Conditionals
+r"{{ 'positive' if x > 0 else 'negative' }}"
+r"{{ a / b if b != 0 else 'undefined' }}"
+
+# String operations
+r"{{ text.upper() }}"   # UPPERCASE
+r"{{ text.title() }}"   # Title Case
+```
+
+### LaTeX Integration
+
+Templates work seamlessly with LaTeX:
+
+```python
+# Math expressions
+r"${{ a }}x^2 + {{ b }}x + {{ c }} = 0$"
+
+# Fractions  
+r"$\frac{{{ numerator }}}{{{ denominator }}}$"
+
+# Complex expressions
+r"$E = mc^2 = {{ mass }} \times ({{ c }})^2 = {{ energy }} \text{ J}$"
+
+# Chemical formulas
+r"$\text{H}_{{ h_atoms }}\text{O}_{{ o_atoms }}$"
+```
+
+## Subject-Specific Examples
+
+### Mathematics Templates
+
+```python
+# Derivative template
+{
+    "template": r"Find the derivative of $f(x) = {{ function }}$",
+    "options": [
+        r"${{ derivative }}$",        # Correct
+        r"${{ wrong1 }}$",
+        r"${{ wrong2 }}$",
+        r"${{ wrong3 }}$"
+    ],
+    "answer": r"${{ derivative }}$",
+    "variables": [
+        {
+            "function": "x^3 + 2x^2", 
+            "derivative": "3x^2 + 4x",
+            "wrong1": "x^4 + x^3", 
+            "wrong2": "3x + 4", 
+            "wrong3": "x^2 + 2x"
+        },
+        {
+            "function": "\\sin(x) + \\cos(x)", 
+            "derivative": "\\cos(x) - \\sin(x)",
+            "wrong1": "\\cos(x) + \\sin(x)", 
+            "wrong2": "-\\sin(x) + \\cos(x)", 
+            "wrong3": "\\sin(x) - \\cos(x)"
+        }
+    ]
+}
+```
+
+### Chemistry Templates
+
+```python
+# Chemical equation balancing
+{
+    "template": r"Balance the equation: {{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + {{ product2 }}",
+    "options": [
+        r"{{ coeff1 }}{{ reactant1 }} + {{ coeff2 }}{{ reactant2 }} → {{ coeff3 }}{{ product1 }} + {{ coeff4 }}{{ product2 }}",
+        r"{{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + {{ product2 }}",  # Unbalanced
+        r"2{{ reactant1 }} + {{ reactant2 }} → {{ product1 }} + 2{{ product2 }}",
+        r"{{ reactant1 }} + 2{{ reactant2 }} → 2{{ product1 }} + {{ product2 }}"
+    ],
+    "answer": r"{{ coeff1 }}{{ reactant1 }} + {{ coeff2 }}{{ reactant2 }} → {{ coeff3 }}{{ product1 }} + {{ coeff4 }}{{ product2 }}",
+    "variables": [
+        {
+            "reactant1": "Al", "reactant2": "Fe₂O₃", 
+            "product1": "Al₂O₃", "product2": "Fe",
+            "coeff1": "2", "coeff2": "", "coeff3": "", "coeff4": "2"
+            # 2Al + Fe₂O₃ → Al₂O₃ + 2Fe
+        }
+    ]
+}
+```
+
+### Computer Science Templates
+
+```python
+# Algorithm complexity
+{
+    "template": r"What is the time complexity of searching in a binary search tree with {{ n }} nodes in the worst case?",
+    "options": [
+        r"O({{ n }})",           # Correct for unbalanced
+        r"O(log {{ n }})",       # Correct for balanced
+        r"O({{ n }}²)",
+        r"O(1)"
+    ],
+    "answer": r"O({{ n }})",     # Assuming worst case (unbalanced)
+    "variables": [
+        {"n": "n"},              # Generic case
+        {"n": "1000"},           # Specific example
+        {"n": "10^6"}            # Large example
+    ]
+}
+```
+
+## Best Practices
+
+### 1. Variable Naming
+```python
+# Good: descriptive names
+{"mass": 10, "velocity": 5, "kinetic_energy": 125}
+
+# Avoid: single letters (unless mathematical convention)
+{"a": 10, "b": 5, "c": 125}  # Less clear
+```
+
+### 2. Answer Consistency
+```python
+# CRITICAL: Rendered answer must match a rendered option
+{
+    "template": r"{{ a }} + {{ b }} = ?",
+    "options": [
+        r"{{ a + b }}",      # This will be the answer
+        r"{{ a - b }}",
+        r"{{ a * b }}"
+    ],
+    "answer": r"{{ a + b }}",    # Must match exactly
+    "variables": [{"a": 5, "b": 3}]
+}
+```
+
+### 3. Reasonable Variable Ranges
+```python
+# Good: realistic values
+{"height": 20, "velocity": 19.8}    # 20m height → 19.8 m/s velocity
+
+# Avoid: extreme values that break physics/logic
+{"height": 10000, "velocity": 443}  # Unrealistic
+```
+
+### 4. Error-Prone Values
+```python
+# Handle division by zero
+r"{{ a / b if b != 0 else 'undefined' }}"
+
+# Handle negative square roots
+r"{{ (value ** 0.5) if value >= 0 else 'complex' }}"
+```
+
+### 5. Testing Templates
+```python
+# Test all variable combinations
+variables = [
+    {"a": 2, "b": 3},   # Simple case
+    {"a": 0, "b": 5},   # Zero case
+    {"a": 10, "b": 1},  # One case
+    {"a": 7, "b": 7}    # Equal case
+]
+```
+
+## Common Patterns
+
+### Percentage Calculations
+```python
+{
+    "template": r"{{ original }} increased by {{ percent }}% equals?",
+    "options": [
+        r"{{ original * (1 + percent/100) }}",     # Correct
+        r"{{ original + percent }}",               # Wrong: adding percent directly  
+        r"{{ original * percent/100 }}",           # Wrong: just percent of original
+        r"{{ original * percent }}"                # Wrong: multiplying by percent
+    ],
+    "variables": [
+        {"original": 100, "percent": 20},  # 100 + 20% = 120
+        {"original": 50, "percent": 10}    # 50 + 10% = 55
+    ]
+}
+```
+
+### Unit Conversions
+```python
+{
+    "template": r"Convert {{ value }} {{ from_unit }} to {{ to_unit }}",
+    "variables": [
+        {
+            "value": 5, "from_unit": "km", "to_unit": "m",
+            "answer": "5 km = 5 × 1000 = 5000 m"
+        },
+        {
+            "value": 2.5, "from_unit": "hours", "to_unit": "minutes", 
+            "answer": "2.5 hours = 2.5 × 60 = 150 minutes"
+        }
+    ]
+}
+```
+
+### Formula Applications
+```python
+{
+    "template": r"Using the formula A = πr², find the area when r = {{ radius }} units",
+    "variables": [
+        {
+            "radius": 3,
+            "answer": "A = π × 3² = π × 9 = 9π ≈ 28.27 square units"
+        },
+        {
+            "radius": 5,
+            "answer": "A = π × 5² = π × 25 = 25π ≈ 78.54 square units"  
+        }
+    ]
+}
+```
+
+## Troubleshooting Templates
+
+### Common Errors
+
+**1. Answer doesn't match options:**
+```python
+# Problem:
+"answer": r"{{ a + b }}",
+"options": [r"{{ a }} + {{ b }}", ...]  # String vs number!
+
+# Solution:
+"answer": r"{{ a + b }}",
+"options": [r"{{ a + b }}", ...]        # Both evaluate to numbers
+```
+
+**2. Undefined variables:**
+```python
+# Problem:
+"template": r"Calculate {{ x }} + {{ y }}",
+"variables": [{"a": 5, "b": 3}]        # Wrong variable names!
+
+# Solution:
+"variables": [{"x": 5, "y": 3}]        # Match template variables
+```
+
+**3. Jinja2 syntax errors:**
+```python
+# Problem:
+r"{{ a + b }"     # Missing closing brace
+
+# Solution:  
+r"{{ a + b }}"    # Proper Jinja2 syntax
+```
+
+### Validation
+Use Setwise's built-in validation:
+
+```bash
+# Validate template syntax
+setwise questions validate my_templated_questions.py
+
+# Test template rendering
+setwise generate --questions-file my_templated_questions.py --sets 1 --seed 42
+```
+
+## Migration from v1.x
+
+If you have existing subjective templates, they work unchanged in v2.0:
+
+```python
+# v1.x subjective template - works perfectly in v2.0
+subjective = [{
+    "template": r"Solve: {{ equation }}",
+    "variables": [
+        {"equation": "2x + 3 = 7", "answer": "x = 2"},
+        {"equation": "3x - 1 = 8", "answer": "x = 3"}
+    ],
+    "marks": 5
+}]
+```
+
+**New in v2.0:** You can now use the same syntax for MCQ questions!
+
+---
+
+::: {.callout-tip}
+## Next Steps
+
+- **Try it out:** Start with simple templates and gradually add complexity
+- **Explore examples:** Check the [Examples Gallery](examples.qmd) for subject-specific templates  
+- **Get help:** Use `setwise questions validate` to check your templates
+- **Share:** Create template libraries for your subject area!
+
+[View Examples](examples.qmd){.btn .btn-primary} [Question Format Reference](question-format.qmd){.btn .btn-outline-secondary}
+:::

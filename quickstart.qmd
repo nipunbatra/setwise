@@ -1,0 +1,363 @@
+# 🚀 Quick Start Guide
+
+Get up and running with Setwise in under 5 minutes! This guide will walk you through creating your first professional quiz with the new v2.0 features.
+
+## Step 1: Installation
+
+Choose your preferred installation method:
+
+::: {.panel-tabset}
+
+## Basic Installation
+```bash
+# Core Setwise package
+pip install git+https://github.com/nipunbatra/setwise.git
+```
+
+## With Web Interface
+```bash
+# Includes Streamlit web interface
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+```
+
+## Full Development Setup
+```bash
+# Everything including development tools
+pip install git+https://github.com/nipunbatra/setwise.git[dev,web,security]
+```
+:::
+
+::: {.callout-note}
+## Prerequisites
+- **Python 3.8+** 
+- **LaTeX distribution** (TeX Live, MiKTeX, or MacTeX)
+- **Git** (for installation from GitHub)
+
+**Quick LaTeX install:**
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-full
+
+# macOS
+brew install --cask mactex
+
+# Windows - Download from https://miktex.org/
+```
+:::
+
+## Step 2: Create Your First Quiz
+
+### Create a Question File
+
+Create `my_first_quiz.py` with the new v2.0 features:
+
+```python
+#!/usr/bin/env python3
+"""My First Setwise v2.0 Quiz"""
+
+# NEW v2.0: Professional quiz metadata
+quiz_metadata = {
+    "title": "Introduction to Science Quiz",
+    "subject": "General Science",
+    "duration": "30 minutes", 
+    "total_marks": 15,
+    "instructions": ["Answer all questions", "Show your work where applicable"]
+}
+
+# Multiple choice questions (including NEW templated MCQ!)
+mcq = [
+    # Regular MCQ question (v1.x compatible)
+    {
+        "question": r"What is the chemical symbol for water?",
+        "options": [r"H$_2$O", r"CO$_2$", r"NaCl", r"O$_2$"],
+        "answer": r"H$_2$O",
+        "marks": 2
+    },
+    
+    # NEW v2.0: Templated MCQ with dynamic values!
+    {
+        "template": r"A circle has radius {{ r }} cm. What is its area? (π ≈ 3.14)",
+        "options": [
+            r"{{ 3.14 * r**2 }} cm²",      # Correct: πr²
+            r"{{ 2 * 3.14 * r }} cm²",     # Wrong: circumference
+            r"{{ 3.14 * r }} cm²",         # Wrong: π×r
+            r"{{ r**2 }} cm²"              # Wrong: just r²
+        ],
+        "answer": r"{{ 3.14 * r**2 }} cm²",
+        "variables": [
+            {"r": 3},   # Area = 28.26 cm²
+            {"r": 5},   # Area = 78.5 cm²
+            {"r": 2}    # Area = 12.56 cm²
+        ],
+        "marks": 3
+    }
+]
+
+# Subjective questions (including multi-part!)
+subjective = [
+    # Regular subjective question
+    {
+        "question": r"Explain the difference between speed and velocity.",
+        "answer": r"Speed is scalar (magnitude only), velocity is vector (magnitude + direction). Speed = distance/time, Velocity = displacement/time.",
+        "marks": 4
+    },
+    
+    # NEW v2.0: Enhanced multi-part question
+    {
+        "question": r"Motion Analysis:",
+        "parts": [
+            {
+                "question": r"A car travels 60 km in 1 hour. Calculate its speed.",
+                "answer": r"Speed = Distance/Time = 60 km / 1 hour = 60 km/h",
+                "marks": 2
+            },
+            {
+                "question": r"If the car maintains this speed, how far will it travel in 2.5 hours?",
+                "answer": r"Distance = Speed × Time = 60 km/h × 2.5 h = 150 km",
+                "marks": 2
+            }
+        ],
+        "marks": 4
+    }
+]
+```
+
+### Generate Your Quiz
+
+```bash
+# Generate 3 randomized quiz sets
+setwise generate --questions-file my_first_quiz.py --sets 3
+
+# Use a specific random seed for reproducibility
+setwise generate --questions-file my_first_quiz.py --sets 3 --seed 42
+
+# Try different templates
+setwise generate --questions-file my_first_quiz.py --template compact --sets 2
+```
+
+**Output:** You'll get professional PDF quiz sets + answer keys!
+
+```
+output/
+├── quiz_set_1.pdf      # Beautiful LaTeX quiz
+├── quiz_set_2.pdf      # Same questions, different order
+├── quiz_set_3.pdf      # Randomized MCQ options
+├── answer_key_1.txt    # Complete solutions
+├── answer_key_2.txt
+└── answer_key_3.txt
+```
+
+## Step 3: Explore Advanced Features
+
+### Try the Web Interface
+
+Launch the user-friendly web interface:
+
+```bash
+streamlit run setwise_web.py
+```
+
+**Features:**
+- 📝 Visual question editor with syntax highlighting
+- 🔍 Live validation and error checking  
+- 📊 PDF preview with download buttons
+- 📚 Built-in examples (Physics, Machine Learning, etc.)
+- ✨ NEW v2.0 features prominently showcased
+
+### Use Built-in Examples
+
+```bash
+# List available examples
+setwise questions list
+
+# Generate with professional examples
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/physics_questions.py
+setwise generate --questions-file physics_questions.py --sets 2
+
+# Try machine learning examples  
+wget https://raw.githubusercontent.com/nipunbatra/setwise/main/examples/computer_science_questions.py
+setwise generate --questions-file computer_science_questions.py --sets 2
+```
+
+### Validate and Fix Questions
+
+```bash
+# Validate your question file
+setwise questions validate my_first_quiz.py
+
+# Fix common LaTeX errors automatically
+setwise questions fix-latex my_first_quiz.py
+
+# Get comprehensive LaTeX help
+setwise questions latex-help
+```
+
+## Step 4: Master Templates (NEW v2.0!)
+
+The most powerful new feature! Create dynamic questions with variables:
+
+### Basic Template Example
+```python
+mcq = [{
+    "template": r"What is {{ a }} + {{ b }}?",
+    "options": [
+        r"{{ a + b }}",         # Correct
+        r"{{ a - b }}",         # Common mistake
+        r"{{ a * b }}",         # Different operation
+        r"{{ (a + b) * 2 }}"    # Double the answer
+    ],
+    "answer": r"{{ a + b }}",
+    "variables": [
+        {"a": 3, "b": 7},   # Creates: What is 3 + 7? Answer: 10
+        {"a": 12, "b": 8},  # Creates: What is 12 + 8? Answer: 20
+        {"a": 5, "b": 9}    # Creates: What is 5 + 9? Answer: 14
+    ],
+    "marks": 2
+}]
+```
+
+### Advanced Physics Template
+```python
+mcq = [{
+    "template": r"A projectile launched at {{ angle }}° with velocity {{ v0 }} m/s. Maximum height?",
+    "options": [
+        r"$h = \frac{({{ v0 }} \sin {{ angle }}°)^2}{2g}$ = {{ height:.1f }} m",  # Correct
+        r"$h = \frac{{{ v0 }}^2}{2g}$ = {{ v0**2 / (2*9.8):.1f }} m",
+        r"$h = {{ v0 }} \sin {{ angle }}°$ = {{ v0 * 0.5 if angle == 30 else v0 * 0.707:.1f }} m",  
+        r"$h = \frac{{{ v0 }}}{g}$ = {{ v0 / 9.8:.1f }} m"
+    ],
+    "answer": r"$h = \frac{({{ v0 }} \sin {{ angle }}°)^2}{2g}$ = {{ height:.1f }} m",
+    "variables": [
+        {"angle": 30, "v0": 20, "height": 5.1},   # sin(30°) = 0.5
+        {"angle": 45, "v0": 25, "height": 15.9},  # sin(45°) = 0.707
+        {"angle": 60, "v0": 30, "height": 34.4}   # sin(60°) = 0.866
+    ],
+    "marks": 4
+}]
+```
+
+## Step 5: Try Different Templates
+
+Setwise includes 3 professional templates:
+
+```bash
+# List available templates
+setwise list-templates
+
+# Default: Professional single-column (formal exams)
+setwise generate --template default --questions-file my_first_quiz.py --sets 2
+
+# Compact: Space-efficient two-column (printing)
+setwise generate --template compact --questions-file my_first_quiz.py --sets 2
+
+# Minimal: Clean black & white (simple assessments)
+setwise generate --template minimal --questions-file my_first_quiz.py --sets 2
+```
+
+## Common Commands Reference
+
+::: {.grid}
+
+::: {.g-col-6}
+### Generation
+```bash
+# Basic generation
+setwise generate
+
+# Custom questions
+setwise generate --questions-file quiz.py
+
+# Multiple sets with seed
+setwise generate --seed 42 --sets 5
+
+# Specific question counts
+setwise generate --mcq 5 --subjective 3
+```
+:::
+
+::: {.g-col-6}
+### Question Management
+```bash
+# Validate questions
+setwise questions validate file.py
+
+# Create sample file
+setwise questions create-sample new.py
+
+# Fix LaTeX errors
+setwise questions fix-latex file.py
+
+# Get statistics
+setwise questions stats file.py
+```
+:::
+
+:::
+
+## Next Steps
+
+🎉 **Congratulations!** You've created your first Setwise quiz with v2.0 features.
+
+**Explore more:**
+
+::: {.grid}
+
+::: {.g-col-4}
+### 📚 [Examples](examples.qmd)
+Ready-to-use subject-specific question libraries
+:::
+
+::: {.g-col-4}
+### 🎯 [v2.0 Features](v2-features.qmd)
+Deep dive into all new capabilities
+:::
+
+::: {.g-col-4}
+### 📝 [Question Format](question-format.qmd)
+Complete reference for writing questions
+:::
+
+:::
+
+## Troubleshooting
+
+::: {.callout-warning}
+## Common Issues
+
+**LaTeX not found:**
+```bash
+# Install LaTeX first
+sudo apt-get install texlive-full  # Ubuntu
+brew install --cask mactex        # macOS
+```
+
+**Question validation errors:**
+```bash
+# Check your Python syntax
+setwise questions validate my_quiz.py
+
+# Auto-fix common LaTeX issues
+setwise questions fix-latex my_quiz.py
+```
+
+**Import errors:**
+```bash
+# Reinstall with all dependencies
+pip install --upgrade git+https://github.com/nipunbatra/setwise.git[web]
+```
+:::
+
+## Get Help
+
+- 📖 **Full Documentation:** Browse this site's navigation menu
+- 🐛 **Report Issues:** [GitHub Issues](https://github.com/nipunbatra/setwise/issues)
+- 💬 **Community:** [GitHub Discussions](https://github.com/nipunbatra/setwise/discussions)
+- 🆘 **Command Help:** `setwise --help` or `setwise questions --help`
+
+---
+
+::: {.text-center}
+**Ready for more advanced features?**
+
+[Explore v2.0 Features](v2-features.qmd){.btn .btn-primary} [View Examples](examples.qmd){.btn .btn-outline-secondary}
+:::

@@ -1,0 +1,451 @@
+# 📥 Installation Guide
+
+Get Setwise up and running on your system with this comprehensive installation guide.
+
+## Prerequisites
+
+Before installing Setwise, ensure you have these components:
+
+### Required Components
+
+::: {.panel-tabset}
+
+## Python 3.8+
+```bash
+# Check your Python version
+python3 --version
+
+# Should show 3.8.0 or higher
+# If not, install from https://python.org
+```
+
+## LaTeX Distribution
+Choose one based on your operating system:
+
+```bash
+# Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install texlive-full
+
+# macOS (with Homebrew)
+brew install --cask mactex
+
+# Or download manually: https://tug.org/mactex/
+
+# Windows
+# Download from: https://miktex.org/
+# Follow the installer instructions
+```
+
+## Git (for installation)
+```bash
+# Check if git is installed
+git --version
+
+# Install if needed:
+# Ubuntu/Debian: sudo apt-get install git
+# macOS: brew install git  
+# Windows: Download from https://git-scm.com/
+```
+:::
+
+## Installation Methods
+
+### Method 1: Direct from GitHub (Recommended)
+
+```bash
+# Basic installation
+pip install git+https://github.com/nipunbatra/setwise.git
+
+# With web interface support
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Full installation with all features
+pip install git+https://github.com/nipunbatra/setwise.git[web,dev,security]
+```
+
+### Method 2: Development Installation
+
+For contributors or advanced users:
+
+```bash
+# Clone the repository
+git clone https://github.com/nipunbatra/setwise.git
+cd setwise
+
+# Install in editable mode
+pip install -e .
+
+# Or with all development dependencies
+pip install -e .[web,dev,security]
+```
+
+### Method 3: Specific Version
+
+```bash
+# Install a specific version/branch
+pip install git+https://github.com/nipunbatra/setwise.git@v2.0.0
+
+# Install from a specific branch
+pip install git+https://github.com/nipunbatra/setwise.git@main
+```
+
+## Installation Options
+
+### Core Installation
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git
+```
+**Includes:** CLI tools, PDF generation, templating, basic examples
+
+### Web Interface
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+```
+**Adds:** Streamlit web interface, interactive editing, live preview
+
+### Development Tools  
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git[dev]
+```
+**Adds:** Testing tools, linting, code formatting, build tools
+
+### Security Tools
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git[security]
+```
+**Adds:** Security scanning, vulnerability checking
+
+### Complete Installation
+```bash
+pip install git+https://github.com/nipunbatra/setwise.git[web,dev,security]
+```
+**Includes:** Everything above for full functionality
+
+## Verification
+
+After installation, verify everything works:
+
+### 1. Test CLI
+```bash
+# Check Setwise is installed
+setwise --help
+
+# Should show help with available commands
+```
+
+### 2. Test LaTeX
+```bash  
+# Check LaTeX installation
+pdflatex --version
+
+# Should show LaTeX version info
+```
+
+### 3. Generate Sample Quiz
+```bash
+# Generate a test quiz with built-in questions
+setwise generate --seed 42 --sets 1
+
+# Should create files in ./output/ directory
+ls output/
+# Expected: quiz_set_1.pdf, answer_key_1.txt
+```
+
+### 4. Test Web Interface (if installed)
+```bash
+# Launch web interface
+streamlit run $(python -c "import setwise; print(setwise.__path__[0])")/setwise_web.py
+
+# Should open browser at http://localhost:8501
+```
+
+## Platform-Specific Instructions
+
+### macOS
+
+::: {.callout-note}
+## macOS Setup
+
+macOS users may need additional steps:
+:::
+
+```bash
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install dependencies
+brew install python git
+brew install --cask mactex
+
+# Install Setwise
+pip3 install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Verify
+setwise --help
+```
+
+### Ubuntu/Debian
+
+```bash
+# Update package list
+sudo apt-get update
+
+# Install dependencies
+sudo apt-get install python3 python3-pip git texlive-full
+
+# Install Setwise
+pip3 install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Add to PATH if needed
+echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify
+setwise --help
+```
+
+### Windows
+
+::: {.callout-warning}
+## Windows Notes
+
+Windows users should use PowerShell or Command Prompt as Administrator for best results.
+:::
+
+```powershell
+# Install Python from https://python.org (ensure "Add to PATH" is checked)
+# Install Git from https://git-scm.com/
+# Install MiKTeX from https://miktex.org/
+
+# Install Setwise
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Verify (may need to restart terminal)
+setwise --help
+```
+
+## Docker Installation (Advanced)
+
+For containerized deployment:
+
+```bash
+# Create Dockerfile
+cat > Dockerfile << 'EOF'
+FROM python:3.9-slim
+
+# Install LaTeX
+RUN apt-get update && \
+    apt-get install -y texlive-full git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Setwise
+RUN pip install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Set working directory
+WORKDIR /workspace
+
+# Expose port for web interface
+EXPOSE 8501
+
+# Default command
+CMD ["setwise", "--help"]
+EOF
+
+# Build image
+docker build -t setwise .
+
+# Run container
+docker run -it --rm -v $(pwd):/workspace -p 8501:8501 setwise
+
+# For web interface
+docker run -it --rm -v $(pwd):/workspace -p 8501:8501 setwise \
+    streamlit run --server.address 0.0.0.0 /usr/local/lib/python3.9/site-packages/setwise/setwise_web.py
+```
+
+## VSCode Extension
+
+For the best development experience:
+
+```bash
+# Install the VSCode extension
+# Method 1: From marketplace (search "Setwise")
+# Method 2: Manual installation
+
+# Clone extension repository
+git clone https://github.com/nipunbatra/setwise-vscode-extension.git
+cd setwise-vscode-extension
+
+# Install extension
+./install.sh
+
+# Or install manually
+code --install-extension setwise-vscode-extension-*.vsix
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**1. "Command not found: setwise"**
+```bash
+# Check if installed
+pip show setwise
+
+# If installed but not in PATH:
+# macOS/Linux:
+echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Windows: Add Python Scripts directory to PATH
+```
+
+**2. "pdflatex not found"**
+```bash
+# Install LaTeX distribution:
+# Ubuntu: sudo apt-get install texlive-full
+# macOS: brew install --cask mactex
+# Windows: Download from https://miktex.org/
+
+# Verify installation
+pdflatex --version
+```
+
+**3. Permission errors on macOS/Linux**
+```bash
+# Use --user flag
+pip install --user git+https://github.com/nipunbatra/setwise.git[web]
+
+# Or create virtual environment
+python3 -m venv setwise-env
+source setwise-env/bin/activate
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+```
+
+**4. "Microsoft Visual C++ 14.0 required" (Windows)**
+```bash
+# Install Microsoft C++ Build Tools
+# Download from: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+# Or use conda instead of pip
+conda install git pip
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+```
+
+**5. LaTeX compilation errors**
+```bash
+# Update LaTeX packages
+# MiKTeX: Update in MiKTeX Console
+# TeX Live: tlmgr update --all
+
+# Or reinstall with full packages
+sudo apt-get install texlive-full  # Ubuntu
+```
+
+### Network Issues
+
+If you have network restrictions:
+
+```bash
+# Download source manually
+wget https://github.com/nipunbatra/setwise/archive/main.zip
+unzip main.zip
+cd setwise-main
+pip install .
+
+# Or use different index
+pip install --index-url https://pypi.org/simple/ git+https://github.com/nipunbatra/setwise.git
+```
+
+### Virtual Environments
+
+Recommended for isolation:
+
+```bash
+# Create virtual environment
+python3 -m venv setwise-env
+
+# Activate
+# Linux/macOS:
+source setwise-env/bin/activate
+# Windows:
+setwise-env\Scripts\activate
+
+# Install
+pip install git+https://github.com/nipunbatra/setwise.git[web]
+
+# Deactivate when done
+deactivate
+```
+
+## Upgrade Instructions
+
+### Upgrade to Latest Version
+```bash
+# Upgrade to latest
+pip install --upgrade git+https://github.com/nipunbatra/setwise.git[web]
+
+# Force reinstall
+pip install --force-reinstall git+https://github.com/nipunbatra/setwise.git[web]
+```
+
+### Check Current Version
+```bash
+# Check version
+setwise --version
+
+# Or in Python
+python -c "import setwise; print(setwise.__version__)"
+```
+
+## Uninstall
+
+If you need to remove Setwise:
+
+```bash
+# Uninstall Setwise
+pip uninstall setwise
+
+# Clean up any remaining files
+rm -rf ~/.setwise  # Configuration files (if any)
+```
+
+## Next Steps
+
+Once installed, you're ready to create your first quiz:
+
+::: {.grid}
+
+::: {.g-col-4}
+### 🚀 [Quick Start](quickstart.qmd)
+Create your first quiz in 5 minutes
+:::
+
+::: {.g-col-4}
+### 📖 [Examples](examples.qmd)
+Explore ready-to-use question libraries
+:::
+
+::: {.g-col-4}
+### 🎯 [v2.0 Features](v2-features.qmd)
+Learn about templated questions
+:::
+
+:::
+
+## Support
+
+If you encounter issues during installation:
+
+- 📖 **Check this guide** for platform-specific instructions
+- 🐛 **Report installation issues** at [GitHub Issues](https://github.com/nipunbatra/setwise/issues)
+- 💬 **Ask for help** in [GitHub Discussions](https://github.com/nipunbatra/setwise/discussions)
+- 📧 **Email support** for urgent installation problems
+
+---
+
+::: {.text-center}
+**Installation complete? Time to create your first quiz!**
+
+[Quick Start Guide](quickstart.qmd){.btn .btn-primary .btn-lg}
+:::
