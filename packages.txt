@@ -1,0 +1,5 @@
+# System packages required for LaTeX compilation
+texlive-latex-base
+texlive-fonts-recommended
+texlive-latex-extra
+texlive-lang-english

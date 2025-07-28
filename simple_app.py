@@ -32,13 +32,64 @@ def load_example_questions(subject):
         "options": [r"$9.8\\,\\text{m/s}^2$", r"$10\\,\\text{m/s}^2$", r"$8.9\\,\\text{m/s}^2$", r"$11\\,\\text{m/s}^2$"],
         "answer": r"$9.8\\,\\text{m/s}^2$",
         "marks": 1
+    },
+    {
+        "question": r"Which law states that force equals mass times acceleration?",
+        "options": [r"Newton's First Law", r"Newton's Second Law", r"Newton's Third Law", r"Law of Conservation"],
+        "answer": r"Newton's Second Law",
+        "marks": 1
+    },
+    {
+        "question": r"What is the formula for electric power?",
+        "options": [r"$P = VI$", r"$P = IR$", r"$P = \\frac{V}{I}$", r"$P = V + I$"],
+        "answer": r"$P = VI$",
+        "marks": 1
+    },
+    {
+        "question": r"The speed of light in vacuum is:",
+        "options": [r"$3 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^6\\,\\text{m/s}$", r"$9 \\times 10^8\\,\\text{m/s}$", r"$3 \\times 10^{10}\\,\\text{m/s}$"],
+        "answer": r"$3 \\times 10^8\\,\\text{m/s}$",
+        "marks": 1
+    },
+    {
+        "question": r"What type of wave is sound?",
+        "options": [r"Electromagnetic", r"Longitudinal", r"Transverse", r"Surface"],
+        "answer": r"Longitudinal",
+        "marks": 1
+    },
+    {
+        "question": r"The unit of electric current is:",
+        "options": [r"Volt", r"Ohm", r"Ampere", r"Watt"],
+        "answer": r"Ampere",
+        "marks": 1
+    },
+    {
+        "question": r"Which particle has no electric charge?",
+        "options": [r"Proton", r"Electron", r"Neutron", r"Ion"],
+        "answer": r"Neutron",
+        "marks": 1
     }
 ]
 
 subjective = [
     {
         "question": r"Derive the kinetic energy formula. Show that $KE = \\frac{1}{2}mv^2$.",
-        "answer": r"Starting with Newton's second law and work-energy theorem...",
+        "answer": r"Starting with Newton's second law F=ma and work-energy theorem, we integrate force over distance to get kinetic energy.",
+        "marks": 5
+    },
+    {
+        "question": r"Explain Ohm's Law and derive the relationship between voltage, current, and resistance.",
+        "answer": r"Ohm's Law states V=IR. For a conductor at constant temperature, voltage is directly proportional to current.",
+        "marks": 4
+    },
+    {
+        "question": r"Describe the photoelectric effect and explain why it supports the particle nature of light.",
+        "answer": r"The photoelectric effect shows electrons are emitted when light hits a surface, demonstrating light's quantum nature.",
+        "marks": 6
+    },
+    {
+        "question": r"What is simple harmonic motion? Give examples and derive the equation of motion.",
+        "answer": r"SHM is periodic motion where restoring force is proportional to displacement: F = -kx, leading to x(t) = A cos(ωt + φ).",
         "marks": 5
     }
 ]''',
@@ -55,14 +106,65 @@ subjective = [
         "options": [r"$\\frac{x^3}{3} + C$", r"$2x + C$", r"$x^3 + C$", r"$\\frac{x^2}{2} + C$"],
         "answer": r"$\\frac{x^3}{3} + C$",
         "marks": 1
+    },
+    {
+        "question": r"What is $\\lim_{x \\to 0} \\frac{\\sin x}{x}$?",
+        "options": [r"0", r"1", r"$\\infty$", r"Does not exist"],
+        "answer": r"1",
+        "marks": 2
+    },
+    {
+        "question": r"The slope of the line $y = 3x + 5$ is:",
+        "options": [r"3", r"5", r"8", r"$\\frac{5}{3}$"],
+        "answer": r"3",
+        "marks": 1
+    },
+    {
+        "question": r"Which of these is NOT a rational number?",
+        "options": [r"$\\frac{22}{7}$", r"$0.\\overline{3}$", r"$\\sqrt{2}$", r"$-5$"],
+        "answer": r"$\\sqrt{2}$",
+        "marks": 1
+    },
+    {
+        "question": r"The quadratic formula is:",
+        "options": [r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{b \\pm \\sqrt{b^2-4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{b^2+4ac}}{2a}$", r"$x = \\frac{-b \\pm \\sqrt{4ac-b^2}}{2a}$"],
+        "answer": r"$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$",
+        "marks": 1
+    },
+    {
+        "question": r"What is the value of $\\pi$ to 3 decimal places?",
+        "options": [r"3.142", r"3.141", r"3.140", r"3.143"],
+        "answer": r"3.142",
+        "marks": 1
+    },
+    {
+        "question": r"The factorial of 5 is:",
+        "options": [r"25", r"120", r"20", r"100"],
+        "answer": r"120",
+        "marks": 1
     }
 ]
 
 subjective = [
     {
-        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$.",
-        "answer": r"We can prove this using mathematical induction...",
+        "question": r"Prove that $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ using mathematical induction.",
+        "answer": r"Base case: n=1, LHS=1, RHS=1(2)/2=1. Inductive step: assume true for k, prove for k+1.",
         "marks": 5
+    },
+    {
+        "question": r"Find the area under the curve $y = x^2$ from $x = 0$ to $x = 2$.",
+        "answer": r"Area = $\\int_0^2 x^2 dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$",
+        "marks": 4
+    },
+    {
+        "question": r"Solve the system of equations: $2x + 3y = 7$ and $x - y = 1$.",
+        "answer": r"From second equation: x = y + 1. Substituting: 2(y+1) + 3y = 7, so y = 1, x = 2.",
+        "marks": 4
+    },
+    {
+        "question": r"Prove that the square root of 2 is irrational.",
+        "answer": r"Assume $\\sqrt{2} = \\frac{p}{q}$ in lowest terms. Then $2q^2 = p^2$, so p is even. This leads to contradiction.",
+        "marks": 6
     }
 ]''',
 
@@ -78,13 +180,64 @@ subjective = [
         "options": [r"$O(n)$", r"$O(\\log n)$", r"$O(n^2)$", r"$O(1)$"],
         "answer": r"$O(\\log n)$",
         "marks": 1
+    },
+    {
+        "question": r"What does SQL stand for?",
+        "options": [r"Structured Query Language", r"Simple Query Language", r"Standard Query Language", r"Sequential Query Language"],
+        "answer": r"Structured Query Language",
+        "marks": 1
+    },
+    {
+        "question": r"Which sorting algorithm has best average case complexity?",
+        "options": [r"Bubble Sort", r"Quick Sort", r"Selection Sort", r"Insertion Sort"],
+        "answer": r"Quick Sort",
+        "marks": 2
+    },
+    {
+        "question": r"In Python, what is the output of print(type([]))?",
+        "options": [r"<class 'list'>", r"<class 'array'>", r"list", r"array"],
+        "answer": r"<class 'list'>",
+        "marks": 1
+    },
+    {
+        "question": r"Which data structure uses LIFO principle?",
+        "options": [r"Queue", r"Stack", r"Array", r"Tree"],
+        "answer": r"Stack",
+        "marks": 1
+    },
+    {
+        "question": r"What is the purpose of a constructor in OOP?",
+        "options": [r"Destroy objects", r"Initialize objects", r"Copy objects", r"Compare objects"],
+        "answer": r"Initialize objects",
+        "marks": 1
+    },
+    {
+        "question": r"Which HTTP method is used to retrieve data?",
+        "options": [r"POST", r"GET", r"PUT", r"DELETE"],
+        "answer": r"GET",
+        "marks": 1
     }
 ]
 
 subjective = [
     {
-        "question": r"Explain recursion. Write recursive factorial function.",
-        "answer": r"def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
+        "question": r"Explain recursion with an example. Write a recursive factorial function.",
+        "answer": r"Recursion is when a function calls itself. def factorial(n): return 1 if n <= 1 else n * factorial(n-1)",
+        "marks": 5
+    },
+    {
+        "question": r"Compare and contrast arrays and linked lists. When would you use each?",
+        "answer": r"Arrays have O(1) access but fixed size. Linked lists have dynamic size but O(n) access. Use arrays for frequent access, linked lists for frequent insertions.",
+        "marks": 6
+    },
+    {
+        "question": r"Explain the concept of Big O notation and give examples.",
+        "answer": r"Big O describes algorithm efficiency. O(1) constant, O(n) linear, O(n²) quadratic. Example: array access O(1), linear search O(n).",
+        "marks": 4
+    },
+    {
+        "question": r"What is the difference between SQL JOIN types? Provide examples.",
+        "answer": r"INNER JOIN returns matching records. LEFT JOIN returns all left records. RIGHT JOIN returns all right records. FULL JOIN returns all records.",
         "marks": 5
     }
 ]'''
@@ -94,6 +247,14 @@ subjective = [
 def generate_quiz_pdfs(questions_text, template, num_sets):
     """Generate quiz PDFs and return their data with answer keys"""
     try:
+        # First validate the questions format
+        try:
+            exec(questions_text)
+        except SyntaxError as e:
+            return None, f"Python syntax error in questions: {str(e)}\n\nCheck your question format - make sure you have 'mcq = [...]' and 'subjective = [...]'"
+        except Exception as e:
+            return None, f"Error in questions format: {str(e)}\n\nMake sure your questions follow the correct format."
+        
         # Create temporary file for questions
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
             f.write(questions_text)
@@ -115,7 +276,23 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         result = subprocess.run(cmd, capture_output=True, text=True)
         
         if result.returncode != 0:
-            return None, f"Error: {result.stderr}"
+            error_msg = f"Quiz generation failed:\n\n"
+            if result.stderr:
+                error_msg += f"Error details: {result.stderr}\n\n"
+            if result.stdout:
+                error_msg += f"Output: {result.stdout}\n\n"
+            
+            # Add helpful suggestions based on common errors
+            if "No module named" in result.stderr:
+                error_msg += "💡 This appears to be a missing dependency issue. Try refreshing the page."
+            elif "FileNotFoundError" in result.stderr:
+                error_msg += "💡 LaTeX compiler not found. This might be a deployment issue."
+            elif "questions" in result.stderr.lower():
+                error_msg += "💡 Check your question format - make sure you have both 'mcq' and 'subjective' arrays."
+            elif "latex" in result.stderr.lower():
+                error_msg += "💡 LaTeX compilation error. Check your math expressions use proper LaTeX syntax like $x^2$ for math."
+            
+            return None, error_msg
         
         # Collect generated PDFs and answer keys
         quiz_sets = []
@@ -141,10 +318,13 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         # Cleanup
         os.unlink(questions_file)
         
+        if not quiz_sets:
+            return None, "No quiz PDFs were generated. Check that your questions are in the correct format and LaTeX compilation succeeded."
+        
         return quiz_sets, None
         
     except Exception as e:
-        return None, f"Error: {str(e)}"
+        return None, f"Unexpected error: {str(e)}\n\nPlease check your questions format and try again."
 
 def display_pdf_embed(pdf_data, height=400):
     """Display PDF using iframe"""
@@ -211,14 +391,48 @@ def main():
         "options": [r"3", r"4", r"5", r"6"],
         "answer": r"4",
         "marks": 1
+    },
+    {
+        "question": r"Which planet is closest to the Sun?",
+        "options": [r"Venus", r"Mercury", r"Earth", r"Mars"],
+        "answer": r"Mercury",
+        "marks": 1
+    },
+    {
+        "question": r"What is the capital of Japan?",
+        "options": [r"Seoul", r"Beijing", r"Tokyo", r"Bangkok"],
+        "answer": r"Tokyo",
+        "marks": 1
+    },
+    {
+        "question": r"How many sides does a hexagon have?",
+        "options": [r"5", r"6", r"7", r"8"],
+        "answer": r"6",
+        "marks": 1
+    },
+    {
+        "question": r"What is the chemical symbol for gold?",
+        "options": [r"Go", r"Gd", r"Au", r"Ag"],
+        "answer": r"Au",
+        "marks": 1
     }
 ]
 
 subjective = [
     {
-        "question": r"Explain a concept you want to test.",
-        "answer": r"Provide the expected answer here.",
+        "question": r"Explain the concept of photosynthesis and its importance.",
+        "answer": r"Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen.",
         "marks": 5
+    },
+    {
+        "question": r"Describe the water cycle and its main stages.",
+        "answer": r"The water cycle includes evaporation, condensation, precipitation, and collection stages.",
+        "marks": 4
+    },
+    {
+        "question": r"What are the main causes of climate change?",
+        "answer": r"Main causes include greenhouse gas emissions, deforestation, and industrial activities.",
+        "marks": 6
     }
 ]'''
         
@@ -233,10 +447,23 @@ subjective = [
         # Update session state
         st.session_state.questions = questions_text
         
-        # Generate button
-        if st.button("Generate Quiz Sets", type="primary", use_container_width=True):
-            st.session_state.generate_now = True
-            st.rerun()
+        # Validation and generation buttons
+        col_btn1, col_btn2 = st.columns(2)
+        
+        with col_btn1:
+            if st.button("Validate Questions", use_container_width=True):
+                try:
+                    exec(questions_text)
+                    st.success("✅ Questions format is valid!")
+                except SyntaxError as e:
+                    st.error(f"❌ Syntax error: {str(e)}")
+                except Exception as e:
+                    st.error(f"❌ Format error: {str(e)}")
+        
+        with col_btn2:
+            if st.button("Generate Quiz Sets", type="primary", use_container_width=True):
+                st.session_state.generate_now = True
+                st.rerun()
     
     # RIGHT PANE: PDF Previews (X rows where X = num_sets)
     with col_right:
@@ -247,7 +474,9 @@ subjective = [
                 quiz_sets, error = generate_quiz_pdfs(questions_text, template, num_sets)
             
             if error:
-                st.error(error)
+                st.error("Generation Failed")
+                with st.expander("View Error Details"):
+                    st.text(error)
             elif quiz_sets:
                 # Display each PDF set in rows
                 for i, quiz_set in enumerate(quiz_sets):
