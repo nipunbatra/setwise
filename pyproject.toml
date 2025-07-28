@@ -38,7 +38,8 @@ requires-python = ">=3.8"
 dependencies = [
     "jinja2>=3.1.0",
     "matplotlib>=3.5.0",
-    "numpy>=1.21.0"
+    "numpy>=1.21.0",
+    "PyYAML>=6.0"
 ]
 
 [project.optional-dependencies]
