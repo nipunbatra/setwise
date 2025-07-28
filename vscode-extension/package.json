@@ -133,8 +133,8 @@
     "keybindings": [
       {
         "command": "setwise.previewQuiz",
-        "key": "ctrl+shift+p",
-        "mac": "cmd+shift+p",
+        "key": "ctrl+shift+q",
+        "mac": "cmd+shift+q",
         "when": "resourceFilename =~ /.*questions.*\\.py$/"
       },
       {
