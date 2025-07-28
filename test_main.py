@@ -319,7 +319,9 @@ class TestMainFunction:
                     '--output-dir', self.temp_dir, '--no-pdf']
         
         with patch('sys.argv', test_args):
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             
         # Check that files were created
         tex_file = os.path.join(self.temp_dir, 'quiz_set_1.tex')
