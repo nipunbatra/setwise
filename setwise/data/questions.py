@@ -565,3 +565,9 @@ You are tasked with building a system to predict customer churn for a telecommun
         "marks": 10
     }
 ]
+
+# Export for backward compatibility
+example_questions = {
+    'mcq': mcq,
+    'subjective': subjective
+}
