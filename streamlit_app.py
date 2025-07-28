@@ -9,7 +9,18 @@ import tempfile
 import subprocess
 import os
 import base64
+import sys
 from pathlib import Path
+
+# Add the current directory to path to import setwise modules
+sys.path.insert(0, str(Path(__file__).parent))
+
+try:
+    from setwise.quiz_generator import QuizGenerator
+    from setwise.template_manager import TemplateManager
+    SETWISE_AVAILABLE = True
+except ImportError:
+    SETWISE_AVAILABLE = False
 
 st.set_page_config(
     page_title="Setwise Quiz Generator",
@@ -247,6 +258,10 @@ subjective = [
 def generate_quiz_pdfs(questions_text, template, num_sets):
     """Generate quiz PDFs and return their data with answer keys"""
     try:
+        # Check if setwise modules are available
+        if not SETWISE_AVAILABLE:
+            return None, "Setwise modules are not available. Please install the setwise package."
+        
         # First validate the questions format
         try:
             exec(questions_text)
@@ -263,36 +278,26 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
         # Create temporary output directory
         output_dir = tempfile.mkdtemp()
         
-        # Generate quiz using CLI
-        cmd = [
-            'setwise', 'generate',
-            '--questions-file', questions_file,
-            '--output-dir', output_dir,
-            '--sets', str(num_sets),
-            '--template', template,
-            '--seed', '42'
-        ]
-        
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        
-        if result.returncode != 0:
-            error_msg = f"Quiz generation failed:\n\n"
-            if result.stderr:
-                error_msg += f"Error details: {result.stderr}\n\n"
-            if result.stdout:
-                error_msg += f"Output: {result.stdout}\n\n"
+        try:
+            # Use QuizGenerator directly instead of CLI
+            generator = QuizGenerator(
+                output_dir=output_dir,
+                questions_file=questions_file
+            )
             
-            # Add helpful suggestions based on common errors
-            if "No module named" in result.stderr:
-                error_msg += "💡 This appears to be a missing dependency issue. Try refreshing the page."
-            elif "FileNotFoundError" in result.stderr:
-                error_msg += "💡 LaTeX compiler not found. This might be a deployment issue."
-            elif "questions" in result.stderr.lower():
-                error_msg += "💡 Check your question format - make sure you have both 'mcq' and 'subjective' arrays."
-            elif "latex" in result.stderr.lower():
-                error_msg += "💡 LaTeX compilation error. Check your math expressions use proper LaTeX syntax like $x^2$ for math."
+            # Generate quiz sets
+            success = generator.generate_quizzes(
+                num_sets=num_sets,
+                template_name=template,
+                compile_pdf=True,
+                seed=42
+            )
             
-            return None, error_msg
+            if not success:
+                return None, "Quiz generation failed. Check your question format and LaTeX syntax."
+            
+        except Exception as e:
+            return None, f"Quiz generation error: {str(e)}\n\nThis might be due to LaTeX compilation issues or question format problems."
         
         # Collect generated PDFs and answer keys
         quiz_sets = []
@@ -316,7 +321,10 @@ def generate_quiz_pdfs(questions_text, template, num_sets):
                 })
         
         # Cleanup
-        os.unlink(questions_file)
+        try:
+            os.unlink(questions_file)
+        except:
+            pass
         
         if not quiz_sets:
             return None, "No quiz PDFs were generated. Check that your questions are in the correct format and LaTeX compilation succeeded."
@@ -358,6 +366,12 @@ def main():
     
     st.title("Setwise Quiz Generator")
     st.markdown("Simple interface: Edit questions → Generate PDFs → Download")
+    
+    # Show status
+    if not SETWISE_AVAILABLE:
+        st.error("⚠️ Setwise modules not available. Some features may not work.")
+    else:
+        st.success("✅ Setwise modules loaded successfully")
     
     # Controls row
     col_ctrl1, col_ctrl2, col_ctrl3, col_ctrl4 = st.columns([1, 1, 1, 2])
