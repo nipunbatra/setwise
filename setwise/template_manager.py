@@ -62,6 +62,12 @@ class TemplateManager:
             return None
         return self.templates[template_name]["file"]
     
+    def get_template_path(self, template_name):
+        """Get the full Path object for a template file."""
+        if template_name not in self.templates:
+            raise KeyError(f"Template '{template_name}' not found. Available: {list(self.templates.keys())}")
+        return self.template_dir / self.templates[template_name]["file"]
+    
     def validate_template(self, template_name):
         """Check if template exists and file is available."""
         if template_name not in self.templates:

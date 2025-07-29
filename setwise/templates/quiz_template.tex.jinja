@@ -25,7 +25,7 @@
 % Configure fancy headers
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\textcolor{primaryblue}{\textbf{Machine Learning Quiz - Set {{ set_id }}}}}
+{% if quiz_metadata.title %}\fancyhead[L]{\textcolor{primaryblue}{\textbf{ {{ quiz_metadata.title }} - Set {{ set_id }} }}}{% else %}\fancyhead[L]{\textcolor{primaryblue}{\textbf{Quiz - Set {{ set_id }}}}}{% endif %}
 \fancyhead[R]{\textcolor{darkgray}{\textbf{Total: {{ total_marks }} marks}}}
 \fancyfoot[C]{\textcolor{darkgray}{\thepage}}
 \renewcommand{\headrulewidth}{2pt}
@@ -68,8 +68,8 @@
 
 % Title section with decorative elements
 \begin{center}
-  {\Huge\textcolor{primaryblue}{\textbf{Machine Learning}}} \\[5pt]
-  {\LARGE\textcolor{darkgray}{\textbf{Supervised Learning Quiz}}} \\[3pt]
+  {\Huge\textcolor{primaryblue}{\textbf{ {% if quiz_metadata.title %}{{ quiz_metadata.title }}{% else %}Quiz{% endif %} }}} \\[5pt]
+  {% if quiz_metadata.subject %}{\LARGE\textcolor{darkgray}{\textbf{ {{ quiz_metadata.subject }} }}} \\[3pt]{% endif %}
   {\Large\textcolor{secondaryblue}{\textbf{Set {{ set_id }}}}}
 \end{center}
 
@@ -79,10 +79,19 @@
 \begin{instructionbox}
 \textcolor{darkgray}{\textbf{\large Instructions:}}
 \begin{itemize}[leftmargin=20pt, itemsep=3pt]
+{% if quiz_metadata.instructions %}
+{% for instruction in quiz_metadata.instructions %}
+  \item \textcolor{darkgray}{ {{ instruction }} }
+{% endfor %}
+{% else %}
   \item \textcolor{darkgray}{Answer all questions clearly and completely.}
   \item \textcolor{darkgray}{Show your work for subjective questions.}
   \item \textcolor{darkgray}{For multiple choice questions, \textbf{circle} the correct option.}
+{% endif %}
   \item \textcolor{darkgray}{\textbf{Marks Distribution:} MCQ ({{ mcq_marks }} marks) + Subjective ({{ subjective_marks }} marks) = \textbf{ {{- total_marks -}} marks total}}
+{% if quiz_metadata.duration %}
+  \item \textcolor{darkgray}{\textbf{Duration:} {{ quiz_metadata.duration }}}
+{% endif %}
 \end{itemize}
 \end{instructionbox}
 
