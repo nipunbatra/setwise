@@ -12,7 +12,16 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage{tcolorbox}
+\usepackage{siunitx}        % For SI units
+\usepackage{chemfig}        % For chemical structures  
+\usepackage{circuitikz}     % For electrical circuits
+\usepackage{pgfplots}       % For advanced plots
+\usepackage{listings}       % For code listings
+\usepackage{array}          % Enhanced arrays and tables
+\usepackage{multirow}       % Multi-row table cells
+\usepackage{subcaption}     % Sub-figures and sub-captions
 \usetikzlibrary{positioning, shadows, decorations.pathmorphing}
+\pgfplotsset{compat=1.16}
 
 % Define colors
 \definecolor{primaryblue}{RGB}{41, 128, 185}
@@ -134,6 +143,15 @@
 \vspace{8pt}
 
 {{ q.question }}
+
+{% if q.parts %}
+\begin{enumerate}[label=(\alph*), leftmargin=20pt, itemsep=6pt]
+{% for part in q.parts %}
+\item \textcolor{darkgray}{{{ part.question }}} 
+\hfill \textcolor{accentorange}{\textbf{[{{ part.marks }} {% if part.marks == 1 %}mark{% else %}marks{% endif %}]}}
+{% endfor %}
+\end{enumerate}
+{% endif %}
 \end{subjectivebox}
 \vspace{12pt}
 {% endfor %}
